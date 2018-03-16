@@ -22,15 +22,18 @@
       </div>
 
       <p>{{e('noAccountText')}}</p>
-      <a class="btn btn-secondary" href="/#/Register/">{{e('registerButton')}}</a>
+      <a class="btn btn-secondary" :href="`/#${routerUrl.Register.path}`">{{e('registerButton')}}</a>
     </div>
   </div>
 </template>
 
 <script>
-import loginText from '@/data/Login.lang';
-import regex from '@/helper/regex';
-import apiUrl from '@/helper/apiUrl';
+import componentText from '@/lang/Login.lang';
+import getTextByLang from '@/helper/getTextByLang';
+import regex from '@/variables/regex';
+import apiUrl from '@/variables/apiUrl';
+import routerUrl from '@/variables/routerUrl';
+import fetching from '@/variables/fetching';
 
 export default {
   name: 'Login',
@@ -39,16 +42,23 @@ export default {
       userError: '',
       passError: '',
       loginError: '',
+      routerUrl,
     };
   },
   methods: {
     e(copy) {
-      if (copy === undefined || copy === '') return '';
-      return loginText[copy][this.$store.state.setup.lang];
+      return getTextByLang(componentText, copy, this.$store.state.setup.lang);
     },
     login(e) {
       e.preventDefault();
 
+      // validate input
+      if (!this.validInput()) return;
+
+      // API make login
+      this.postLogin();
+    },
+    validInput() {
       // reset error
       this.userError = '';
       this.passError = '';
@@ -66,33 +76,27 @@ export default {
       if (this.$refs.pass.value === '') this.passError = this.e('passEmpty');
 
       // return if error
-      if (this.passError !== '' || this.userError !== '') return;
+      if (this.passError !== '' || this.userError !== '') return false;
 
-      // API make login
-      this.apiLogin();
+      return true;
     },
-    apiLogin() {
+    postLogin() {
       // reset error message
       this.loginError = '';
 
       // connect API
       fetch(apiUrl.login, {
-        body: JSON.stringify({ email: this.$refs.user.value, password: this.$refs.pass.value }), // must match 'Content-Type' header
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'omit', // include, same-origin, *omit
-        headers: new Headers({
-          'Content-Type': 'application/json',
-        }),
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, cors, *same-origin
-        redirect: 'follow', // *manual, follow, error
-        referrer: 'no-referrer', // *client, no-referrer
+        body: JSON.stringify({
+          email: this.$refs.user.value,
+          password: this.$refs.pass.value,
+        }), // must match 'Content-Type' header
+        ...fetching.header,
       })
         .then(response => response.json())
-        .then(jsonData => this.apiGetUserData(jsonData))
+        .then(jsonData => this.getUserData(jsonData))
         .catch(() => null);
     },
-    apiGetUserData(loginResult) {
+    getUserData(loginResult) {
       // if error
       if (loginResult.error && loginResult.error.message) {
         this.loginError = loginResult.error.message;

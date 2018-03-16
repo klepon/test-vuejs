@@ -1,25 +1,23 @@
 <template>
   <div class="wrapper">
     <section class="header">
-
       <div class="nav nav-pills">
-        <a class="nav-link" href="/#/"><img :src="$store.state.setup.logoImage" class="logo"></a>
+        <a class="nav-link" :href="url('Homepage')"><img :src="$store.state.setup.logoImage" class="logo"></a>
 
-        <a v-show="state.user.token" :class="`nav-link${isActive('Dashboard')}`" href="/#/Dashboard">Dashboard</a>
-        <a v-show="state.user.token" :class="`nav-link${isActive('Project')}`" href="/#/Project">Project</a>
-        <a v-show="state.user.token" :class="`nav-link${isActive('Task')}`" href="/#/Task">Task</a>
-        <a v-show="state.user.token && state.user.level === 1" :class="`nav-link${isActive('Report')}`" href="/#/Report">Report</a>
-        <a v-show="state.user.token && state.user.level === 3" :class="`nav-link${isActive('MyReport')}`" href="/#/Report/MyReport">My Report</a>
-        <a v-show="state.user.token && state.user.level === 1" :class="`nav-link${isActive('User')}`" href="/#/Member">Member</a>
-        <a v-show="state.user.token" @click="logout" class="nav-link" href="/#/">Logout</a>
+        <a v-show="state.user.token" :class="`nav-link${isActive('Dashboard')}`" :href="url('Dashboard')">Dashboard</a>
+        <a v-show="state.user.token" :class="`nav-link${isActive('Project')}`" :href="url('Project')">Project</a>
+        <a v-show="state.user.token" :class="`nav-link${isActive('Task')}`" :href="url('Task')">Task</a>
+        <a v-show="state.user.token && state.user.role === 1" :class="`nav-link${isActive('Report')}`" :href="url('Report')">Report</a>
+        <a v-show="state.user.token && state.user.role === 3" :class="`nav-link${isActive('MyReport')}`" :href="`${url('Report')}${url('MyReport')}`">My Report</a>
+        <a v-show="state.user.token && state.user.role === 1" :class="`nav-link${isActive('User')}`" :href="url('Member')">Member</a>
+        <a v-show="state.user.token" @click="logout" class="nav-link" :href="url('Homepage')">Logout</a>
 
-        <a v-show="!state.user.token" class="nav-link" href="/#/Login">Login</a>
-        <a v-show="!state.user.token" class="nav-link" href="/#/Register/">Register</a>
+        <a v-show="!state.user.token" class="nav-link" :href="url('Login')">Login</a>
+        <a v-show="!state.user.token" class="nav-link" :href="url('Register')">Register</a>
 
         <a v-show="setup.lang === 'en'" @click="switchLang('id', $event)" class="nav-link" href="#">id</a>
         <a v-show="setup.lang === 'id'" @click="switchLang('en', $event)" class="nav-link" href="#">en</a>
       </div>
-
     </section>
 
     <router-view/>
@@ -27,7 +25,9 @@
 </template>
 
 <script>
-import apiUrl from '@/helper/apiUrl';
+import apiUrl from '@/variables/apiUrl';
+import routerUrl from '@/variables/routerUrl';
+import fetching from '@/variables/fetching';
 
 export default {
   name: 'App',
@@ -42,12 +42,10 @@ export default {
       e.preventDefault();
 
       fetch(`${apiUrl.member}/logout?access_token=${this.$store.state.user.token}`, {
-        method: 'POST', // or 'PUT'
-        headers: new Headers({
-          'Content-Type': 'application/json',
-        }),
+        body: JSON.stringify({}), // must match 'Content-Type' header
+        ...fetching.header,
       })
-        .then(() => this.$store.commit('setUser', { login: false }))
+        .then(() => this.$store.commit('logoutUser'))
         .catch(() => null);
     },
     isActive(name) {
@@ -57,6 +55,9 @@ export default {
     switchLang(langCode, e) {
       if (e) e.preventDefault();
       this.$store.commit('switchLang', langCode);
+    },
+    url(page) {
+      return `/#${routerUrl[page].path}`;
     },
   },
 };

@@ -2,14 +2,17 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import router from '@/router';
+import routerUrl from '@/variables/routerUrl';
+// import userStore from '@/components/User/UserStore';
 
 Vue.use(Vuex);
 
+// role harusnya bukan bagian user,karna user bisa multi project and beda role di tiap project
 const userTpl = {
-  level: 0, // 0 visitor, 1 manager, 2 suversisor, 3 member
+  role: 1, // 1 admin, 2 watcher, 3 member
   token: '',
   name: '',
-  position: '',
+  discipline: '',
 };
 
 export default new Vuex.Store({
@@ -19,9 +22,6 @@ export default new Vuex.Store({
       logoImage: 'static/logo.png',
     },
     user: { ...userTpl },
-    data: {
-      sampleText: 'Lorem ipsum<br /><b>Dolor</b> sit <i>amet</i> gitu lo',
-    },
   },
   mutations: {
     setUser(state, params) {
@@ -33,10 +33,13 @@ export default new Vuex.Store({
       }
 
       // redirect user after login/logout success
-      router.push({ name: params.login ? 'Project' : 'Homepage' });
+      router.push({ name: params.login ? routerUrl.Project.name : routerUrl.Homepage.name });
     },
     switchLang(state, langCode) {
       state.setup.lang = langCode;
+    },
+    logoutUser() {
+      this.commit('setUser', { login: false });
     },
   },
 });

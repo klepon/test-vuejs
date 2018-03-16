@@ -1,7 +1,7 @@
 export default {
   userNameLabel: {
-    en: 'User name',
-    id: 'Nama akun',
+    en: 'Email address',
+    id: 'Alamat email',
   },
   passwordLabel: {
     en: 'Password',
@@ -12,12 +12,12 @@ export default {
     id: 'Masuk',
   },
   registerButton: {
-    en: 'Register now',
-    id: 'Daftar sekarang',
+    en: 'Register',
+    id: 'Daftar',
   },
-  noAccountText: {
-    en: 'No account yet?',
-    id: 'Belum memiliki akun?',
+  haveAccountText: {
+    en: 'Already have account?',
+    id: 'Sudah memiliki akun?',
   },
   userError: {
     en: 'Your email seem invalid, please fix',
@@ -35,9 +35,9 @@ export default {
     en: 'Password required',
     id: 'Kata sandi diperlukan',
   },
-  'login failed': {
-    en: 'Invalid User or password',
-    id: 'Nama akun atau kata sandi salah',
+  emailExist: {
+    en: 'Your email address already registered, please login',
+    id: 'Alamat email Anda sudah terdaftar, silahkan masuk',
   },
   foo: {
     en: '',
