@@ -50,6 +50,7 @@ export default {
       // reset error
       this.userError = '';
       this.passError = '';
+      this.$emit('resetError');
 
       // error email
       if (!regex.email.test(String(this.$refs.user.value).toLowerCase())) this.userError = this.e('userError');

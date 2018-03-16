@@ -9,8 +9,9 @@
     v-bind:switchText="e('noAccountText')"
     v-bind:switchButtonText="e('registerButton')"
     v-bind:switchUrl="routerUrl.Register.path"
-    v-bind:componentText="getComponentText()"
+    v-bind:componentText="componentText"
     v-on:postAPI="postLogin"
+    v-on:resetError="loginError = ''"
   />
 </template>
 
@@ -31,19 +32,14 @@ export default {
     return {
       loginError: '',
       routerUrl,
+      componentText,
     };
   },
   methods: {
-    getComponentText() {
-      return componentText;
-    },
     e(copy) {
       return getTextByLang(componentText, copy, this.$store.state.setup.lang);
     },
     postLogin({ user, pass }) {
-      // reset error message
-      this.loginError = '';
-
       // connect API
       fetch(apiUrl.login, {
         body: JSON.stringify({
