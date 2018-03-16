@@ -1,87 +1,49 @@
 <template>
-  <div class="container-fluid">
-    <div class="col-sm-8 col-md-6 offset-sm-2 offset-md-3">
-      <div class="card">
-        <div class="card-body">
-          <h1>Register</h1>
-          <div class="form-group">
-            <label for="userName">{{e('userNameLabel')}}</label>
-            <input value="qw@qw.qw" ref="user" type="email" id="userName" placeholder="my-email@domain.com" class="form-control" />
-            <small v-show="userError !== ''" class="form-text text-muted">{{userError}}</small>
-          </div>
+  <formPanel
+    v-bind:title="e('pageTitle')"
+    v-bind:labelUserEmail="e('userNameLabel')"
+    v-bind:labelPassword="e('passwordLabel')"
 
-          <div class="form-group">
-            <label for="password">{{e('passwordLabel')}}</label>
-            <input value="123456" ref="pass" type="password" id="password" class="form-control" />
-            <small v-show="passError !== ''" class="form-text text-muted">{{passError}}</small>
-          </div>
-
-          <small v-show="registerError !== ''" class="form-text text-muted">{{e(registerError)}}</small>
-          <button @click="register" type="submit" class="btn btn-primary">{{e('registerButton')}}</button>
-        </div>
-      </div>
-
-      <p>{{e('haveAccountText')}}</p>
-      <a class="btn btn-secondary" :href="`/#${routerUrl.Login.path}`">{{e('loginButton')}}</a>
-    </div>
-  </div>
+    v-bind:resultError="e(registerError)"
+    v-bind:submitButton="e('registerButton')"
+    v-bind:switchText="e('haveAccountText')"
+    v-bind:switchButtonText="e('loginButton')"
+    v-bind:switchUrl="routerUrl.Login.path"
+    v-bind:componentText="getComponentText()"
+    v-on:postAPI="postUser"
+  />
 </template>
 
 <script>
-import router from '@/router';
-import componentText from '@/lang/Register.lang';
-import getTextByLang from '@/helper/getTextByLang';
-import regex from '@/variables/regex';
-import apiUrl from '@/variables/apiUrl';
-import routerUrl from '@/variables/routerUrl';
-import fetching from '@/variables/fetching';
+import router from '@/global/router';
+import getTextByLang from '@/global/getTextByLang';
+import apiUrl from '@/global/apiUrl';
+import routerUrl from '@/global/routerUrl';
+import fetching from '@/global/fetching';
+import componentText from './register.lang';
+import formPanel from './FormPanel';
 
 export default {
   name: 'Register',
+  components: {
+    formPanel,
+  },
   data() {
     return {
-      userError: '',
-      passError: '',
+      // userError: '',
+      // passError: '',
       registerError: '',
       routerUrl,
     };
   },
   methods: {
+    getComponentText() {
+      return componentText;
+    },
     e(copy) {
       return getTextByLang(componentText, copy, this.$store.state.setup.lang);
     },
-    register(e) {
-      e.preventDefault();
-
-      // validate
-      if (!this.validInput()) return;
-
-      // post user
-      this.postUser();
-    },
-    validInput() {
-      // reset error
-      this.userError = '';
-      this.passError = '';
-
-      // error email
-      if (!regex.email.test(String(this.$refs.user.value).toLowerCase())) this.userError = this.e('userError');
-
-      // empty email
-      if (this.$refs.user.value === '') this.userError = this.e('userEmpty');
-
-      // error Password
-      if (this.$refs.pass.value.length < 6) this.passError = this.e('passError');
-
-      // empty Password
-      if (this.$refs.pass.value === '') this.passError = this.e('passEmpty');
-
-      // return if error
-      if (this.passError !== '' || this.userError !== '') return false;
-
-      return true;
-    },
-    postUser() {
+    postUser({ user, pass }) {
       // reset error message
       this.registerError = '';
 
@@ -92,9 +54,9 @@ export default {
           discipline: '',
           name: '',
           realm: '',
-          username: this.$refs.user.value,
-          email: this.$refs.user.value,
-          password: this.$refs.pass.value,
+          username: user,
+          email: user,
+          password: pass,
           emailVerified: true,
         }), // must match 'Content-Type' header
         ...fetching.header,

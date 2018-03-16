@@ -1,23 +1,25 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import routerUrl from '@/variables/routerUrl';
+import routerUrl from '@/global/routerUrl';
 
-import Homepage from '@/components/Homepage';
-import Dashboard from '@/components/Dashboard';
+import Dashboard from '@/components/dashboard/Dashboard';
 
-import ProjectList from '@/components/Project/ProjectList';
-import AddProject from '@/components/Project/AddProject';
-import ProjectDetail from '@/components/Project/ProjectDetail';
+import User from '@/components/member/Member';
 
-import ProjectReport from '@/components/Report/ProjectReport';
-import PersonalReport from '@/components/Report/PersonalReport';
+import AddProject from '@/components/project/AddProject';
+import ProjectDetail from '@/components/project/ProjectDetail';
+import ProjectList from '@/components/project/ProjectList';
 
-import TaskList from '@/components/Task/TaskList';
-import User from '@/components/Member/Member';
+import Homepage from '@/components/publicPage/Homepage';
 
-import Login from '@/components/User/Login';
-import Register from '@/components/User/Register';
+import ProjectReport from '@/components/report/ProjectReport';
+import PersonalReport from '@/components/report/PersonalReport';
+
+import TaskList from '@/components/task/TaskList';
+
+import Login from '@/components/user/Login';
+import Register from '@/components/user/Register';
 
 Vue.use(Router);
 

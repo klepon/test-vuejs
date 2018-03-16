@@ -1,4 +1,8 @@
 export default {
+  pageTitle: {
+    en: 'Register',
+    id: 'Daftar',
+  },
   userNameLabel: {
     en: 'Email address',
     id: 'Alamat email',

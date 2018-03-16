@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import componentText from '@/lang/Dashboard.lang';
-import getTextByLang from '@/helper/getTextByLang';
+import getTextByLang from '@/global/getTextByLang';
+import componentText from './dashboard.lang';
 
 export default {
   name: 'Dashboard',

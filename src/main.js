@@ -3,9 +3,10 @@
 import Vue from 'vue';
 import wysiwyg from 'vue-wysiwyg';
 
-import store from './store/store';
+import store from './global/store';
+import router from './global/router';
+
 import App from './App';
-import router from './router';
 
 Vue.config.productionTip = false;
 Vue.use(wysiwyg, {}); // config https://github.com/chmln/vue-wysiwyg

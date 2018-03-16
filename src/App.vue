@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import apiUrl from '@/variables/apiUrl';
-import routerUrl from '@/variables/routerUrl';
-import fetching from '@/variables/fetching';
+import apiUrl from '@/global/apiUrl';
+import routerUrl from '@/global/routerUrl';
+import fetching from '@/global/fetching';
 
 export default {
   name: 'App',
