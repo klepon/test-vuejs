@@ -14,3 +14,9 @@
     border-bottom: solid 3px $nav-pills-link-active-bg;
   }
 }
+
+.nav.pull-left {
+  .nav-link {
+    padding-left: 0;
+  }
+}

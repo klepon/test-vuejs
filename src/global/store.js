@@ -1,7 +1,7 @@
 // Import Vue
 import Vue from 'vue';
 import Vuex from 'vuex';
-import User from '@/components/user/userStore';
+import User from '@/components/user/_userStore';
 
 Vue.use(Vuex);
 

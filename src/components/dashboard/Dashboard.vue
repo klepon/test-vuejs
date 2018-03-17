@@ -6,6 +6,9 @@
     <div v-show="user.token" class="row">
       <h1 class="col-sm-12">Dashboard</h1>
 
+      <p class="col-sm-12"><small>{{user.token}}</small></p>
+      <p class="col-sm-12"><small>{{user.email}}</small></p>
+
       <div class="col-sm-6 col-md-4">
         <div class="card">
           <div class="card-body">

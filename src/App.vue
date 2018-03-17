@@ -28,9 +28,7 @@
 </template>
 
 <script>
-import apiUrl from '@/global/apiUrl';
 import routerUrl from '@/global/routerUrl';
-import fetching from '@/global/fetching';
 
 export default {
   name: 'App',
@@ -44,12 +42,14 @@ export default {
     logout(e) {
       e.preventDefault();
 
-      fetch(`${apiUrl.member}/logout?access_token=${this.$store.state.user.token}`, {
-        body: JSON.stringify({}), // must match 'Content-Type' header
-        ...fetching.header,
-      })
-        .then(() => this.$store.commit('logoutUser'))
-        .catch(() => null);
+      this.$store.commit('logoutUser');
+
+      // fetch(`${apiUrl.member}/logout?access_token=${this.$store.state.user.token}`, {
+      //   body: JSON.stringify({}), // must match 'Content-Type' header
+      //   ...fetching.header,
+      // })
+      //   .then(() => this.$store.commit('logoutUser'))
+      //   .catch(() => null);
     },
     isActive(name) {
       if (this.$route.matched[0] === undefined) return '';

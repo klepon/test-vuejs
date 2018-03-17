@@ -10,6 +10,7 @@
     v-bind:switchButtonText="e('registerButton')"
     v-bind:switchUrl="routerUrl.Register.path"
     v-bind:componentText="componentText"
+    v-bind:minPassLength="1"
     v-on:postAPI="postLogin"
     v-on:resetError="loginError = ''"
   />
@@ -17,10 +18,10 @@
 
 <script>
 import getTextByLang from '@/global/getTextByLang';
-import apiUrl from '@/global/apiUrl';
 import routerUrl from '@/global/routerUrl';
 import fetching from '@/global/fetching';
 import componentText from './login.lang';
+import variable from './_var';
 import formPanel from './FormPanel';
 
 export default {
@@ -41,7 +42,7 @@ export default {
     },
     postLogin({ user, pass }) {
       // connect API
-      fetch(apiUrl.login, {
+      fetch(variable.apiUrl.login, {
         body: JSON.stringify({
           email: user,
           password: pass,
@@ -61,13 +62,13 @@ export default {
 
       // if success, get user data
       if (loginResult.id) {
-        fetch(`${apiUrl.member}/${loginResult.userId}?access_token=${loginResult.id}`)
+        fetch(`${variable.apiUrl.member}/${loginResult.userId}?access_token=${loginResult.id}`)
           .then(response => response.json())
           .then((userData) => {
             // if success, login user
             if (userData.email) {
               this.$store.commit('setUser', {
-                login: true,
+                redirect: routerUrl.Dashboard.name,
                 userData: { token: loginResult.id, ...userData },
               });
             }

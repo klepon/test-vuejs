@@ -1,6 +1,8 @@
 // Import Vue
 import router from '@/global/router';
 import routerUrl from '@/global/routerUrl';
+import fetching from '@/global/fetching';
+import variable from './_var';
 
 export default {
   /* set user data object
@@ -11,6 +13,7 @@ export default {
     token: '',
     name: '',
     discipline: '',
+    email: '',
   },
 
   /* set user data on store to mark login/logout
@@ -21,14 +24,10 @@ export default {
   */
   setUser(state, params) {
     // set user detil
-    if (!params.login) {
-      state.user = { ...this.tpl };
-    } else {
-      state.user = { ...params.userData };
-    }
+    state.user = { ...params.userData };
 
     // redirect user after login/logout success
-    router.push({ name: params.login ? routerUrl.Dashboard.name : routerUrl.Homepage.name });
+    if (params.redirect) router.push({ name: params.redirect });
   },
 
   /* set user data on store to mark login/logout
@@ -38,6 +37,16 @@ export default {
     },
   */
   logoutUser(store) {
-    store.commit('setUser', { login: false });
+    fetch(`${variable.apiUrl.member}/logout?access_token=${store.state.user.token}`, {
+      body: JSON.stringify({}),
+      ...fetching.header,
+    })
+      .then(() => {
+        store.commit('setUser', {
+          redirect: routerUrl.Homepage.name,
+          userData: { ...this.tpl },
+        });
+      })
+      .catch(() => null);
   },
 };

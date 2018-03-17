@@ -33,7 +33,7 @@ import regex from '@/global/regex';
 
 export default {
   name: 'FormTpl',
-  props: ['title', 'labelUserEmail', 'labelPassword', 'resultError', 'submitButton', 'switchText', 'switchButtonText', 'switchUrl', 'componentText'],
+  props: ['title', 'labelUserEmail', 'labelPassword', 'resultError', 'submitButton', 'switchText', 'switchButtonText', 'switchUrl', 'componentText', 'minPassLength'],
   data() {
     return {
       userError: '',
@@ -59,7 +59,7 @@ export default {
       if (this.$refs.user.value === '') this.userError = this.e('userEmpty');
 
       // error Password
-      if (this.$refs.pass.value.length < 6) this.passError = this.e('passError');
+      if (this.$refs.pass.value.length < this.minPassLength) this.passError = this.e('passError');
 
       // empty Password
       if (this.$refs.pass.value === '') this.passError = this.e('passEmpty');
