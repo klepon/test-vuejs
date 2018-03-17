@@ -205,6 +205,10 @@ a {
     color: $link-hover-color;
     text-decoration: $link-hover-decoration;
   }
+
+  &.active {
+    color: $link-hover-color;
+  }
 }
 
 // And undo these styles for placeholder links/named anchors (without href)

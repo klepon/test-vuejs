@@ -8,12 +8,10 @@ export default {
     user: { ...User.tpl },
   */
   tpl: {
-    role: 1, // 1 admin, 2 watcher, 3 member
     token: '',
     name: '',
     discipline: '',
   },
-
 
   /* set user data on store to mark login/logout
   * how to use; add on store mutations
@@ -30,9 +28,8 @@ export default {
     }
 
     // redirect user after login/logout success
-    router.push({ name: params.login ? routerUrl.Project.name : routerUrl.Homepage.name });
+    router.push({ name: params.login ? routerUrl.Dashboard.name : routerUrl.Homepage.name });
   },
-
 
   /* set user data on store to mark login/logout
   * how to use; add on store mutations

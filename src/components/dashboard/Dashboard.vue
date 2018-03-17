@@ -9,8 +9,8 @@
       <div class="col-sm-6 col-md-4">
         <div class="card">
           <div class="card-body">
-            <h3 @click="addName">{{user.name || e('addName')}}</h3>
-            <p @click="addDiscipline">{{user.discipline   || e('addDiscipline')}}</p>
+            <h3 @click="editProfile">{{user.name || e('addName')}}</h3>
+            <p @click="editProfile">{{user.discipline   || e('addDiscipline')}}</p>
           </div>
         </div>
       </div>
@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import router from '@/global/router';
+import routerUrl from '@/global/routerUrl';
 import getTextByLang from '@/global/getTextByLang';
 import componentText from './dashboard.lang';
 
@@ -44,19 +46,8 @@ export default {
     e(copy) {
       return getTextByLang(componentText, copy, this.$store.state.setup.lang);
     },
-    addName() {
-      if (this.user.name) {
-        this.user.name = 'edit name';
-      } else {
-        this.user.name = 'add new name';
-      }
-    },
-    addDiscipline() {
-      if (this.user.discipline) {
-        this.user.discipline = 'edit discipline';
-      } else {
-        this.user.discipline = 'add new discipline';
-      }
+    editProfile() {
+      router.push({ name: routerUrl.Account.name });
     },
   },
 };

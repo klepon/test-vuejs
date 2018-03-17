@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <section class="container-fluid">
     <div class="col-sm-8 col-md-6 offset-sm-2 offset-md-3">
       <div class="card">
         <div class="card-body">
@@ -24,7 +24,7 @@
       <p>{{switchText}}</p>
       <a class="btn btn-secondary" :href="`/#${switchUrl}`">{{switchButtonText}}</a>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>

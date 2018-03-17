@@ -18,6 +18,7 @@ import PersonalReport from '@/components/report/PersonalReport';
 
 import TaskList from '@/components/task/TaskList';
 
+import Account from '@/components/user/Account';
 import Login from '@/components/user/Login';
 import Register from '@/components/user/Register';
 
@@ -29,6 +30,11 @@ export default new Router({
       path: routerUrl.Homepage.path,
       name: routerUrl.Homepage.name,
       component: Homepage,
+    },
+    {
+      path: routerUrl.Account.path,
+      name: routerUrl.Account.name,
+      component: Account,
     },
     {
       path: routerUrl.Login.path,

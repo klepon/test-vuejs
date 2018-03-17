@@ -3,3 +3,14 @@
     width: 25px;
   }
 }
+
+.nav-border {
+  .nav-link {
+    padding: $nav-link-padding-y $nav-link-padding-x / 2;
+    margin: 0 $nav-link-padding-x / 2;
+  }
+
+  .nav-link.active {
+    border-bottom: solid 3px $nav-pills-link-active-bg;
+  }
+}

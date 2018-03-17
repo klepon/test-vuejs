@@ -43,6 +43,10 @@ export default {
     path: '/Member/',
     name: 'Member',
   },
+  Account: {
+    path: '/Account/',
+    name: 'Account',
+  },
   foo: {
     path: '/foo/',
     name: 'foo',

@@ -44,7 +44,6 @@ export default {
       // connect API
       fetch(apiUrl.register, {
         body: JSON.stringify({
-          role: 1,
           discipline: '',
           name: '',
           realm: '',
