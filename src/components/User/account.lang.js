@@ -35,6 +35,14 @@ export default {
     en: 'By removing account, all your data will be lost including projects participation, comments, and notes.',
     id: 'Dengan menghapus akun, semua data anda akan hilang, termasuk keterlibatan dalam proyek, komen-komen, dan catatan.',
   },
+  newPasswod: {
+    en: 'New password',
+    id: 'Kata kunci baru',
+  },
+  confirmPasswod: {
+    en: 'Repeat new password',
+    id: 'Ulangi kata kunci baru',
+  },
   yourCurrentPasswod: {
     en: 'Your current password',
     id: 'Kata kunci Anda saat ini',
@@ -46,6 +54,26 @@ export default {
   'Invalid password.': {
     en: 'Invalid password',
     id: 'Kata sandi salah',
+  },
+  'Authorization Required': {
+    en: 'Invalid password',
+    id: 'Kata sandi salah',
+  },
+  allRequired: {
+    en: 'All field must filled',
+    id: 'Semua isian wajib diisi',
+  },
+  passwordNotMatch: {
+    en: 'Your new password not match',
+    id: 'Kata sandi baru Anda tidak sama',
+  },
+  'Invalid current password': {
+    en: 'Invalid current password',
+    id: 'Kata sandi saat ini salah',
+  },
+  passwordChanged: {
+    en: 'Password changed successfully',
+    id: 'Kata kunti berhasil dirubah',
   },
   foo: {
     en: '',

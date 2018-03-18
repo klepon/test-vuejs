@@ -8,7 +8,7 @@ export default (langObj, copy, langCode) => {
   }
 
   if (langObj[copy] === undefined) {
-    console.error('Error: Translation word missing.');
+    console.error(`Error: Translation word missing for [${copy}]`);
     return '';
   }
 

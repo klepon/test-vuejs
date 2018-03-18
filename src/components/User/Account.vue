@@ -33,7 +33,7 @@
 
             <div class="form-group">
               <label for="password">{{e('yourCurrentPasswod')}}*</label>
-              <input ref="pass" type="password" id="password" class="form-control" />
+              <input ref="pass" type="password" class="form-control" />
             </div>
 
             <small v-show="resultError !== ''" class="form-text text-muted">{{e(resultError)}}</small>
@@ -44,7 +44,25 @@
 
         <div v-show="tabs.changePassword">
           <h1>{{e('changePassword')}}</h1>
-          changePassword
+
+          <div class="form-group">
+            <label for="password">{{e('newPasswod')}}*</label>
+            <input @keyup="comparePassword" v-model="newPass" type="password" class="form-control" />
+          </div>
+
+          <div class="form-group">
+            <label for="password">{{e('confirmPasswod')}}*</label>
+            <input @keyup="comparePassword" v-model="rePass" type="password" class="form-control" />
+            <small v-show="notEqualPassword !== ''" class="form-text text-muted">{{e(notEqualPassword)}}</small>
+          </div>
+
+          <div class="form-group">
+            <label for="password">{{e('yourCurrentPasswod')}}*</label>
+            <input v-model="oldPass" type="password" class="form-control" />
+          </div>
+
+          <small v-show="resultError !== ''" class="form-text text-muted">{{e(resultError)}}</small>
+          <button @click="changePassword" type="submit" class="btn btn-primary">{{e('saveProfile')}}</button>
         </div>
 
         <div v-show="tabs.removeAccount">
@@ -72,6 +90,7 @@ export default {
   data() {
     return {
       editProfile: false,
+      notEqualPassword: '',
       resultError: '',
       user: this.$store.state.user,
       tabs: {
@@ -79,6 +98,9 @@ export default {
         profile: true,
       },
       componentText,
+      newPass: '',
+      rePass: '',
+      oldPass: '',
     };
   },
   methods: {
@@ -88,11 +110,27 @@ export default {
     toggleTab(key, e) {
       e.preventDefault();
 
+      this.resultError = '';
+
       this.tabs = { ...this.tabsTpl };
       this.tabs[key] = true;
     },
     setClass(bool) {
       return bool === true ? 'active' : '';
+    },
+    loginUser(nextFunction) {
+      this.resultError = '';
+
+      fetch(variable.apiUrl.login, {
+        body: JSON.stringify({
+          email: this.user.email,
+          password: this.$refs.pass.value,
+        }),
+        ...fetching.header,
+      })
+        .then(response => response.json())
+        .then(jsonData => nextFunction(jsonData))
+        .catch(() => null);
     },
     saveProfile() {
       // empty Password
@@ -101,8 +139,10 @@ export default {
         return;
       }
 
-      // connect API
-      const apiUrl = `${variable.apiUrl.member}/1?access_token=${this.user.token}`;
+      this.loginUser(this.updateUserProfile);
+    },
+    updateUserProfile(loginResult) {
+      const apiUrl = `${variable.apiUrl.member}/${loginResult.userId}?access_token=${loginResult.id}`;
       const apiRequest = {
         body: JSON.stringify({
           discipline: this.$refs.discipline.value,
@@ -126,16 +166,72 @@ export default {
           if (jsonData.id) {
             const newUser = {
               ...this.user,
+              token: loginResult.id,
               name: this.$refs.name.value,
               discipline: this.$refs.discipline.value,
             };
 
-            this.editProfile = false;
-            this.user = newUser;
-
             this.$store.commit('setUser', {
               userData: newUser,
             });
+
+            // store update doesn't update the page, so let change data here
+            this.editProfile = false;
+            this.user = newUser;
+          }
+        })
+        .catch(() => null);
+    },
+    comparePassword() {
+      this.notEqualPassword = '';
+      if (this.newPass === '' || this.rePass === '') return;
+
+      if (this.newPass !== this.rePass) {
+        this.notEqualPassword = 'passwordNotMatch';
+      }
+    },
+    changePassword() {
+      this.resultError = '';
+
+      // empty Password
+      if (this.newPass === '' || this.rePass === '' || this.oldPass === '') {
+        this.resultError = 'allRequired';
+        return;
+      }
+
+      // not match
+      if (this.newPass !== this.rePass) {
+        this.resultError = 'passwordNotMatch';
+        return;
+      }
+
+      this.updatePassword();
+    },
+    updatePassword() {
+      const apiUrl = `${variable.apiUrl.changePassword}/?access_token=${this.user.token}`;
+      const apiRequest = {
+        body: JSON.stringify({
+          oldPassword: this.oldPass,
+          newPassword: this.newPass,
+        }),
+        ...fetching.header,
+      };
+
+      fetch(apiUrl, apiRequest)
+        .then((response) => {
+          if (response.ok === true) {
+            this.resultError = 'passwordChanged';
+            this.newPass = '';
+            this.rePass = '';
+            this.oldPass = '';
+            return '';
+          }
+
+          return response.json();
+        })
+        .then((jsonData) => {
+          if (jsonData.error && jsonData.error.message) {
+            this.resultError = jsonData.error.message;
           }
         })
         .catch(() => null);
