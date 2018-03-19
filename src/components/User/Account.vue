@@ -224,6 +224,7 @@ export default {
 
             // store update doesn't update the page, so let change data here
             this.editProfile = false;
+            this.loading = false;
             this.user = newUser;
           }
         })
