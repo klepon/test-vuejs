@@ -31,10 +31,6 @@ export default {
     en: 'Save',
     id: 'Simpan',
   },
-  removeAccountMessage: {
-    en: 'By removing account, all your data will be lost including projects participation, comments, and notes.',
-    id: 'Dengan menghapus akun, semua data anda akan hilang, termasuk keterlibatan dalam proyek, komen-komen, dan catatan.',
-  },
   newPasswod: {
     en: 'New password',
     id: 'Kata kunci baru',
@@ -74,6 +70,30 @@ export default {
   passwordChanged: {
     en: 'Password changed successfully',
     id: 'Kata kunti berhasil dirubah',
+  },
+  removeAccountMessage: {
+    en: 'By removing account, all your data will be lost including projects participation, comments, and notes.',
+    id: 'Dengan menghapus akun, semua data anda akan hilang, termasuk keterlibatan dalam proyek, komen-komen, dan catatan.',
+  },
+  deleteButton: {
+    en: 'Delete account',
+    id: 'Hapus akun',
+  },
+  yesDeleteButton: {
+    en: 'Yes, delete my account',
+    id: 'Ya, hapus akun saya',
+  },
+  deleteMessageWarning: {
+    en: 'Are you sure want to delete your account?<br />You cannot undo this action.',
+    id: 'Anda yakin mau menghapus akun Anda?<br />Akun anda akan terhapus secara permanen.',
+  },
+  deletePasswordConfirm: {
+    en: 'Please enter your password to confirm.',
+    id: 'Mahon masukkan kata kunci untuk konfirmasi.',
+  },
+  warningTitle: {
+    en: 'Warning',
+    id: 'Perhatian',
   },
   foo: {
     en: '',

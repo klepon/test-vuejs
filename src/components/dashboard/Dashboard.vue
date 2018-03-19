@@ -10,12 +10,10 @@
       <p class="col-sm-12"><small>{{user.email}}</small></p>
 
       <div class="col-sm-6 col-md-4">
-        <div class="card">
-          <div class="card-body">
-            <h3 @click="editProfile">{{user.name || e('addName')}}</h3>
-            <p @click="editProfile">{{user.discipline   || e('addDiscipline')}}</p>
-          </div>
-        </div>
+        <b-card>
+          <h3 @click="editProfile">{{user.name || e('addName')}}</h3>
+          <p @click="editProfile">{{user.discipline   || e('addDiscipline')}}</p>
+        </b-card>
       </div>
 
       <div class="col-sm-6 col-md-8">

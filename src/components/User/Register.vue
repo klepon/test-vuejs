@@ -3,6 +3,7 @@
     v-bind:title="e('pageTitle')"
     v-bind:labelUserEmail="e('userNameLabel')"
     v-bind:labelPassword="e('passwordLabel')"
+    v-bind:loading="loading"
 
     v-bind:resultError="e(registerError)"
     v-bind:submitButton="e('registerButton')"
@@ -12,7 +13,8 @@
     v-bind:componentText="componentText"
     v-bind:minPassLength="6"
     v-on:postAPI="postUser"
-    v-on:resetError="registerError = ''"
+    v-on:startProcess="startProcess"
+    v-on:endProcess="endProcess"
   />
 </template>
 
@@ -33,6 +35,7 @@ export default {
   data() {
     return {
       registerError: '',
+      loading: false,
       routerUrl,
       componentText,
     };
@@ -40,6 +43,13 @@ export default {
   methods: {
     e(copy) {
       return getTextByLang(componentText, copy, this.$store.state.setup.lang);
+    },
+    startProcess() {
+      this.loginError = '';
+      this.loading = true;
+    },
+    endProcess() {
+      this.loading = false;
     },
     postUser({ user, pass }) {
       // connect API
@@ -64,6 +74,7 @@ export default {
             jsonData.error.details.messages.email
           ) {
             this.registerError = 'emailExist';
+            this.loading = false;
             return;
           }
 
@@ -72,7 +83,10 @@ export default {
             router.push({ name: routerUrl.Login.name });
           }
         })
-        .catch(() => null);
+        .catch(() => {
+          this.loading = false;
+          return null;
+        });
     },
   },
 };

@@ -3,6 +3,7 @@
     v-bind:title="e('pageTitle')"
     v-bind:labelUserEmail="e('userNameLabel')"
     v-bind:labelPassword="e('passwordLabel')"
+    v-bind:loading="loading"
 
     v-bind:resultError="e(loginError)"
     v-bind:submitButton="e('loginButton')"
@@ -12,7 +13,8 @@
     v-bind:componentText="componentText"
     v-bind:minPassLength="1"
     v-on:postAPI="postLogin"
-    v-on:resetError="loginError = ''"
+    v-on:startProcess="startProcess"
+    v-on:endProcess="endProcess"
   />
 </template>
 
@@ -32,6 +34,7 @@ export default {
   data() {
     return {
       loginError: '',
+      loading: false,
       routerUrl,
       componentText,
     };
@@ -39,6 +42,13 @@ export default {
   methods: {
     e(copy) {
       return getTextByLang(componentText, copy, this.$store.state.setup.lang);
+    },
+    startProcess() {
+      this.loginError = '';
+      this.loading = true;
+    },
+    endProcess() {
+      this.loading = false;
     },
     postLogin({ user, pass }) {
       // connect API
@@ -51,12 +61,16 @@ export default {
       })
         .then(response => response.json())
         .then(jsonData => this.getUserData(jsonData))
-        .catch(() => null);
+        .catch(() => {
+          this.loading = false;
+          return null;
+        });
     },
     getUserData(loginResult) {
       // if error
       if (loginResult.error && loginResult.error.message) {
         this.loginError = loginResult.error.message;
+        this.loading = false;
         return;
       }
 
@@ -73,7 +87,10 @@ export default {
               });
             }
           })
-          .catch(() => null);
+          .catch(() => {
+            this.loading = false;
+            return null;
+          });
       }
     },
   },

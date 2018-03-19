@@ -17,7 +17,7 @@
               <li>{{e('yourName')}}: {{user.name}}</li>
               <li>{{e('yourDiscipline')}}: {{user.discipline}}</li>
             </ul>
-            <button @click="editProfile = true" type="submit" class="btn btn-primary">{{e('edit')}}</button>
+            <b-button @click="editProfile = true" variant="primary">{{e('edit')}}</b-button>
           </div>
 
           <div v-show="editProfile">
@@ -37,8 +37,11 @@
             </div>
 
             <small v-show="resultError !== ''" class="form-text text-muted">{{e(resultError)}}</small>
-            <button @click="saveProfile" type="submit" class="btn btn-primary">{{e('saveProfile')}}</button>
-            <button @click="editProfile = false" type="submit" class="btn btn-secondary">{{e('cancel')}}</button>
+            <div class="flex-horizontal">
+              <b-button @click="saveProfile" variant="primary">{{e('saveProfile')}}</b-button>
+              <b-button @click="editProfile = false" variant="secondary">{{e('cancel')}}</b-button>
+              <div class="loader" v-show="loading"></div>
+            </div>
           </div>
         </div>
 
@@ -62,12 +65,40 @@
           </div>
 
           <small v-show="resultError !== ''" class="form-text text-muted">{{e(resultError)}}</small>
-          <button @click="changePassword" type="submit" class="btn btn-primary">{{e('saveProfile')}}</button>
+          <div class="flex-horizontal">
+            <b-button @click="changePassword" variant="primary">{{e('saveProfile')}}</b-button>
+            <div class="loader" v-show="loading"></div>
+          </div>
         </div>
 
         <div v-show="tabs.removeAccount">
           <h1>{{e('removeAccount')}}</h1>
           <p>{{e('removeAccountMessage')}}</p>
+          <b-button v-b-modal.deleteAccount variant="danger">{{e('deleteButton')}}</b-button>
+          <b-modal id="deleteAccount"
+            ref="deleteAccount"
+            :title="e('warningTitle')"
+            header-bg-variant="danger"
+            header-text-variant="light"
+            :no-close-on-backdrop=true
+            :no-close-on-esc=true
+            :hide-footer=true
+            >
+            <p v-html="e('deleteMessageWarning')"></p>
+
+            <div class="form-group" v-show="deletePassword">
+              <label for="password">{{e('deletePasswordConfirm')}}*</label>
+              <input ref="delpass" type="password" class="form-control" />
+            </div>
+
+            <small v-show="resultError !== ''" class="form-text text-muted">{{e(resultError)}}</small>
+            <div class="flex-horizontal">
+              <b-button @click="prepareDeleteAccount" variant="danger">{{e(deleteButtonText)}}</b-button>
+              <b-button @click="hideModal" variant="secondary">{{e('cancel')}}</b-button>
+              <div class="loader" v-show="loading"></div>
+            </div>
+
+          </b-modal>
         </div>
       </div>
     </div>
@@ -75,8 +106,10 @@
 </template>
 
 <script>
+import routerUrl from '@/global/routerUrl';
 import getTextByLang from '@/global/getTextByLang';
 import fetching from '@/global/fetching';
+import User from '@/components/user/_userStore';
 import componentText from './account.lang';
 import variable from './_var';
 
@@ -92,6 +125,7 @@ export default {
       editProfile: false,
       notEqualPassword: '',
       resultError: '',
+      loading: false,
       user: this.$store.state.user,
       tabs: {
         ...this.tabsTpl,
@@ -101,16 +135,23 @@ export default {
       newPass: '',
       rePass: '',
       oldPass: '',
+      deletePassword: false,
+      deleteButtonText: 'yesDeleteButton',
     };
   },
   methods: {
     e(copy) {
       return getTextByLang(this.componentText, copy, this.$store.state.setup.lang);
     },
+    hideModal() {
+      this.$refs.deleteAccount.hide();
+      this.loading = false;
+    },
     toggleTab(key, e) {
       e.preventDefault();
 
       this.resultError = '';
+      this.loading = false;
 
       this.tabs = { ...this.tabsTpl };
       this.tabs[key] = true;
@@ -118,28 +159,33 @@ export default {
     setClass(bool) {
       return bool === true ? 'active' : '';
     },
-    loginUser(nextFunction) {
-      this.resultError = '';
-
+    loginUser(nextFunction, pass) {
       fetch(variable.apiUrl.login, {
         body: JSON.stringify({
           email: this.user.email,
-          password: this.$refs.pass.value,
+          password: pass,
         }),
         ...fetching.header,
       })
         .then(response => response.json())
         .then(jsonData => nextFunction(jsonData))
-        .catch(() => null);
+        .catch(() => {
+          this.loading = false;
+          return null;
+        });
     },
     saveProfile() {
+      this.resultError = '';
+      this.loading = true;
+
       // empty Password
       if (this.$refs.pass.value === '') {
         this.resultError = 'passEmpty';
+        this.loading = false;
         return;
       }
 
-      this.loginUser(this.updateUserProfile);
+      this.loginUser(this.updateUserProfile, this.$refs.pass.value);
     },
     updateUserProfile(loginResult) {
       const apiUrl = `${variable.apiUrl.member}/${loginResult.userId}?access_token=${loginResult.id}`;
@@ -159,6 +205,7 @@ export default {
         .then((jsonData) => {
           if (jsonData.error && jsonData.error.message) {
             this.resultError = jsonData.error.message;
+            this.loading = false;
             return;
           }
 
@@ -180,7 +227,10 @@ export default {
             this.user = newUser;
           }
         })
-        .catch(() => null);
+        .catch(() => {
+          this.loading = false;
+          return null;
+        });
     },
     comparePassword() {
       this.notEqualPassword = '';
@@ -192,16 +242,19 @@ export default {
     },
     changePassword() {
       this.resultError = '';
+      this.loading = true;
 
       // empty Password
       if (this.newPass === '' || this.rePass === '' || this.oldPass === '') {
         this.resultError = 'allRequired';
+        this.loading = false;
         return;
       }
 
       // not match
       if (this.newPass !== this.rePass) {
         this.resultError = 'passwordNotMatch';
+        this.loading = false;
         return;
       }
 
@@ -221,6 +274,7 @@ export default {
         .then((response) => {
           if (response.ok === true) {
             this.resultError = 'passwordChanged';
+            this.loading = false;
             this.newPass = '';
             this.rePass = '';
             this.oldPass = '';
@@ -232,9 +286,52 @@ export default {
         .then((jsonData) => {
           if (jsonData.error && jsonData.error.message) {
             this.resultError = jsonData.error.message;
+            this.loading = false;
           }
         })
         .catch(() => null);
+    },
+    prepareDeleteAccount() {
+      if (!this.deletePassword) {
+        this.deletePassword = true;
+        this.deleteButtonText = 'deleteButton';
+      } else {
+        this.loading = true;
+        this.loginUser(this.deleteAccount, this.$refs.delpass.value);
+      }
+    },
+    deleteAccount(loginResult) {
+      if (loginResult.error && loginResult.error.message) {
+        this.loading = false;
+        this.resultError = 'Invalid password.';
+        return;
+      }
+
+      const apiUrl = `${variable.apiUrl.member}/${loginResult.userId}?access_token=${loginResult.id}`;
+      const apiRequest = {
+        body: JSON.stringify({
+          password: this.$refs.delpass.value,
+          email: this.user.email,
+        }),
+        ...fetching.header,
+        method: 'DELETE',
+      };
+
+      fetch(apiUrl, apiRequest)
+        .then(response => response.json())
+        .then((jsonData) => {
+          if (jsonData.count) {
+            this.hideModal();
+            this.$store.commit('setUser', {
+              redirect: routerUrl.Homepage.name,
+              userData: { ...User.tpl },
+            });
+          }
+        })
+        .catch(() => {
+          this.loading = false;
+          return null;
+        });
     },
   },
 };
