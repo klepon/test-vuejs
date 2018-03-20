@@ -17,6 +17,9 @@ export default new Vuex.Store({
     switchLang(state, langCode) {
       state.setup.lang = langCode;
     },
+    isUserLogin() {
+      User.isUserLogin(this);
+    },
     setUser(state, params) {
       User.setUser(state, params);
     },

@@ -83,7 +83,8 @@ export default {
             if (userData.email) {
               this.$store.commit('setUser', {
                 redirect: routerUrl.Dashboard.name,
-                userData: { token: loginResult.id, ...userData },
+                token: loginResult.id,
+                ...userData,
               });
             }
           })

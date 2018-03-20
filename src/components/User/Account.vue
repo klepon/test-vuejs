@@ -23,12 +23,12 @@
           <div v-show="editProfile">
             <div class="form-group">
               <label for="userName">{{e('yourName')}}</label>
-              <input :value="user.name" ref="name" type="text" class="form-control" />
+              <input v-model="user.name" ref="name" type="text" class="form-control" />
             </div>
 
             <div class="form-group">
               <label for="userName">{{e('yourDiscipline')}}</label>
-              <input :value="user.discipline" ref="discipline" type="text" class="form-control" />
+              <input v-model="user.discipline" ref="discipline" type="text" class="form-control" />
             </div>
 
             <div class="form-group">
@@ -109,7 +109,7 @@
 import routerUrl from '@/global/routerUrl';
 import getTextByLang from '@/global/getTextByLang';
 import fetching from '@/global/fetching';
-import User from '@/components/user/_userStore';
+import User from './_userStore';
 import componentText from './account.lang';
 import variable from './_var';
 
@@ -218,9 +218,7 @@ export default {
               discipline: this.$refs.discipline.value,
             };
 
-            this.$store.commit('setUser', {
-              userData: newUser,
-            });
+            this.$store.commit('setUser', newUser);
 
             // store update doesn't update the page, so let change data here
             this.editProfile = false;
@@ -325,7 +323,7 @@ export default {
             this.hideModal();
             this.$store.commit('setUser', {
               redirect: routerUrl.Homepage.name,
-              userData: { ...User.tpl },
+              ...User.tpl,
             });
           }
         })

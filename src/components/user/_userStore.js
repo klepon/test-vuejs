@@ -2,6 +2,7 @@
 import router from '@/global/router';
 import routerUrl from '@/global/routerUrl';
 import fetching from '@/global/fetching';
+import { setLocalStorage, getLocalStorage } from '@/global/localStorage';
 import variable from './_var';
 
 export default {
@@ -16,6 +17,24 @@ export default {
     email: '',
   },
 
+  localStorageKey: 'userData',
+
+  /* check if user already login
+  * how to use;
+  * add on store mutations
+    isUserLogin() {
+      User.isUserLogin(this);
+    },
+  * add on main.js or on first page with import store from './global/store';
+    store.commit('isUserLogin');
+  */
+  isUserLogin(store) {
+    const userData = getLocalStorage(this.localStorageKey);
+    if (userData !== null) {
+      store.commit('setUser', userData);
+    }
+  },
+
   /* set user data on store to mark login/logout
   * how to use; add on store mutations
     setUser(state, params) {
@@ -24,7 +43,9 @@ export default {
   */
   setUser(state, params) {
     // set user detil
-    state.user = { ...params.userData };
+    const { token, name, discipline, email } = params;
+    state.user = { token, name, discipline, email };
+    setLocalStorage(this.localStorageKey, { ...state.user });
 
     // redirect user after login/logout success
     if (params.redirect) router.push({ name: params.redirect });
@@ -44,7 +65,7 @@ export default {
       .then(() => {
         store.commit('setUser', {
           redirect: routerUrl.Homepage.name,
-          userData: { ...this.tpl },
+          ...this.tpl,
         });
       })
       .catch(() => null);

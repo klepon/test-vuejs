@@ -15,6 +15,9 @@ Vue.use(Card);
 Vue.use(Modal);
 Vue.use(Button);
 
+// check if user already login
+store.commit('isUserLogin');
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
