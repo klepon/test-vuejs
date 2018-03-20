@@ -23,7 +23,7 @@ import getTextByLang from '@/global/getTextByLang';
 import routerUrl from '@/global/routerUrl';
 import fetching from '@/global/fetching';
 import componentText from './login.lang';
-import variable from './_var';
+import url from './_var';
 import formPanel from './FormPanel';
 
 export default {
@@ -52,7 +52,7 @@ export default {
     },
     postLogin({ user, pass }) {
       // connect API
-      fetch(variable.apiUrl.login, {
+      fetch(url.login, {
         body: JSON.stringify({
           email: user,
           password: pass,
@@ -76,7 +76,7 @@ export default {
 
       // if success, get user data
       if (loginResult.id) {
-        fetch(`${variable.apiUrl.member}/${loginResult.userId}?access_token=${loginResult.id}`)
+        fetch(`${url.member}/${loginResult.userId}?access_token=${loginResult.id}`)
           .then(response => response.json())
           .then((userData) => {
             // if success, login user

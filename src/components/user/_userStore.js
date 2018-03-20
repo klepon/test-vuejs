@@ -3,7 +3,7 @@ import router from '@/global/router';
 import routerUrl from '@/global/routerUrl';
 import fetching from '@/global/fetching';
 import { setLocalStorage, getLocalStorage } from '@/global/localStorage';
-import variable from './_var';
+import url from './_var';
 
 export default {
   /* set user data object
@@ -58,7 +58,7 @@ export default {
     },
   */
   logoutUser(store) {
-    fetch(`${variable.apiUrl.member}/logout?access_token=${store.state.user.token}`, {
+    fetch(`${url.member}/logout?access_token=${store.state.user.token}`, {
       body: JSON.stringify({}),
       ...fetching.header,
     })

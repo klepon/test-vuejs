@@ -1,7 +1,7 @@
+import setting from '@/global/setting';
+
 export default {
-  apiUrl: {
-    member: 'http://localhost:3030/api/member',
-    login: 'http://localhost:3030/api/member/login',
-    changePassword: 'http://localhost:3030/api/member/change-password',
-  },
+  member: `${setting.apiUrl}api/member`,
+  login: `${setting.apiUrl}api/member/login`,
+  changePassword: `${setting.apiUrl}api/member/change-password`,
 };

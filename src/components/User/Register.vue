@@ -24,7 +24,7 @@ import getTextByLang from '@/global/getTextByLang';
 import routerUrl from '@/global/routerUrl';
 import fetching from '@/global/fetching';
 import componentText from './register.lang';
-import variable from './_var';
+import url from './_var';
 import formPanel from './FormPanel';
 
 export default {
@@ -53,7 +53,7 @@ export default {
     },
     postUser({ user, pass }) {
       // connect API
-      fetch(variable.apiUrl.member, {
+      fetch(url.member, {
         body: JSON.stringify({
           discipline: '',
           name: '',
