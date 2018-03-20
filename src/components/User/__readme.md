@@ -9,3 +9,5 @@
 * fetching from '@/global/fetching';
 * regex from '@/global/regex';
 * router from '@/global/router';
+* setting from '@/global/setting';
+ 

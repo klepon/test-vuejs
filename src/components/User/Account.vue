@@ -111,7 +111,7 @@ import getTextByLang from '@/global/getTextByLang';
 import fetching from '@/global/fetching';
 import User from './_userStore';
 import componentText from './account.lang';
-import variable from './_var';
+import url from './_var';
 
 export default {
   name: 'Account',
@@ -160,7 +160,7 @@ export default {
       return bool === true ? 'active' : '';
     },
     loginUser(nextFunction, pass) {
-      fetch(variable.apiUrl.login, {
+      fetch(url.login, {
         body: JSON.stringify({
           email: this.user.email,
           password: pass,
@@ -188,7 +188,7 @@ export default {
       this.loginUser(this.updateUserProfile, this.$refs.pass.value);
     },
     updateUserProfile(loginResult) {
-      const apiUrl = `${variable.apiUrl.member}/${loginResult.userId}?access_token=${loginResult.id}`;
+      const apiUrl = `${url.member}/${loginResult.userId}?access_token=${loginResult.id}`;
       const apiRequest = {
         body: JSON.stringify({
           discipline: this.$refs.discipline.value,
@@ -260,7 +260,7 @@ export default {
       this.updatePassword();
     },
     updatePassword() {
-      const apiUrl = `${variable.apiUrl.changePassword}/?access_token=${this.user.token}`;
+      const apiUrl = `${url.changePassword}/?access_token=${this.user.token}`;
       const apiRequest = {
         body: JSON.stringify({
           oldPassword: this.oldPass,
@@ -306,7 +306,7 @@ export default {
         return;
       }
 
-      const apiUrl = `${variable.apiUrl.member}/${loginResult.userId}?access_token=${loginResult.id}`;
+      const apiUrl = `${url.member}/${loginResult.userId}?access_token=${loginResult.id}`;
       const apiRequest = {
         body: JSON.stringify({
           password: this.$refs.delpass.value,
