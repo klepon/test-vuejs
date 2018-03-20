@@ -2,7 +2,7 @@
   <section class="container-fluid">
     <div v-show="user.token && isParent()">
       <h1>Project List</h1>
-      <a v-show="user.role === 1" class="nav-link" href="/#/Project/AddProject">Add Project</a>
+      <a class="nav-link" href="/#/Project/AddProject">Add Project</a>
 
       <ul>
         <li>
