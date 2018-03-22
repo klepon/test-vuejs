@@ -1,30 +1,36 @@
 <template>
   <section class="container-fluid">
-    <div class="col-sm-8 col-md-6 offset-sm-2 offset-md-3">
+    <b-form @submit="onSubmit" class="col-sm-8 col-md-6 offset-sm-2 offset-md-3">
       <b-card>
         <h1>{{title}}</h1>
-        <div class="form-group">
-          <label for="userName">{{labelUserEmail}}</label>
-          <input value="qw@qw.qw" ref="user" type="email" id="userName" placeholder="my-email@domain.com" class="form-control" />
-          <small v-show="userError !== ''" class="form-text text-muted">{{userError}}</small>
-        </div>
+        <b-form-group label-for="userName" :label="labelUserEmail" :description="userError">
+          <b-form-input id="userName"
+            type="email"
+            v-model="user"
+            required
+            placeholder="my-email@domain.com">
+          </b-form-input>
+        </b-form-group>
 
-        <div class="form-group">
-          <label for="password">{{labelPassword}}</label>
-          <input value="123456" ref="pass" type="password" id="password" class="form-control" />
-          <small v-show="passError !== ''" class="form-text text-muted">{{passError}}</small>
-        </div>
+        <b-form-group label-for="password" :label="labelPassword" :description="passError">
+          <b-form-input id="password"
+            type="password"
+            v-model="pass"
+            required
+            >
+          </b-form-input>
+        </b-form-group>
 
         <small v-show="resultError !== ''" class="form-text text-muted">{{resultError}}</small>
         <div class="flex-horizontal">
-          <b-button @click="onClick" variant="primary">{{submitButton}}</b-button>
+          <b-button type="submit" variant="primary">{{submitButton}}</b-button>
           <div v-show="loading" class="loader"></div>
         </div>
       </b-card>
 
       <p>{{switchText}}</p>
       <a class="btn btn-secondary" :href="`/#${switchUrl}`">{{switchButtonText}}</a>
-    </div>
+    </b-form>
   </section>
 </template>
 
@@ -39,13 +45,15 @@ export default {
     return {
       userError: '',
       passError: '',
+      user: 'qw@qw.qw',
+      pass: '123456',
     };
   },
   methods: {
     e(copy) {
       return getTextByLang(this.componentText, copy, this.$store.state.setup.lang);
     },
-    onClick(e) {
+    onSubmit(e) {
       e.preventDefault();
 
       // reset error
@@ -54,16 +62,16 @@ export default {
       this.$emit('startProcess');
 
       // error email
-      if (!regex.email.test(String(this.$refs.user.value).toLowerCase())) this.userError = this.e('userError');
+      if (!regex.email.test(String(this.user).toLowerCase())) this.userError = this.e('userError');
 
       // empty email
-      if (this.$refs.user.value === '') this.userError = this.e('userEmpty');
+      if (this.user === '') this.userError = this.e('userEmpty');
 
       // error Password
-      if (this.$refs.pass.value.length < this.minPassLength) this.passError = this.e('passError');
+      if (this.pass.length < this.minPassLength) this.passError = this.e('passError');
 
       // empty Password
-      if (this.$refs.pass.value === '') this.passError = this.e('passEmpty');
+      if (this.pass === '') this.passError = this.e('passEmpty');
 
       // return if error
       if (this.passError !== '' || this.userError !== '') {
@@ -71,7 +79,7 @@ export default {
         return;
       }
 
-      this.$emit('postAPI', { user: this.$refs.user.value, pass: this.$refs.pass.value });
+      this.$emit('postAPI', { user: this.user, pass: this.pass });
     },
   },
 };

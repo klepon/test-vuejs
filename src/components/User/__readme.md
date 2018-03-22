@@ -3,11 +3,10 @@
 * add isUserLogin(store) on main.js or on first page with import store from './global/store';
 
 ** required
-* { Card, Modal, Button } from 'bootstrap-vue/es/components';
+* { Card, Modal, Button, Form, FormGroup, FormInput } from 'bootstrap-vue/es/components';
 * routerUrl from '@/global/routerUrl';
 * getTextByLang from '@/global/getTextByLang';
 * fetching from '@/global/fetching';
 * regex from '@/global/regex';
 * router from '@/global/router';
 * setting from '@/global/setting';
- 

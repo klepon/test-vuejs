@@ -2,7 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import wysiwyg from 'vue-wysiwyg';
-import { Card, Modal, Button } from 'bootstrap-vue/es/components';
+import { Card, Modal, Button, Form, FormGroup, FormInput } from 'bootstrap-vue/es/components';
 
 import store from './global/store';
 import router from './global/router';
@@ -14,6 +14,9 @@ Vue.use(wysiwyg, {}); // config https://github.com/chmln/vue-wysiwyg
 Vue.use(Card);
 Vue.use(Modal);
 Vue.use(Button);
+Vue.use(Form);
+Vue.use(FormGroup);
+Vue.use(FormInput);
 
 // check if user already login
 store.commit('isUserLogin');

@@ -20,56 +20,67 @@
             <b-button @click="editProfile = true" variant="primary">{{e('edit')}}</b-button>
           </div>
 
-          <div v-show="editProfile">
-            <div class="form-group">
-              <label for="userName">{{e('yourName')}}</label>
-              <input v-model="user.name" ref="name" type="text" class="form-control" />
-            </div>
+          <b-form @submit="submitSaveProfile" v-show="editProfile">
+            <b-form-group>
+              <b-form-input type="text"
+                v-model="user.name"
+                :placeholder="e('yourName')" />
+            </b-form-group>
 
-            <div class="form-group">
-              <label for="userName">{{e('yourDiscipline')}}</label>
-              <input v-model="user.discipline" ref="discipline" type="text" class="form-control" />
-            </div>
+            <b-form-group>
+              <b-form-input type="text"
+                v-model="user.discipline"
+                :placeholder="e('yourDiscipline')" />
+            </b-form-group>
 
-            <div class="form-group">
-              <label for="password">{{e('yourCurrentPasswod')}}*</label>
-              <input ref="pass" type="password" class="form-control" />
-            </div>
+            <b-form-group>
+              <b-form-input type="password"
+                v-model="form.profilePass"
+                :placeholder="e('yourCurrentPasswod')" />
+            </b-form-group>
 
             <small v-show="resultError !== ''" class="form-text text-muted">{{e(resultError)}}</small>
             <div class="flex-horizontal">
-              <b-button @click="saveProfile" variant="primary">{{e('saveProfile')}}</b-button>
-              <b-button @click="editProfile = false" variant="secondary">{{e('cancel')}}</b-button>
+              <b-button type="submit" variant="primary">{{e('saveProfile')}}</b-button>
+              <b-button type="button" @click="editProfile = false" variant="secondary">{{e('cancel')}}</b-button>
               <div class="loader" v-show="loading"></div>
             </div>
-          </div>
+          </b-form>
         </div>
 
-        <div v-show="tabs.changePassword">
+        <b-form @submit="submitChangePassword" v-show="tabs.changePassword">
           <h1>{{e('changePassword')}}</h1>
 
-          <div class="form-group">
-            <label for="password">{{e('newPasswod')}}*</label>
-            <input @keyup="comparePassword" v-model="newPass" type="password" class="form-control" />
-          </div>
+          <b-form-group>
+            <b-form-input type="password"
+              v-model="form.newPass"
+              @keyup.native="comparePassword"
+              required
+              :pattern="`.{${form.minPassLength},}`"
+              :placeholder="`${e('newPasswod')} - minimum ${form.minPassLength}`" />
+          </b-form-group>
 
-          <div class="form-group">
-            <label for="password">{{e('confirmPasswod')}}*</label>
-            <input @keyup="comparePassword" v-model="rePass" type="password" class="form-control" />
-            <small v-show="notEqualPassword !== ''" class="form-text text-muted">{{e(notEqualPassword)}}</small>
-          </div>
+          <b-form-group :description="e(notEqualPassword)">
+            <b-form-input type="password"
+              v-model="form.rePass"
+              @keyup.native="comparePassword"
+              required
+              :placeholder="e('confirmPasswod')" />
+          </b-form-group>
 
-          <div class="form-group">
-            <label for="password">{{e('yourCurrentPasswod')}}*</label>
-            <input v-model="oldPass" type="password" class="form-control" />
-          </div>
+          <b-form-group>
+            <b-form-input type="password"
+              v-model="form.oldPass"
+              required
+              :placeholder="e('yourCurrentPasswod')" />
+          </b-form-group>
 
           <small v-show="resultError !== ''" class="form-text text-muted">{{e(resultError)}}</small>
           <div class="flex-horizontal">
-            <b-button @click="changePassword" variant="primary">{{e('saveProfile')}}</b-button>
+            <b-button type="submit" variant="primary">{{e('saveProfile')}}</b-button>
             <div class="loader" v-show="loading"></div>
           </div>
-        </div>
+        </b-form>
 
         <div v-show="tabs.removeAccount">
           <h1>{{e('removeAccount')}}</h1>
@@ -86,18 +97,19 @@
             >
             <p v-html="e('deleteMessageWarning')"></p>
 
-            <div class="form-group" v-show="deletePassword">
-              <label for="password">{{e('deletePasswordConfirm')}}*</label>
-              <input ref="delpass" type="password" class="form-control" />
-            </div>
+            <b-form-group v-show="deletePassword">
+              <b-form-input type="password"
+                v-model="form.deletePass"
+                required
+                :placeholder="e('deletePasswordConfirm')" />
+            </b-form-group>
 
             <small v-show="resultError !== ''" class="form-text text-muted">{{e(resultError)}}</small>
             <div class="flex-horizontal">
-              <b-button @click="prepareDeleteAccount" variant="danger">{{e(deleteButtonText)}}</b-button>
+              <b-button @click="submitDeleteAccount" variant="danger">{{e(deleteButtonText)}}</b-button>
               <b-button @click="hideModal" variant="secondary">{{e('cancel')}}</b-button>
               <div class="loader" v-show="loading"></div>
             </div>
-
           </b-modal>
         </div>
       </div>
@@ -132,11 +144,16 @@ export default {
         profile: true,
       },
       componentText,
-      newPass: '',
-      rePass: '',
-      oldPass: '',
       deletePassword: false,
       deleteButtonText: 'yesDeleteButton',
+      form: {
+        deletePass: '',
+        profilePass: '',
+        newPass: '',
+        rePass: '',
+        oldPass: '',
+        minPassLength: 6,
+      },
     };
   },
   methods: {
@@ -174,27 +191,27 @@ export default {
           return null;
         });
     },
-    saveProfile() {
+    submitSaveProfile() {
       this.resultError = '';
       this.loading = true;
 
       // empty Password
-      if (this.$refs.pass.value === '') {
+      if (this.form.profilePass === '') {
         this.resultError = 'passEmpty';
         this.loading = false;
         return;
       }
 
-      this.loginUser(this.updateUserProfile, this.$refs.pass.value);
+      this.loginUser(this.updateProfile, this.form.profilePass);
     },
-    updateUserProfile(loginResult) {
+    updateProfile(loginResult) {
       const apiUrl = `${url.member}/${loginResult.userId}?access_token=${loginResult.id}`;
       const apiRequest = {
         body: JSON.stringify({
-          discipline: this.$refs.discipline.value,
-          name: this.$refs.name.value,
-          password: this.$refs.pass.value,
           email: this.user.email,
+          name: this.user.name,
+          discipline: this.user.discipline,
+          password: this.form.profilePass,
         }),
         ...fetching.header,
         method: 'PUT',
@@ -214,8 +231,6 @@ export default {
             const newUser = {
               ...this.user,
               token: loginResult.id,
-              name: this.$refs.name.value,
-              discipline: this.$refs.discipline.value,
             };
 
             this.$store.commit('setUser', newUser);
@@ -233,38 +248,39 @@ export default {
     },
     comparePassword() {
       this.notEqualPassword = '';
-      if (this.newPass === '' || this.rePass === '') return;
 
-      if (this.newPass !== this.rePass) {
+      if (this.form.newPass === '' || this.form.rePass === '') return;
+
+      if (this.form.newPass !== this.form.rePass) {
         this.notEqualPassword = 'passwordNotMatch';
       }
     },
-    changePassword() {
+    submitChangePassword() {
       this.resultError = '';
       this.loading = true;
 
       // empty Password
-      if (this.newPass === '' || this.rePass === '' || this.oldPass === '') {
+      if (this.form.newPass === '' || this.form.rePass === '' || this.form.oldPass === '') {
         this.resultError = 'allRequired';
         this.loading = false;
         return;
       }
 
       // not match
-      if (this.newPass !== this.rePass) {
+      if (this.form.newPass !== this.form.rePass) {
         this.resultError = 'passwordNotMatch';
         this.loading = false;
         return;
       }
 
-      this.updatePassword();
+      this.changePassword();
     },
-    updatePassword() {
+    changePassword() {
       const apiUrl = `${url.changePassword}/?access_token=${this.user.token}`;
       const apiRequest = {
         body: JSON.stringify({
-          oldPassword: this.oldPass,
-          newPassword: this.newPass,
+          oldPassword: this.form.oldPass,
+          newPassword: this.form.newPass,
         }),
         ...fetching.header,
       };
@@ -274,9 +290,9 @@ export default {
           if (response.ok === true) {
             this.resultError = 'passwordChanged';
             this.loading = false;
-            this.newPass = '';
-            this.rePass = '';
-            this.oldPass = '';
+            this.form.newPass = '';
+            this.form.rePass = '';
+            this.form.oldPass = '';
             return '';
           }
 
@@ -290,13 +306,13 @@ export default {
         })
         .catch(() => null);
     },
-    prepareDeleteAccount() {
+    submitDeleteAccount() {
       if (!this.deletePassword) {
         this.deletePassword = true;
         this.deleteButtonText = 'deleteButton';
       } else {
         this.loading = true;
-        this.loginUser(this.deleteAccount, this.$refs.delpass.value);
+        this.loginUser(this.deleteAccount, this.form.deletePass);
       }
     },
     deleteAccount(loginResult) {
@@ -309,7 +325,7 @@ export default {
       const apiUrl = `${url.member}/${loginResult.userId}?access_token=${loginResult.id}`;
       const apiRequest = {
         body: JSON.stringify({
-          password: this.$refs.delpass.value,
+          password: this.form.deletePass,
           email: this.user.email,
         }),
         ...fetching.header,

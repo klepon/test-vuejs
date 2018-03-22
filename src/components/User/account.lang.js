@@ -88,8 +88,8 @@ export default {
     id: 'Anda yakin mau menghapus akun Anda?<br />Akun anda akan terhapus secara permanen.',
   },
   deletePasswordConfirm: {
-    en: 'Please enter your password to confirm.',
-    id: 'Mahon masukkan kata kunci untuk konfirmasi.',
+    en: 'Enter password to confirm.',
+    id: 'Ketik kata kunci untuk konfirmasi.',
   },
   warningTitle: {
     en: 'Warning',
