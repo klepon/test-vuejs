@@ -1,39 +1,60 @@
 <template>
   <section class="container-fluid">
-    <div v-show="user.token">
+    <b-form @submit="onSubmit" v-show="user.token">
       <h1>Add Project</h1>
 
-      <p>Todo:</p>
-      <ul>
-        <li>nama project</li>
-        <li>keterangan project</li>
-        <li>member yg disertakan</li>
-      </ul>
+      <b-form-group :description="titleError">
+        <b-form-input
+          type="text"
+          v-model="project.title"
+          required
+          :placeholder="e('title')">
+        </b-form-input>
+      </b-form-group>
 
-      <div class="form-group">
-        <label for="projectName">Project name</label>
-        <input type="text" id="projectName" placeholder="Project name" class="form-control" />
-      </div>
+      <b-form-group :description="e('descriptionDesc')">
+        <wysiwyg v-model="project.description" :placeholder="e('description')" />
+      </b-form-group>
 
-      <div class="form-group">
-        <label for="projectDesc">Project description</label>
-        <wysiwyg id="projectDesc" placeholder="Project description" />
-        <small class="form-text text-muted">Sort description about your project</small>
-      </div>
+      <b-btn type="submit" variant="primary">{{e('submmitBtn')}}</b-btn>
+    </b-form >
 
-      <button type="submit" class="btn btn-primary">Save</button>
-
+    <div v-show="!user.token">
+      {{e('pleaseLogin')}}
     </div>
+
+    <p><b>Todo:</b></p>
+    <ul>
+      <li>nama project</li>
+      <li>keterangan project</li>
+      <li>set owner sebagai admin</li>
+    </ul>
   </section>
 </template>
 
 <script>
+import getTextByLang from '@/global/getTextByLang';
+import componentText from './addProject.lang';
+
 export default {
   name: 'AddProject',
   data() {
     return {
       user: this.$store.state.user,
+      project: {
+        title: '',
+        description: '',
+      },
+      titleError: '',
     };
+  },
+  methods: {
+    e(copy) {
+      return getTextByLang(componentText, copy, this.$store.state.setup.lang);
+    },
+    onSubmit() {
+      console.table({title: this.project.title, description: this.project.description});
+    },
   },
 };
 </script>
