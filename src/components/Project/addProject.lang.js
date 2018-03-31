@@ -36,8 +36,12 @@ export default {
     id: 'Buat proyek',
   },
   pleaseLogin: {
-    en: 'You need to login before adding any project',
-    id: 'Anda perlu masuk untuk menambah project',
+    en: 'You need to login before adding any project.',
+    id: 'Anda perlu masuk untuk menambah project.',
+  },
+  'Authorization Required': {
+    en: 'Authorization required, please contact your manager.',
+    id: 'Otorisasi diperlukan, silahkan menghubungi manager Anda.',
   },
   foo: {
     en: '',

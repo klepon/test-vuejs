@@ -19,7 +19,13 @@ Vue.use(Form);
 Vue.use(FormGroup);
 Vue.use(FormInput);
 
-Vue.use(kpUtils);
+const mp = {
+  install() {
+    Vue.kpUtils = kpUtils;
+    Vue.prototype.$kpUtils = kpUtils;
+  },
+};
+Vue.use(mp);
 
 
 // check if user already login

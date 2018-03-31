@@ -2,8 +2,8 @@
   <section class="container-fluid">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a :href="`/#/Project/${project.id}`">{{project.name}}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Library</li>
+        <li class="breadcrumb-item"><a :href="`/#/Project/`">{{e('projectList')}}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{e('projectDetail')}}</li>
       </ol>
     </nav>
 
@@ -61,6 +61,9 @@ export default {
     onSubmit() {
       // console.table({title: this.project.title, description: this.project.description});
     },
+  },
+  beforeMount() {
+    this.$kpUtils.isLoggedIn();
   },
 };
 </script>

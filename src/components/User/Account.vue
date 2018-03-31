@@ -1,5 +1,5 @@
 <template>
-  <section v-show="user.token" class="container-fluid">
+  <section class="container-fluid">
     <div class="row">
       <div class="col-sm-4 col-md-3">
         <nav class="nav flex-column pull-left">
@@ -346,6 +346,9 @@ export default {
           return null;
         });
     },
+  },
+  beforeMount() {
+    this.$kpUtils.isLoggedIn();
   },
 };
 </script>

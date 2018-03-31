@@ -10,3 +10,8 @@
 * regex from '@/global/regex';
 * router from '@/global/router';
 * setting from '@/global/setting';
+
+** add auto redirect on user loose token on each page that need auth, see user/Account.vue
+beforeMount() {
+  this.$kpUtils.isLoggedIn();
+},

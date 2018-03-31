@@ -1,7 +1,9 @@
 /* eslint-disable no-console */
-import Vue from 'vue';
+import store from '@/global/store';
+import router from '@/global/router';
+import routerUrl from '@/global/routerUrl';
 
-export const kpUtils = {
+export default {
   getTextByLang(langObj, copy, langCode) {
     if (copy === undefined || copy === '') return '';
 
@@ -37,6 +39,11 @@ export const kpUtils = {
       console.log(`localStorage Error on storing (${key}) Object`);
     }
   },
+  isLoggedIn() { // extends user state format for `store.state.user.token`
+    if (!store.state.user.token) {
+      router.push({ name: routerUrl.Login.name });
+    }
+  },
   apiHeader: {
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     credentials: 'omit', // include, same-origin, *omit
@@ -53,9 +60,9 @@ export const kpUtils = {
   },
 };
 
-export default {
-  install() {
-    Vue.kpUtils = kpUtils;
-    Vue.prototype.$kpUtils = kpUtils;
-  },
-};
+// export default {
+//   install() {
+//     Vue.kpUtils = kpUtils;
+//     Vue.prototype.$kpUtils = kpUtils;
+//   },
+// };

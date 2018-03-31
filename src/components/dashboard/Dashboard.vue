@@ -1,9 +1,6 @@
 <template>
   <section class="container-fluid">
-    <div v-show="!user.token">
-      <h1>tak ada token, silahkan login dulu</h1>
-    </div>
-    <div v-show="user.token" class="row">
+    <div class="row">
       <h1 class="col-sm-12">Dashboard</h1>
 
       <p class="col-sm-12"><small>{{user.token}}</small></p>
@@ -49,6 +46,9 @@ export default {
     editProfile() {
       router.push({ name: routerUrl.Account.name });
     },
+  },
+  beforeMount() {
+    this.$kpUtils.isLoggedIn();
   },
 };
 </script>

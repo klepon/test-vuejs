@@ -1,6 +1,6 @@
 <template>
-  <section class="container-fluid">
-    <div v-show="user.token">
+  <section v-if="user.token" class="container-fluid">
+    <div>
       <h1>Project Detail</h1>
 
       <p>detail project for id: {{$route.params.id}}, project terdiri dari</p>
@@ -40,6 +40,9 @@ export default {
     return {
       user: this.$store.state.user,
     };
+  },
+  beforeMount() {
+    this.$kpUtils.isLoggedIn();
   },
 };
 </script>

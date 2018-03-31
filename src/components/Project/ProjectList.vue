@@ -1,6 +1,6 @@
 <template>
   <section class="container-fluid">
-    <div v-show="user.token && isParent()">
+    <div v-if="user.token && isParent()">
       <h1>{{e('projectList')}}</h1>
       <a class="nav-link" href="/#/Project/AddProject">Add Project</a>
 
@@ -8,7 +8,11 @@
         Loading.... <div class="loader"></div>
       </div>
 
-      <ul>
+      <div v-if="projects.error" class="alert alert-danger">
+        <strong>{{projects.error.name}}:</strong> {{e(projects.error.message)}}
+      </div>
+
+      <ul v-if="projects.length > 0">
         <li v-for="project in projects" v-bind:key="project.id">
           <a :href="`/#/Project/${project.id}`">{{project.name}}</a>
           <p>{{project.description}}</p>
@@ -60,6 +64,7 @@ export default {
   },
   beforeMount() {
     this.getProjetData();
+    this.$kpUtils.isLoggedIn();
   },
 };
 </script>

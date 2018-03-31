@@ -1,7 +1,7 @@
 // Import Vue
 import router from '@/global/router';
 import routerUrl from '@/global/routerUrl';
-import { kpUtils } from '@/global/utils';
+import kpUtils from '@/global/utils';
 import url from './_var';
 
 export default {
