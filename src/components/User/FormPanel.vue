@@ -35,9 +35,6 @@
 </template>
 
 <script>
-import getTextByLang from '@/global/getTextByLang';
-import regex from '@/global/regex';
-
 export default {
   name: 'FormTpl',
   props: ['title', 'labelUserEmail', 'labelPassword', 'loading', 'resultError', 'submitButton', 'switchText', 'switchButtonText', 'switchUrl', 'componentText', 'minPassLength'],
@@ -51,7 +48,7 @@ export default {
   },
   methods: {
     e(copy) {
-      return getTextByLang(this.componentText, copy, this.$store.state.setup.lang);
+      return this.$kpUtils.getTextByLang(this.componentText, copy, this.$store.state.setup.lang);
     },
     onSubmit(e) {
       e.preventDefault();
@@ -62,7 +59,7 @@ export default {
       this.$emit('startProcess');
 
       // error email
-      if (!regex.email.test(String(this.user).toLowerCase())) this.userError = this.e('userError');
+      if (!this.$kpUtils.regex.email.test(String(this.user).toLowerCase())) this.userError = this.e('userError');
 
       // empty email
       if (this.user === '') this.userError = this.e('userEmpty');

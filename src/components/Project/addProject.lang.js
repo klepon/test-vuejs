@@ -1,4 +1,16 @@
 export default {
+  addProject: {
+    en: 'Add Project',
+    id: 'Tambah Project',
+  },
+  projectDetail: {
+    en: 'Detail Project',
+    id: 'Proyek Detil',
+  },
+  projectList: {
+    en: 'Project List',
+    id: 'Daftar Proyek',
+  },
   title: {
     en: 'Project title',
     id: 'Nama proyek',

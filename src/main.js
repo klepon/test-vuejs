@@ -6,6 +6,7 @@ import { Card, Modal, Button, Form, FormGroup, FormInput } from 'bootstrap-vue/e
 
 import store from './global/store';
 import router from './global/router';
+import kpUtils from './global/utils';
 
 import App from './App';
 
@@ -17,6 +18,9 @@ Vue.use(Button);
 Vue.use(Form);
 Vue.use(FormGroup);
 Vue.use(FormInput);
+
+Vue.use(kpUtils);
+
 
 // check if user already login
 store.commit('isUserLogin');

@@ -119,8 +119,6 @@
 
 <script>
 import routerUrl from '@/global/routerUrl';
-import getTextByLang from '@/global/getTextByLang';
-import fetching from '@/global/fetching';
 import User from './_userStore';
 import componentText from './account.lang';
 import url from './_var';
@@ -158,7 +156,7 @@ export default {
   },
   methods: {
     e(copy) {
-      return getTextByLang(this.componentText, copy, this.$store.state.setup.lang);
+      return this.$kpUtils.getTextByLang(this.componentText, copy, this.$store.state.setup.lang);
     },
     hideModal() {
       this.$refs.deleteAccount.hide();
@@ -182,7 +180,7 @@ export default {
           email: this.user.email,
           password: pass,
         }),
-        ...fetching.header,
+        ...this.$kpUtils.apiHeader,
       })
         .then(response => response.json())
         .then(jsonData => nextFunction(jsonData))
@@ -213,7 +211,7 @@ export default {
           discipline: this.user.discipline,
           password: this.form.profilePass,
         }),
-        ...fetching.header,
+        ...this.$kpUtils.apiHeader,
         method: 'PUT',
       };
 
@@ -282,7 +280,7 @@ export default {
           oldPassword: this.form.oldPass,
           newPassword: this.form.newPass,
         }),
-        ...fetching.header,
+        ...this.$kpUtils.apiHeader,
       };
 
       fetch(apiUrl, apiRequest)
@@ -328,7 +326,7 @@ export default {
           password: this.form.deletePass,
           email: this.user.email,
         }),
-        ...fetching.header,
+        ...this.$kpUtils.apiHeader,
         method: 'DELETE',
       };
 

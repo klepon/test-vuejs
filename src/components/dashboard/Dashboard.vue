@@ -33,7 +33,6 @@
 <script>
 import router from '@/global/router';
 import routerUrl from '@/global/routerUrl';
-import getTextByLang from '@/global/getTextByLang';
 import componentText from './dashboard.lang';
 
 export default {
@@ -45,7 +44,7 @@ export default {
   },
   methods: {
     e(copy) {
-      return getTextByLang(componentText, copy, this.$store.state.setup.lang);
+      return this.$kpUtils.getTextByLang(componentText, copy, this.$store.state.setup.lang);
     },
     editProfile() {
       router.push({ name: routerUrl.Account.name });

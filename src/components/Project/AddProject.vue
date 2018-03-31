@@ -1,7 +1,14 @@
 <template>
   <section class="container-fluid">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a :href="`/#/Project/${project.id}`">{{project.name}}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Library</li>
+      </ol>
+    </nav>
+
     <b-form @submit="onSubmit" v-show="user.token">
-      <h1>Add Project</h1>
+      <h1>{{e('addProject')}}</h1>
 
       <b-form-group :description="titleError">
         <b-form-input
@@ -33,7 +40,6 @@
 </template>
 
 <script>
-import getTextByLang from '@/global/getTextByLang';
 import componentText from './addProject.lang';
 
 export default {
@@ -50,10 +56,10 @@ export default {
   },
   methods: {
     e(copy) {
-      return getTextByLang(componentText, copy, this.$store.state.setup.lang);
+      return this.$kpUtils.getTextByLang(componentText, copy, this.$store.state.setup.lang);
     },
     onSubmit() {
-      console.table({title: this.project.title, description: this.project.description});
+      // console.table({title: this.project.title, description: this.project.description});
     },
   },
 };

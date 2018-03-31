@@ -1,8 +1,7 @@
 // Import Vue
 import router from '@/global/router';
 import routerUrl from '@/global/routerUrl';
-import fetching from '@/global/fetching';
-import { setLocalStorage, getLocalStorage } from '@/global/localStorage';
+import { kpUtils } from '@/global/utils';
 import url from './_var';
 
 export default {
@@ -29,7 +28,7 @@ export default {
     store.commit('isUserLogin');
   */
   isUserLogin(store) {
-    const userData = getLocalStorage(this.localStorageKey);
+    const userData = kpUtils.getLocalStorage(this.localStorageKey);
     if (userData !== null) {
       store.commit('setUser', userData);
     }
@@ -45,7 +44,7 @@ export default {
     // set user detil
     const { token, name, discipline, email } = params;
     state.user = { token, name, discipline, email };
-    setLocalStorage(this.localStorageKey, { ...state.user });
+    kpUtils.setLocalStorage(this.localStorageKey, { ...state.user });
 
     // redirect user after login/logout success
     if (params.redirect) router.push({ name: params.redirect });
@@ -60,7 +59,7 @@ export default {
   logoutUser(store) {
     fetch(`${url.member}/logout?access_token=${store.state.user.token}`, {
       body: JSON.stringify({}),
-      ...fetching.header,
+      ...kpUtils.apiHeader,
     })
       .then(() => {
         store.commit('setUser', {

@@ -19,9 +19,7 @@
 </template>
 
 <script>
-import getTextByLang from '@/global/getTextByLang';
 import routerUrl from '@/global/routerUrl';
-import fetching from '@/global/fetching';
 import componentText from './login.lang';
 import url from './_var';
 import formPanel from './FormPanel';
@@ -41,7 +39,7 @@ export default {
   },
   methods: {
     e(copy) {
-      return getTextByLang(componentText, copy, this.$store.state.setup.lang);
+      return this.$kpUtils.getTextByLang(componentText, copy, this.$store.state.setup.lang);
     },
     startProcess() {
       this.loginError = '';
@@ -57,7 +55,7 @@ export default {
           email: user,
           password: pass,
         }), // must match 'Content-Type' header
-        ...fetching.header,
+        ...this.$kpUtils.apiHeader,
       })
         .then(response => response.json())
         .then(jsonData => this.getUserData(jsonData))
