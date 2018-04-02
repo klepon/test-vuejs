@@ -23,8 +23,8 @@ export default {
     id: 'Tambah Project Baru',
   },
   'Authorization Required': {
-    en: 'Authorization required, please contact your manager.',
-    id: 'Otorisasi diperlukan, silahkan menghubungi manager Anda.',
+    en: 'Authorization required, please relogin or contact your manager.',
+    id: 'Otorisasi diperlukan, silahkan login ulang atau menghubungi manager Anda.',
   },
   foo: {
     en: '',
