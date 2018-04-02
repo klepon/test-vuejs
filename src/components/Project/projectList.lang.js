@@ -11,8 +11,8 @@ export default {
     id: 'Tambah Project',
   },
   projectDetail: {
-    en: 'Detail Project',
-    id: 'Proyek Detil',
+    en: '',
+    id: '',
   },
   projectList: {
     en: 'Project List',

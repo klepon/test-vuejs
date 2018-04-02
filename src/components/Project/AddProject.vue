@@ -68,12 +68,7 @@ export default {
         .then((jsonData) => {
           // success
           if (jsonData.id) {
-            this.$router.push({
-              name: this.$kpUtils.routerUrl.Project.name,
-              params: {
-                reloadList: true,
-              },
-            });
+            this.$router.push({ name: this.$kpUtils.routerUrl.Project.name });
           } else {
             // no auth: {error.statusCode: 401}
             this.$kpUtils.utilModal({

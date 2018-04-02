@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="container-fluid">
     <section class="header">
       <div class="nav nav-border">
         <a class="nav-link" :href="url('Homepage')"><img :src="$store.state.setup.logoImage" class="logo"></a>
@@ -21,14 +21,14 @@
       </div>
 
       <div class="row header-line">
-        <div class="col-sm-1 bg-primary"></div>
-        <div class="col-sm-1 bg-secondary"></div>
-        <div class="col-sm-1 bg-success"></div>
-        <div class="col-sm-1 bg-danger"></div>
-        <div class="col-sm-1 bg-warning"></div>
-        <div class="col-sm-1 bg-light"></div>
-        <div class="col-sm-1 bg-info"></div>
-        <div class="col-sm-5 bg-dark"></div>
+        <div class="col-1 bg-primary"></div>
+        <div class="col-1 bg-secondary"></div>
+        <div class="col-1 bg-success"></div>
+        <div class="col-1 bg-danger"></div>
+        <div class="col-1 bg-warning"></div>
+        <div class="col-1 bg-light"></div>
+        <div class="col-1 bg-info"></div>
+        <div class="col-5 bg-dark"></div>
       </div>
     </section>
 

@@ -1,6 +1,6 @@
 <template>
   <section class="container-fluid">
-    <b-form @submit="onSubmit" class="col-sm-8 col-md-6 offset-sm-2 offset-md-3">
+    <b-form @submit="onSubmit" class="col-8 col-md-6 offset-sm-2 offset-md-3">
       <b-card>
         <h1>{{title}}</h1>
         <b-form-group label-for="userName" :label="labelUserEmail" :description="userError">

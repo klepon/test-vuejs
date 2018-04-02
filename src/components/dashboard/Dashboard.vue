@@ -1,19 +1,19 @@
 <template>
   <section class="container-fluid">
     <div class="row">
-      <h1 class="col-sm-12">Dashboard</h1>
+      <h1 class="col-12">Dashboard</h1>
 
-      <p class="col-sm-12"><small>{{user.token}}</small></p>
-      <p class="col-sm-12"><small>{{user.email}}</small></p>
+      <p class="col-12"><small>{{user.token}}</small></p>
+      <p class="col-12"><small>{{user.email}}</small></p>
 
-      <div class="col-sm-6 col-md-4">
+      <div class="col-6 col-md-4">
         <b-card>
           <h3 @click="editProfile">{{user.name || e('addName')}}</h3>
           <p @click="editProfile">{{user.discipline   || e('addDiscipline')}}</p>
         </b-card>
       </div>
 
-      <div class="col-sm-6 col-md-8">
+      <div class="col-6 col-md-8">
         <p>berisi ringkasan project, task, dan report, misal 20 task complit, 30 bug, 2 project done, 1 mangkrak, etc</p>
         <p>project -> task -> task status</p>
         <p>sortcut</p>

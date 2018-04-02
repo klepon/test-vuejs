@@ -1,7 +1,7 @@
 <template>
   <section class="container-fluid">
     <div class="row">
-      <div class="col-sm-4 col-md-3">
+      <div class="col-4 col-md-3">
         <nav class="nav flex-column pull-left">
           <a @click="toggleTab('profile', $event)" :class="`nav-link ${setClass(tabs.profile)}`" href="#">{{e('profile')}}</a>
           <a @click="toggleTab('changePassword', $event)" :class="`nav-link ${setClass(tabs.changePassword)}`" href="#">{{e('changePassword')}}</a>
@@ -9,7 +9,7 @@
         </nav>
       </div>
 
-      <div class="col-sm-8 col-md-9">
+      <div class="col-8 col-md-9">
         <div v-show="tabs.profile">
           <h1>{{e('profile')}}</h1>
           <div v-show="!editProfile">

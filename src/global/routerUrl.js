@@ -24,7 +24,7 @@ export default {
     name: 'AddProject',
   },
   ProjectID: {
-    path: ':id',
+    path: ':id/*',
     name: 'ProjectID',
   },
   Report: {
