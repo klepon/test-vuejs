@@ -20,7 +20,6 @@
 
 <script>
 import router from '@/global/router';
-import routerUrl from '@/global/routerUrl';
 import componentText from './register.lang';
 import url from './_var';
 import formPanel from './FormPanel';
@@ -34,7 +33,7 @@ export default {
     return {
       registerError: '',
       loading: false,
-      routerUrl,
+      routerUrl: this.$kpUtils.routerUrl,
       componentText,
     };
   },
@@ -78,7 +77,7 @@ export default {
 
           // success
           if (jsonData.id) {
-            router.push({ name: routerUrl.Login.name });
+            router.push({ name: this.$kpUtils.routerUrl.Login.name });
           }
         })
         .catch(() => {

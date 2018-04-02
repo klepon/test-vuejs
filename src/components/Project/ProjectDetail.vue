@@ -1,8 +1,6 @@
 <template>
   <section v-if="user.token" class="container-fluid">
     <div>
-      <h1>Project Detail</h1>
-
       <p>detail project for id: {{$route.params.id}}, project terdiri dari</p>
       <ul>
         <li>project title dan descripsi</li>

@@ -1,15 +1,14 @@
 <template>
   <section class="container-fluid">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a :href="`/#/Project/`">{{e('projectList')}}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{e('addProject')}}</li>
-      </ol>
-    </nav>
+
+    <p><b>Todo:</b></p>
+    <ul>
+      <li>nama project -> done</li>
+      <li>keterangan project -> done</li>
+      <li>set owner sebagai admin</li>
+    </ul>
 
     <b-form @submit="onSubmit">
-      <h1>{{e('addProject')}}</h1>
-
       <b-form-group :description="util.titleError">
         <b-form-input
           type="text"
@@ -26,18 +25,10 @@
       <b-btn type="submit" variant="primary">{{e('submmitBtn')}}</b-btn>
     </b-form >
 
-    <p><b>Todo:</b></p>
-    <ul>
-      <li>nama project</li>
-      <li>keterangan project</li>
-      <li>set owner sebagai admin</li>
-    </ul>
   </section>
 </template>
 
 <script>
-import router from '@/global/router';
-import routerUrl from '@/global/routerUrl';
 import componentText from './addProject.lang';
 import url from './_var';
 
@@ -77,10 +68,10 @@ export default {
         .then((jsonData) => {
           // success
           if (jsonData.id) {
-            router.push({
-              path: routerUrl.Project.path,
-              function() {
-                console.log('router complete');
+            this.$router.push({
+              name: this.$kpUtils.routerUrl.Project.name,
+              params: {
+                reloadList: true,
               },
             });
           } else {

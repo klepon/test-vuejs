@@ -58,10 +58,12 @@ export default new Router({
       children: [
         {
           path: routerUrl.AddProject.path,
+          name: routerUrl.AddProject.name,
           component: AddProject,
         },
         {
           path: routerUrl.ProjectID.path,
+          name: routerUrl.ProjectID.name,
           component: ProjectDetail,
         },
       ],
@@ -73,6 +75,7 @@ export default new Router({
       children: [
         {
           path: routerUrl.MyReport.path,
+          name: routerUrl.MyReport.name,
           component: PersonalReport,
         },
       ],

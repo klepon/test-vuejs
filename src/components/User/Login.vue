@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import routerUrl from '@/global/routerUrl';
 import componentText from './login.lang';
 import url from './_var';
 import formPanel from './FormPanel';
@@ -33,7 +32,7 @@ export default {
     return {
       loginError: '',
       loading: false,
-      routerUrl,
+      routerUrl: this.$kpUtils.routerUrl,
       componentText,
     };
   },
@@ -85,7 +84,7 @@ export default {
             // if success, login user
             if (userData.email) {
               this.$store.commit('setUser', {
-                redirect: routerUrl.Dashboard.name,
+                redirect: this.$kpUtils.routerUrl.Dashboard.name,
                 token: loginResult.id,
                 ...userData,
               });

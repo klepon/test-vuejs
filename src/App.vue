@@ -46,8 +46,6 @@
 </template>
 
 <script>
-import routerUrl from '@/global/routerUrl';
-
 export default {
   name: 'App',
   data() {
@@ -71,9 +69,9 @@ export default {
       this.$store.commit('switchLang', langCode);
     },
     url(page, child) {
-      if (child) return routerUrl[page].path;
+      if (child) return this.$kpUtils.routerUrl[page].path;
 
-      return `/#${routerUrl[page].path}`;
+      return `/#${this.$kpUtils.routerUrl[page].path}`;
     },
   },
 };

@@ -1,11 +1,20 @@
 <template>
   <section class="container-fluid">
-    <div v-if="user.token && isParent()">
-      <h1>{{e('projectList')}}</h1>
-      <a class="nav-link" href="/#/Project/AddProject">Add Project</a>
 
-      <div v-show="util.loading" class="">
-        Loading.... <div class="loader"></div>
+    <nav v-if="user.token && !isParent()" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a :href="`/#/Project/`">{{e('projectList')}}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{e('addProject')}}</li>
+      </ol>
+    </nav>
+
+    <h1>{{e(util.pageTitle)}}</h1>
+
+    <div v-if="user.token && isParent()">
+      <a v-if="!projects.error" class="nav-link" href="/#/Project/AddProject">{{e('addProjectBtn')}}</a>
+
+      <div v-show="util.loading" class="row">
+        {{e('loadingText')}} <div class="loader"></div>
       </div>
 
       <div v-if="projects.error" class="alert alert-danger">
@@ -18,7 +27,6 @@
           <p>{{project.description}}</p>
         </li>
       </ul>
-
     </div>
 
     <router-view :key="$route.fullPath"/>
@@ -26,7 +34,7 @@
 </template>
 
 <script>
-import componentText from './addProject.lang';
+import componentText from './projectList.lang';
 import url from './_var';
 
 export default {
@@ -36,6 +44,7 @@ export default {
       user: this.$store.state.user,
       util: {
         loading: false,
+        pageTitle: 'projectList',
       },
       projects: {},
     };
@@ -68,9 +77,27 @@ export default {
     },
   },
   beforeMount() {
-    console.log("masuk before mount");
     this.$kpUtils.isLoggedIn();
     this.getProjetList();
+  },
+  beforeRouteUpdate(to, from, next) {
+    if (to.name === this.$kpUtils.routerUrl.Project.name && from.name === this.$kpUtils.routerUrl.AddProject.name) {
+      this.getProjetList();
+    }
+
+    // switch page title
+    switch (to.name) {
+      case this.$kpUtils.routerUrl.AddProject.name:
+        this.util.pageTitle = 'addProject';
+        break;
+      case this.$kpUtils.routerUrl.ProjectID.name:
+        this.util.pageTitle = 'projectDetail';
+        break;
+      default:
+        this.util.pageTitle = 'projectList';
+    }
+
+    next();
   },
 };
 </script>

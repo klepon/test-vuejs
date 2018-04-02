@@ -118,7 +118,6 @@
 </template>
 
 <script>
-import routerUrl from '@/global/routerUrl';
 import User from './_userStore';
 import componentText from './account.lang';
 import url from './_var';
@@ -356,7 +355,7 @@ export default {
           if (jsonData.count) {
             this.hideModal();
             this.$store.commit('setUser', {
-              redirect: routerUrl.Homepage.name,
+              redirect: this.$kpUtils.routerUrl.Homepage.name,
               ...User.tpl,
             });
           }

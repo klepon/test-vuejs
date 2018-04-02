@@ -1,6 +1,5 @@
 // Import Vue
 import router from '@/global/router';
-import routerUrl from '@/global/routerUrl';
 import kpUtils from '@/global/utils';
 import utilLang from '@/global/_util.lang';
 import url from './_var';
@@ -64,7 +63,7 @@ export default {
     })
       .then(() => {
         store.commit('setUser', {
-          redirect: routerUrl.Homepage.name,
+          redirect: kpUtils.routerUrl.Homepage.name,
           ...this.tpl,
         });
       })

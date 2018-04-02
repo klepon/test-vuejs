@@ -42,7 +42,7 @@ export default {
   },
   isLoggedIn() { // following user store format for `store.state.user.token`
     if (!store.state.user.token) {
-      router.push({ name: routerUrl.Login.name });
+      router.push({ name: this.routerUrl.Login.name });
     }
   },
   utilModal(data) {
@@ -72,4 +72,5 @@ export default {
   regex: {
     email: /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i,
   },
+  routerUrl: { ...routerUrl },
 };

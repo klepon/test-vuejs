@@ -2,18 +2,6 @@ import utilLang from '@/global/_util.lang';
 
 export default {
   ...utilLang,
-  addProject: {
-    en: 'Add Project',
-    id: 'Tambah Project',
-  },
-  projectDetail: {
-    en: 'Detail Project',
-    id: 'Proyek Detil',
-  },
-  projectList: {
-    en: 'Project List',
-    id: 'Daftar Proyek',
-  },
   title: {
     en: 'Project title',
     id: 'Nama proyek',
@@ -37,14 +25,6 @@ export default {
   submmitBtn: {
     en: 'Create project',
     id: 'Buat proyek',
-  },
-  pleaseLogin: {
-    en: 'You need to login before adding any project.',
-    id: 'Anda perlu masuk untuk menambah project.',
-  },
-  'Authorization Required': {
-    en: 'Authorization required, please contact your manager.',
-    id: 'Otorisasi diperlukan, silahkan menghubungi manager Anda.',
   },
   foo: {
     en: '',
