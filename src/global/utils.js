@@ -2,9 +2,10 @@
 import store from '@/global/store';
 import router from '@/global/router';
 import routerUrl from '@/global/routerUrl';
+import utilLang from '@/global/_util.lang';
 
 export default {
-  getTextByLang(langObj, copy, langCode) {
+  getTextByLang(langObj, copy) {
     if (copy === undefined || copy === '') return '';
 
     if (langObj === undefined) {
@@ -17,7 +18,7 @@ export default {
       return '';
     }
 
-    return langObj[copy][langCode];
+    return langObj[copy][store.state.setup.lang];
   },
   getLocalStorage(key) {
     try {
@@ -39,10 +40,23 @@ export default {
       console.log(`localStorage Error on storing (${key}) Object`);
     }
   },
-  isLoggedIn() { // extends user state format for `store.state.user.token`
+  isLoggedIn() { // following user store format for `store.state.user.token`
     if (!store.state.user.token) {
       router.push({ name: routerUrl.Login.name });
     }
+  },
+  utilModal(data) {
+    this.textModal({
+      ...data,
+      title: this.e(data.title),
+      message: this.e(data.message),
+    });
+  },
+  textModal(data) {
+    store.commit('setModal', data);
+  },
+  e(copy) {
+    return this.getTextByLang(utilLang, copy, store.state.setup.lang);
   },
   apiHeader: {
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -59,10 +73,3 @@ export default {
     email: /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i,
   },
 };
-
-// export default {
-//   install() {
-//     Vue.kpUtils = kpUtils;
-//     Vue.prototype.$kpUtils = kpUtils;
-//   },
-// };

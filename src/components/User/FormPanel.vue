@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     e(copy) {
-      return this.$kpUtils.getTextByLang(this.componentText, copy, this.$store.state.setup.lang);
+      return this.$kpUtils.getTextByLang(this.componentText, copy);
     },
     onSubmit(e) {
       e.preventDefault();

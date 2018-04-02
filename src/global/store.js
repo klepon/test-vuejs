@@ -11,6 +11,15 @@ export default new Vuex.Store({
       lang: 'en',
       logoImage: 'static/logo.png',
     },
+    util: {
+      modal: {
+        show: false,
+        title: '',
+        message: '',
+        theme: '',
+        themeColor: '',
+      },
+    },
     user: { ...User.tpl },
   },
   mutations: {
@@ -25,6 +34,10 @@ export default new Vuex.Store({
     },
     logoutUser() {
       User.logoutUser(this);
+    },
+    setModal(state, data) {
+      const { title, message, theme = 'info', themeColor = 'light', show = true } = data;
+      this.state.util.modal = { title, message, theme, themeColor, show };
     },
   },
 });

@@ -2,6 +2,14 @@
   .logo {
     width: 25px;
   }
+
+  .header-line {
+    padding: 20px 0;
+
+    > div {
+      height: 7px;
+    }
+  }
 }
 
 .nav-border {

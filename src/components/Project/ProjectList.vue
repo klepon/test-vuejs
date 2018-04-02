@@ -21,7 +21,7 @@
 
     </div>
 
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
   </section>
 </template>
 
@@ -42,29 +42,35 @@ export default {
   },
   methods: {
     e(copy) {
-      return this.$kpUtils.getTextByLang(componentText, copy, this.$store.state.setup.lang);
+      return this.$kpUtils.getTextByLang(componentText, copy);
     },
     isParent() {
       return this.$route.matched.length === 1;
     },
-    getProjetData() {
+    getProjetList() {
       this.util.loading = true;
 
       // connect API
-      fetch(`${url.getProjectAndChild}${this.user.token}`)
+      fetch(`${url.getProjects}${this.user.token}`)
         .then(response => response.json())
         .then((jsonData) => {
           this.projects = jsonData;
           this.util.loading = false;
         })
         .catch(() => {
+          this.$kpUtils.utilModal({
+            title: 'warningTitle',
+            message: 'serverError',
+          });
+
           this.util.loading = false;
         });
     },
   },
   beforeMount() {
-    this.getProjetData();
+    console.log("masuk before mount");
     this.$kpUtils.isLoggedIn();
+    this.getProjetList();
   },
 };
 </script>

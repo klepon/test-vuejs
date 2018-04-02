@@ -2,6 +2,7 @@
 import router from '@/global/router';
 import routerUrl from '@/global/routerUrl';
 import kpUtils from '@/global/utils';
+import utilLang from '@/global/_util.lang';
 import url from './_var';
 
 export default {
@@ -67,6 +68,14 @@ export default {
           ...this.tpl,
         });
       })
-      .catch(() => null);
+      .catch(() => {
+        store.commit('setModal', {
+          title: this.e('warningTitle', store),
+          message: this.e('serverError', store),
+        });
+      });
+  },
+  e(copy, store) {
+    return kpUtils.getTextByLang(utilLang, copy, store.state.setup.lang);
   },
 };

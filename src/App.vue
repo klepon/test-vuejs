@@ -19,11 +19,29 @@
         <a v-show="setup.lang === 'en'" @click="switchLang('id', $event)" class="nav-link" href="#">id</a>
         <a v-show="setup.lang === 'id'" @click="switchLang('en', $event)" class="nav-link" href="#">en</a>
       </div>
+
+      <div class="row header-line">
+        <div class="col-sm-1 bg-primary"></div>
+        <div class="col-sm-1 bg-secondary"></div>
+        <div class="col-sm-1 bg-success"></div>
+        <div class="col-sm-1 bg-danger"></div>
+        <div class="col-sm-1 bg-warning"></div>
+        <div class="col-sm-1 bg-light"></div>
+        <div class="col-sm-1 bg-info"></div>
+        <div class="col-sm-5 bg-dark"></div>
+      </div>
     </section>
 
-    <hr />
-
     <router-view/>
+
+    <b-modal v-model="util.modal.show"
+      :hide-footer=true
+      :title="util.modal.title"
+      :header-bg-variant="util.modal.theme"
+      :header-text-variant="util.modal.themeColor"
+      >
+      <p v-html="util.modal.message"></p>
+    </b-modal>
   </div>
 </template>
 
@@ -36,6 +54,7 @@ export default {
     return {
       state: this.$store.state,
       setup: this.$store.state.setup,
+      util: this.$store.state.util,
     };
   },
   methods: {

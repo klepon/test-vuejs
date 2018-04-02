@@ -156,10 +156,11 @@ export default {
   },
   methods: {
     e(copy) {
-      return this.$kpUtils.getTextByLang(this.componentText, copy, this.$store.state.setup.lang);
+      return this.$kpUtils.getTextByLang(componentText, copy);
     },
     hideModal() {
       this.$refs.deleteAccount.hide();
+      this.deletePassword = false;
       this.loading = false;
     },
     toggleTab(key, e) {
@@ -185,7 +186,14 @@ export default {
         .then(response => response.json())
         .then(jsonData => nextFunction(jsonData))
         .catch(() => {
+          this.$kpUtils.utilModal({
+            title: 'warningTitle',
+            message: 'serverError',
+          });
+
+          this.deletePassword = false;
           this.loading = false;
+
           return null;
         });
     },
@@ -240,6 +248,11 @@ export default {
           }
         })
         .catch(() => {
+          this.$kpUtils.utilModal({
+            title: 'warningTitle',
+            message: 'serverError',
+          });
+
           this.loading = false;
           return null;
         });
@@ -302,7 +315,14 @@ export default {
             this.loading = false;
           }
         })
-        .catch(() => null);
+        .catch(() => {
+          this.$kpUtils.utilModal({
+            title: 'warningTitle',
+            message: 'serverError',
+          });
+
+          this.loading = false;
+        });
     },
     submitDeleteAccount() {
       if (!this.deletePassword) {
@@ -342,7 +362,11 @@ export default {
           }
         })
         .catch(() => {
-          this.loading = false;
+          this.$kpUtils.utilModal({
+            title: 'warningTitle',
+            message: 'serverError',
+          });
+
           return null;
         });
     },

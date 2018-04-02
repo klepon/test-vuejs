@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     e(copy) {
-      return this.$kpUtils.getTextByLang(componentText, copy, this.$store.state.setup.lang);
+      return this.$kpUtils.getTextByLang(componentText, copy);
     },
     startProcess() {
       this.loginError = '';
@@ -60,6 +60,11 @@ export default {
         .then(response => response.json())
         .then(jsonData => this.getUserData(jsonData))
         .catch(() => {
+          this.$kpUtils.utilModal({
+            title: 'warningTitle',
+            message: 'serverError',
+          });
+
           this.loading = false;
           return null;
         });

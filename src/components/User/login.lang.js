@@ -1,4 +1,7 @@
+import utilLang from '@/global/_util.lang';
+
 export default {
+  ...utilLang,
   pageTitle: {
     en: 'Login',
     id: 'Masuk',

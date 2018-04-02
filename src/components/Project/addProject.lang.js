@@ -1,4 +1,7 @@
+import utilLang from '@/global/_util.lang';
+
 export default {
+  ...utilLang,
   addProject: {
     en: 'Add Project',
     id: 'Tambah Project',

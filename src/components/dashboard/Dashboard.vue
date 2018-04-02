@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     e(copy) {
-      return this.$kpUtils.getTextByLang(componentText, copy, this.$store.state.setup.lang);
+      return this.$kpUtils.getTextByLang(componentText, copy);
     },
     editProfile() {
       router.push({ name: routerUrl.Account.name });
