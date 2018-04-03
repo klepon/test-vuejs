@@ -45,15 +45,35 @@ export default {
       router.push({ name: this.routerUrl.Login.name });
     }
   },
-  utilModal(data) {
+  modalServerError(err) {
+    this.textModal({
+      title: this.e('warningTitle'),
+      message: this.e(err && err.message === 'Failed to fetch' ? 'serverError' : 'unknowError'),
+    });
+  },
+  modalWarning(data) {
     this.textModal({
       ...data,
-      title: this.e(data.title),
-      message: this.e(data.message),
+      title: this.e('warningTitle'),
     });
   },
   textModal(data) {
     store.commit('setModal', data);
+  },
+  date(isoDate) {
+    const date = new Date(isoDate);
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let dt = date.getDate();
+
+    if (dt < 10) {
+      dt = `0${dt}`;
+    }
+    if (month < 10) {
+      month = `0${month}`;
+    }
+
+    return (`${year}-${month}-${dt}`);
   },
   e(copy) {
     return this.getTextByLang(utilLang, copy, store.state.setup.lang);

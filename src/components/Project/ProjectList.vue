@@ -28,10 +28,10 @@
           class="list-group-item list-group-item-action flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{project.name}}</h5>
-            <small>put date here</small>
+            <small>{{$kpUtils.date(project.date)}} - date end/due date</small>
           </div>
           <p v-html="project.description" class="mb-1" />
-          <small>small info, number of member maybe</small>
+          <small>small info, milestone, percentage progress, etc</small>
         </a>
       </div>
     </div>
@@ -78,12 +78,8 @@ export default {
           this.projects = jsonData;
           this.util.loading = false;
         })
-        .catch(() => {
-          this.$kpUtils.utilModal({
-            title: 'warningTitle',
-            message: 'serverError',
-          });
-
+        .catch((err) => {
+          this.$kpUtils.modalServerError(err);
           this.util.loading = false;
         });
     },

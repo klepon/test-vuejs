@@ -70,18 +70,25 @@ export default {
           if (jsonData.id) {
             this.$router.push({ name: this.$kpUtils.routerUrl.Project.name });
           } else {
-            // no auth: {error.statusCode: 401}
-            this.$kpUtils.utilModal({
-              title: 'warningTitle',
-              message: 'authNeeded',
-            });
+            switch (jsonData.error.statusCode) {
+              case 422:
+                this.$kpUtils.modalWarning({
+                  message: this.e('code422'),
+                });
+                break;
+              case 401:
+                // no auth: {error.statusCode: 401}
+                this.$kpUtils.modalWarning({
+                  message: this.e('authNeeded'),
+                });
+                break;
+              default:
+                this.$kpUtils.modalServerError(null);
+            }
           }
         })
-        .catch(() => {
-          this.$kpUtils.utilModal({
-            title: 'warningTitle',
-            message: 'serverError',
-          });
+        .catch((err) => {
+          this.$kpUtils.modalServerError(err);
 
           this.util.loading = false;
           return null;

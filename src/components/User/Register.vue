@@ -80,12 +80,8 @@ export default {
             router.push({ name: this.$kpUtils.routerUrl.Login.name });
           }
         })
-        .catch(() => {
-          this.$kpUtils.utilModal({
-            title: 'warningTitle',
-            message: 'serverError',
-          });
-
+        .catch((err) => {
+          this.$kpUtils.modalServerError(err);
           this.loading = false;
           return null;
         });

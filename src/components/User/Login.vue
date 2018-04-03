@@ -58,12 +58,8 @@ export default {
       })
         .then(response => response.json())
         .then(jsonData => this.getUserData(jsonData))
-        .catch(() => {
-          this.$kpUtils.utilModal({
-            title: 'warningTitle',
-            message: 'serverError',
-          });
-
+        .catch((err) => {
+          this.$kpUtils.modalServerError(err);
           this.loading = false;
           return null;
         });

@@ -184,11 +184,8 @@ export default {
       })
         .then(response => response.json())
         .then(jsonData => nextFunction(jsonData))
-        .catch(() => {
-          this.$kpUtils.utilModal({
-            title: 'warningTitle',
-            message: 'serverError',
-          });
+        .catch((err) => {
+          this.$kpUtils.modalServerError(err);
 
           this.deletePassword = false;
           this.loading = false;
@@ -246,12 +243,8 @@ export default {
             this.user = newUser;
           }
         })
-        .catch(() => {
-          this.$kpUtils.utilModal({
-            title: 'warningTitle',
-            message: 'serverError',
-          });
-
+        .catch((err) => {
+          this.$kpUtils.modalServerError(err);
           this.loading = false;
           return null;
         });
@@ -314,12 +307,8 @@ export default {
             this.loading = false;
           }
         })
-        .catch(() => {
-          this.$kpUtils.utilModal({
-            title: 'warningTitle',
-            message: 'serverError',
-          });
-
+        .catch((err) => {
+          this.$kpUtils.modalServerError(err);
           this.loading = false;
         });
     },
@@ -360,12 +349,8 @@ export default {
             });
           }
         })
-        .catch(() => {
-          this.$kpUtils.utilModal({
-            title: 'warningTitle',
-            message: 'serverError',
-          });
-
+        .catch((err) => {
+          this.$kpUtils.modalServerError(err);
           return null;
         });
     },

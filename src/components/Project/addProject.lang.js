@@ -26,6 +26,10 @@ export default {
     en: 'Create project',
     id: 'Buat proyek',
   },
+  code422: {
+    en: 'Some data mising, please refresh your browser or contact your admin',
+    id: 'Beberapa data hilang, mohon refresh browser Anda atau hubungi Admin',
+  },
   foo: {
     en: '',
     id: '',
