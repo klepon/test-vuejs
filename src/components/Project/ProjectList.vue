@@ -1,5 +1,5 @@
 <template>
-  <section class="container-fluid">
+  <section class="project">
 
     <nav v-if="user.token && !isParent()" aria-label="breadcrumb">
       <ol class="breadcrumb">
@@ -11,16 +11,40 @@
     <h1>{{e(util.pageTitle)}}{{projectNameByRouteId()}}</h1>
 
     <div v-if="user.token && isParent()">
-      <a v-if="!projects.error" class="nav-link" href="/#/Project/AddProject">{{e('addProjectBtn')}}</a>
+      <!-- add project, serach, and orderby -->
+      <b-form v-if="!projects.error && !util.loading" @submit="onSubmit" class="form-inline">
+        <a class="btn btn-primary" href="/#/Project/AddProject">{{e('addProjectBtn')}}</a>
 
+        <b-form-group label-for="keyword">
+          <b-form-input id="keyword"
+            type="text"
+            v-model="keyword"
+            placeholder="search project">
+          </b-form-input>
+        </b-form-group>
+
+        <label for="">Sort by:
+          <select class="" name="">
+            <option value="">Project name ascending</option>
+            <option value="">Project name ascending</option>
+            <option value="">Project name ascending</option>
+            <option value="">Project name ascending</option>
+          </select>
+        </label>
+
+      </b-form>
+
+      <!-- show loading -->
       <div v-show="util.loading" class="row">
         {{e('loadingText')}} <div class="loader"></div>
       </div>
 
+      <!-- if error -->
       <div v-if="projects.error" class="alert alert-danger">
         <strong>{{projects.error.name}}:</strong> {{e(projects.error.message)}}
       </div>
 
+      <!-- project listing -->
       <div v-if="projects.length > 0" class="list-group">
         <a v-for="project in projects"
           v-bind:key="project.id"
@@ -34,9 +58,18 @@
           <small>small info, milestone, percentage progress, etc</small>
         </a>
       </div>
+
+      <!-- add project and orderby bottom -->
+      <div v-if="!projects.error && !util.loading" class="row">
+        <a class="col-6 btn btn-primary" href="/#/Project/AddProject">{{e('addProjectBtn')}}</a>
+        <select class="col-6 " name="">
+
+        </select>
+      </div>
     </div>
 
     <router-view :key="$route.fullPath"/>
+
   </section>
 </template>
 
@@ -58,6 +91,7 @@ export default {
           [this.$kpUtils.routerUrl.Project.name]: 'projectList',
         },
       },
+      keyword: '',
       projects: [],
     };
   },

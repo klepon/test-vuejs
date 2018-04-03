@@ -1,5 +1,5 @@
 <template>
-  <section class="container-fluid">
+  <section class="account">
     <div class="row">
       <div class="col-4 col-md-3">
         <nav class="nav flex-column pull-left">

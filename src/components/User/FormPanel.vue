@@ -1,5 +1,5 @@
 <template>
-  <section class="container-fluid">
+  <section class="user-form">
     <b-form @submit="onSubmit" class="col-8 col-md-6 offset-sm-2 offset-md-3">
       <b-card>
         <h1>{{title}}</h1>
