@@ -8,31 +8,30 @@
       </ol>
     </nav>
 
-    <h1>{{e(util.pageTitle)}}{{projectNameByRouteId()}}</h1>
+    <div class="row align-items-center justify-content-between">
+      <div class="col">
+        <h1>{{e(util.pageTitle)}}{{projectNameByRouteId()}}</h1>
+      </div>
+      <div v-if="user.token && isParent()" class="col text-right">
+        <buttonIcon
+          v-bind:link="`/#${$kpUtils.routerUrl.Project.path}${$kpUtils.routerUrl.AddProject.path}`"
+          v-bind:text="e('addProjectBtn')"
+          icon="plus" />
+      </div>
+    </div>
 
     <div v-if="user.token && isParent()">
-      <!-- add project, serach, and orderby -->
-      <b-form v-if="!projects.error && !util.loading" @submit="onSubmit" class="form-inline">
-        <a class="btn btn-primary" href="/#/Project/AddProject">{{e('addProjectBtn')}}</a>
-
-        <b-form-group label-for="keyword">
-          <b-form-input id="keyword"
-            type="text"
-            v-model="keyword"
-            placeholder="search project">
-          </b-form-input>
-        </b-form-group>
-
-        <label for="">Sort by:
-          <select class="" name="">
-            <option value="">Project name ascending</option>
-            <option value="">Project name ascending</option>
-            <option value="">Project name ascending</option>
-            <option value="">Project name ascending</option>
-          </select>
-        </label>
-
-      </b-form>
+      <!-- add project, search, and orderby -->
+      <listingFilter v-if="!projects.error && !util.loading"
+        v-bind:data="projects"
+        v-on:updateData="updateProjectRender"
+        v-bind:addItemButtonText="e('addProjectBtn')"
+        v-bind:addItemButtonLink="`/#${$kpUtils.routerUrl.Project.path}${$kpUtils.routerUrl.AddProject.path}`"
+        v-bind:keywordPlaceholder="e('search')"
+        v-bind:searchIn="['name', 'description']"
+        v-bind:sortByLabel="e('sortBy')"
+        v-bind:sortByList="sortByList"
+      />
 
       <!-- show loading -->
       <div v-show="util.loading" class="row">
@@ -46,7 +45,7 @@
 
       <!-- project listing -->
       <div v-if="projects.length > 0" class="list-group">
-        <a v-for="project in projects"
+        <a v-for="project in projects" v-show="showItem(project)"
           v-bind:key="project.id"
           :href="`/#/Project/${project.id}/${project.name}/`"
           class="list-group-item list-group-item-action flex-column align-items-start">
@@ -60,12 +59,8 @@
       </div>
 
       <!-- add project and orderby bottom -->
-      <div v-if="!projects.error && !util.loading" class="row">
-        <a class="col-6 btn btn-primary" href="/#/Project/AddProject">{{e('addProjectBtn')}}</a>
-        <select class="col-6 " name="">
 
-        </select>
-      </div>
+
     </div>
 
     <router-view :key="$route.fullPath"/>
@@ -74,11 +69,20 @@
 </template>
 
 <script>
+/* eslint-disable no-plusplus */
 import componentText from './projectList.lang';
 import url from './_var';
+import listingFilter from '../widget/ListingFilter';
+import buttonIcon from '../widget/ButtonIcon';
+import pagination from '../widget/Pagination';
 
 export default {
   name: 'ProjectList',
+  components: {
+    listingFilter,
+    buttonIcon,
+    pagination,
+  },
   data() {
     return {
       user: this.$store.state.user,
@@ -91,7 +95,12 @@ export default {
           [this.$kpUtils.routerUrl.Project.name]: 'projectList',
         },
       },
-      keyword: '',
+      sortByList: [
+        { text: this.e('sortNameAsc'), value: 'name~asc' },
+        { text: this.e('sortNameDesc'), value: 'name~desc' },
+        { text: this.e('sortDateAsc'), value: 'date~desc' },
+        { text: this.e('sortDateDesc'), value: 'date~asc' },
+      ],
       projects: [],
     };
   },
@@ -125,6 +134,12 @@ export default {
 
       this.util.pageTitle = this.util.pagetTitleMapping[this.$route.name];
       return '';
+    },
+    updateProjectRender(newProject) {
+      this.projects = newProject;
+    },
+    showItem(project) {
+      return project.visible || project.visible === undefined;
     },
   },
   beforeMount() {
