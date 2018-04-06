@@ -9,10 +9,10 @@
     </nav>
 
     <div class="row align-items-center justify-content-between">
-      <div class="col">
+      <div class="col-12 col-sm-7">
         <h1>{{e(util.pageTitle)}}{{projectNameByRouteId()}}</h1>
       </div>
-      <div v-if="user.token && isParent()" class="col text-right">
+      <div v-if="user.token && isParent()" class="col-12 col-sm-5 text-sm-right mb-2 mb-sm-0">
         <buttonIcon
           v-bind:link="`/#${$kpUtils.routerUrl.Project.path}${$kpUtils.routerUrl.AddProject.path}`"
           v-bind:text="e('addProjectBtn')"
@@ -21,7 +21,7 @@
     </div>
 
     <div v-if="user.token && isParent()">
-      <!-- add project, search, and orderby -->
+      <!-- list filter -->
       <listingFilter v-if="!projects.error && !util.loading"
         v-bind:data="projects"
         v-on:updateData="updateProjectRender"
@@ -34,8 +34,9 @@
       />
 
       <!-- show loading -->
-      <div v-show="util.loading" class="row">
-        {{e('loadingText')}} <div class="loader"></div>
+      <div v-if="util.loading" class="d-flex flex-column align-items-center">
+        <div class="loader mb-3"></div>
+        <div class="text-xs-center text-sm-left">{{e('loadingText')}}</div>
       </div>
 
       <!-- if error -->
@@ -58,7 +59,8 @@
         </a>
       </div>
 
-      <!-- add project and orderby bottom -->
+      <!-- list pagination -->
+      <pagination />
 
 
     </div>

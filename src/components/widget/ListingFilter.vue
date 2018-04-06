@@ -1,7 +1,7 @@
 <template>
   <b-form class="form-inline list-util">
 
-    <b-form-input class="mr-2 mb-2"
+    <b-form-input class="mr-sm-2 mb-2"
       type="text"
       v-model="keyword"
       :placeholder="keywordPlaceholder"
@@ -22,7 +22,7 @@
 /* eslint-disable no-plusplus */
 
 export default {
-  name: 'listUtil',
+  name: 'ListingFilter',
   props: [
     'data',
     'updateData',
