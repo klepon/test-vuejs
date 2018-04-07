@@ -21,31 +21,26 @@
     </div>
 
     <div v-if="user.token && isParent()">
+      <!-- show loading -->
+      <loadingText v-bind:showLoading="isLoading()" v-bind:loadingText="e('loadingText')" />
+
+      <!-- if error -->
+      <errorMessage v-bind:showError="isError()"
+        v-bind:errorName="getErrorName()"
+        v-bind:errorMessage="getErrorMessage()" />
+
       <!-- list filter -->
-      <listingFilter v-if="!projects.error && !util.loading"
+      <listingFilter v-if="!isError() && !isLoading()"
         v-bind:data="projects"
         v-on:updateData="updateProjectRender"
-        v-bind:addItemButtonText="e('addProjectBtn')"
-        v-bind:addItemButtonLink="`/#${$kpUtils.routerUrl.Project.path}${$kpUtils.routerUrl.AddProject.path}`"
         v-bind:keywordPlaceholder="e('search')"
         v-bind:searchIn="['name', 'description']"
         v-bind:sortByLabel="e('sortBy')"
         v-bind:sortByList="sortByList"
       />
 
-      <!-- show loading -->
-      <div v-if="util.loading" class="d-flex flex-column align-items-center">
-        <div class="loader mb-3"></div>
-        <div class="text-xs-center text-sm-left">{{e('loadingText')}}</div>
-      </div>
-
-      <!-- if error -->
-      <div v-if="projects.error" class="alert alert-danger">
-        <strong>{{projects.error.name}}:</strong> {{e(projects.error.message)}}
-      </div>
-
       <!-- project listing -->
-      <div v-if="projects.length > 0" class="list-group">
+      <div v-if="isProjectExist()" class="list-group">
         <a v-for="project in projects" v-show="showItem(project)"
           v-bind:key="project.id"
           :href="`/#/Project/${project.id}/${project.name}/`"
@@ -74,6 +69,8 @@
 /* eslint-disable no-plusplus */
 import componentText from './projectList.lang';
 import url from './_var';
+import loadingText from '../widget/LoadingText';
+import errorMessage from '../widget/ErrorMessage';
 import listingFilter from '../widget/ListingFilter';
 import buttonIcon from '../widget/ButtonIcon';
 import pagination from '../widget/Pagination';
@@ -81,6 +78,8 @@ import pagination from '../widget/Pagination';
 export default {
   name: 'ProjectList',
   components: {
+    loadingText,
+    errorMessage,
     listingFilter,
     buttonIcon,
     pagination,
@@ -142,6 +141,23 @@ export default {
     },
     showItem(project) {
       return project.visible || project.visible === undefined;
+    },
+    isLoading() {
+      return this.util.loading;
+    },
+    isError() {
+      return this.projects.error !== undefined;
+    },
+    isProjectExist() {
+      return !this.isError() && !this.isLoading() && this.projects.length > 0;
+    },
+    getErrorName() {
+      if (this.projects.error !== undefined) return this.projects.error.name;
+      return '';
+    },
+    getErrorMessage() {
+      if (this.projects.error !== undefined) return this.e(this.projects.error.message);
+      return '';
     },
   },
   beforeMount() {
