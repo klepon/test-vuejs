@@ -4,6 +4,8 @@ import Vue from 'vue';
 import wysiwyg from 'vue-wysiwyg';
 import { Card, Modal, Button, Form, FormGroup, FormInput, FormSelect } from 'bootstrap-vue/es/components';
 import Icon from 'vue-awesome/components/Icon';
+import 'vue-awesome/icons/angle-double-right';
+import 'vue-awesome/icons/angle-double-left';
 import 'vue-awesome/icons/plus';
 
 import store from './global/store';

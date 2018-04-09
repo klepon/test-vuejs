@@ -14,7 +14,9 @@
       </div>
       <div v-if="user.token && isParent()" class="col-12 col-sm-5 text-sm-right mb-2 mb-sm-0">
         <buttonIcon
-          v-bind:link="`/#${$kpUtils.routerUrl.Project.path}${$kpUtils.routerUrl.AddProject.path}`"
+          theme="primary"
+          left="true"
+          v-bind:link="`${$kpUtils.routerUrl.Project.path}${$kpUtils.routerUrl.AddProject.path}`"
           v-bind:text="e('addProjectBtn')"
           icon="plus" />
       </div>
@@ -41,9 +43,9 @@
 
       <!-- project listing -->
       <div v-if="isProjectExist()" class="list-group">
-        <a v-for="project in projects" v-show="showItem(project)"
+        <a v-for="project in getProjects()" v-show="isVisible(project)"
           v-bind:key="project.id"
-          :href="`/#/Project/${project.id}/${project.name}/`"
+          :href="projectDetailUrl(project)"
           class="list-group-item list-group-item-action flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{project.name}}</h5>
@@ -55,7 +57,12 @@
       </div>
 
       <!-- list pagination -->
-      <pagination />
+      <pagination
+        v-bind:currentPage="page"
+        v-bind:perpage="perpage"
+        v-bind:total="total"
+        v-on:setPage="setPage"
+      />
 
 
     </div>
@@ -103,6 +110,9 @@ export default {
         { text: this.e('sortDateDesc'), value: 'date~asc' },
       ],
       projects: [],
+      perpage: 4,
+      page: 0,
+      total: 0,
     };
   },
   methods: {
@@ -136,10 +146,13 @@ export default {
       this.util.pageTitle = this.util.pagetTitleMapping[this.$route.name];
       return '';
     },
+    projectDetailUrl(project) {
+      return `${this.$kpUtils.routerUrl.Project.path}${this.$kpUtils.routerUrl.ProjectID.path}${project.id}/${project.name}/`;
+    },
     updateProjectRender(newProject) {
       this.projects = newProject;
     },
-    showItem(project) {
+    isVisible(project) {
       return project.visible || project.visible === undefined;
     },
     isLoading() {
@@ -158,6 +171,15 @@ export default {
     getErrorMessage() {
       if (this.projects.error !== undefined) return this.e(this.projects.error.message);
       return '';
+    },
+    getProjects() {
+      const start = this.page * this.perpage;
+      const visibleProject = this.projects.filter(p => this.isVisible(p));
+      this.total = visibleProject.length;
+      return visibleProject.slice(start, start + this.perpage);
+    },
+    setPage(page) {
+      this.page = page;
     },
   },
   beforeMount() {

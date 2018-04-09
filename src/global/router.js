@@ -27,32 +27,32 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: routerUrl.Homepage.path,
+      path: routerUrl.Homepage.pathMainRoute,
       name: routerUrl.Homepage.name,
       component: Homepage,
     },
     {
-      path: routerUrl.Account.path,
+      path: routerUrl.Account.pathMainRoute,
       name: routerUrl.Account.name,
       component: Account,
     },
     {
-      path: routerUrl.Login.path,
+      path: routerUrl.Login.pathMainRoute,
       name: routerUrl.Login.name,
       component: Login,
     },
     {
-      path: routerUrl.Register.path,
+      path: routerUrl.Register.pathMainRoute,
       name: routerUrl.Register.name,
       component: Register,
     },
     {
-      path: routerUrl.Dashboard.path,
+      path: routerUrl.Dashboard.pathMainRoute,
       name: routerUrl.Dashboard.name,
       component: Dashboard,
     },
     {
-      path: routerUrl.Project.path,
+      path: routerUrl.Project.pathMainRoute,
       name: routerUrl.Project.name,
       component: ProjectList,
       children: [
@@ -62,14 +62,14 @@ export default new Router({
           component: AddProject,
         },
         {
-          path: routerUrl.ProjectID.path,
+          path: routerUrl.ProjectID.pathMainRoute,
           name: routerUrl.ProjectID.name,
           component: ProjectDetail,
         },
       ],
     },
     {
-      path: routerUrl.Report.path,
+      path: routerUrl.Report.pathMainRoute,
       name: routerUrl.Report.name,
       component: ProjectReport,
       children: [
@@ -81,12 +81,12 @@ export default new Router({
       ],
     },
     {
-      path: routerUrl.Task.path,
+      path: routerUrl.Task.pathMainRoute,
       name: routerUrl.Task.name,
       component: TaskList,
     },
     {
-      path: routerUrl.Member.path,
+      path: routerUrl.Member.pathMainRoute,
       name: routerUrl.Member.name,
       component: User,
     },

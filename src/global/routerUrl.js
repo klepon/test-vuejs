@@ -1,34 +1,45 @@
 export default {
   Homepage: {
-    path: '/',
+    pathMainRoute: '/',
+    path: '/#/',
     name: 'Homepage',
   },
   Login: {
-    path: '/Login/',
+    pathMainRoute: '/Login/',
+    path: '/#/Login/',
     name: 'Login',
   },
   Register: {
-    path: '/Register/',
+    pathMainRoute: '/Register/',
+    path: '/#/Register/',
     name: 'Register',
   },
   Dashboard: {
-    path: '/Dashboard/',
+    pathMainRoute: '/Dashboard/',
+    path: '/#/Dashboard/',
     name: 'Dashboard',
   },
   Project: {
-    path: '/Project/',
+    pathMainRoute: '/Project/',
+    path: '/#/Project/',
     name: 'Project',
+  },
+  ProjectPage: {
+    path: '?page=',
+    name: 'ProjectPage',
+  },
+  ProjectID: {
+    pathMainRoute: 'detail/:id/*',
+    path: 'detail/',
+    name: 'ProjectID',
   },
   AddProject: {
     path: 'AddProject',
     name: 'AddProject',
   },
-  ProjectID: {
-    path: ':id/*',
-    name: 'ProjectID',
-  },
   Report: {
-    path: '/Report/',
+    pathMainRoute: '/Report/',
+    path: '/#/Report/',
     name: 'Report',
   },
   MyReport: {
@@ -36,19 +47,23 @@ export default {
     name: 'MyReport',
   },
   Task: {
-    path: '/Task/',
+    pathMainRoute: '/Task/',
+    path: '/#/Task/',
     name: 'Task',
   },
   Member: {
-    path: '/Member/',
+    pathMainRoute: '/Member/',
+    path: '/#/Member/',
     name: 'Member',
   },
   Account: {
-    path: '/Account/',
+    pathMainRoute: '/Account/',
+    path: '/#/Account/',
     name: 'Account',
   },
   foo: {
-    path: '/foo/',
+    pathMainRoute: '/foo/',
+    path: '/#/foo/',
     name: 'foo',
   },
 };

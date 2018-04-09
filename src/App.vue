@@ -71,7 +71,7 @@ export default {
     url(page, child) {
       if (child) return this.$kpUtils.routerUrl[page].path;
 
-      return `/#${this.$kpUtils.routerUrl[page].path}`;
+      return `${this.$kpUtils.routerUrl[page].path}`;
     },
   },
 };
