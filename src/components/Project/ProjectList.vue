@@ -3,16 +3,16 @@
 
     <nav v-if="user.token && !isParent()" aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a :href="`/#/Project/`">{{e('projectList')}}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{e('addProject')}}</li>
+        <li class="breadcrumb-item"><a :href="$kpUtils.routerUrl.Project.path">{{e(util.pagetTitleMapping[$kpUtils.routerUrl.Project.name])}}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{projectNameByRouteId()}}</li>
       </ol>
     </nav>
 
-    <div class="row align-items-center justify-content-between">
+    <div v-if="isParent()" class="row align-items-center justify-content-between">
       <div class="col-12 col-sm-7">
-        <h1>{{e(util.pageTitle)}}{{projectNameByRouteId()}}</h1>
+        <h1>{{projectNameByRouteId()}}</h1>
       </div>
-      <div v-if="user.token && isParent()" class="col-12 col-sm-5 text-sm-right mb-2 mb-sm-0">
+      <div v-if="user.token" class="col-12 col-sm-5 text-sm-right mb-2 mb-sm-0">
         <buttonIcon
           theme="primary"
           left="true"
@@ -96,10 +96,8 @@ export default {
       user: this.$store.state.user,
       util: {
         loading: false,
-        pageTitle: 'projectList',
         pagetTitleMapping: {
           [this.$kpUtils.routerUrl.AddProject.name]: 'addProject',
-          [this.$kpUtils.routerUrl.ProjectID.name]: 'projectDetail',
           [this.$kpUtils.routerUrl.Project.name]: 'projectList',
         },
       },
@@ -139,12 +137,10 @@ export default {
     },
     projectNameByRouteId() {
       if (this.$route.params.id && this.projects[0]) {
-        this.util.pageTitle = this.util.pagetTitleMapping[this.$kpUtils.routerUrl.ProjectID.name];
         return this.projects.find(p => p.id === this.$route.params.id * 1).name;
       }
 
-      this.util.pageTitle = this.util.pagetTitleMapping[this.$route.name];
-      return '';
+      return this.e(this.util.pagetTitleMapping[this.$route.name]);
     },
     projectDetailUrl(project) {
       return `${this.$kpUtils.routerUrl.Project.path}${this.$kpUtils.routerUrl.ProjectID.path}${project.id}/${project.name}/`;

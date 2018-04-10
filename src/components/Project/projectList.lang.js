@@ -10,10 +10,6 @@ export default {
     en: 'Add Project',
     id: 'Tambah Project',
   },
-  projectDetail: {
-    en: '',
-    id: '',
-  },
   projectList: {
     en: 'Project List',
     id: 'Daftar Proyek',

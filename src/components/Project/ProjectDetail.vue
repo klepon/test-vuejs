@@ -1,7 +1,11 @@
 <template>
   <section v-if="user.token" class="container-fluid">
+    <!-- show loading -->
+    <loadingText v-bind:showLoading="isLoading()" v-bind:loadingText="e('loadingText')" />
+
     <div>
       <p>detail project for id: {{$route.params.id}}, project terdiri dari</p>
+      <p>{{$route.name}}</p>
       <ul>
         <li>project title dan descripsi</li>
         <li>component task, prop project id, component task yg cari user dari projectnya</li>
@@ -32,12 +36,29 @@
 </template>
 
 <script>
+import componentText from './projectDetail.lang';
+import loadingText from '../widget/LoadingText';
+
 export default {
   name: 'AddProject',
+  components: {
+    loadingText,
+  },
   data() {
     return {
+      util: {
+        loading: true,
+      },
       user: this.$store.state.user,
     };
+  },
+  methods: {
+    e(copy) {
+      return this.$kpUtils.getTextByLang(componentText, copy);
+    },
+    isLoading() {
+      return this.util.loading;
+    },
   },
   beforeMount() {
     this.$kpUtils.isLoggedIn();
