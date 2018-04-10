@@ -75,6 +75,15 @@ export default {
 
     return (`${year}-${month}-${dt}`);
   },
+  isError(data) {
+    return data.error !== undefined;
+  },
+  getErrorName(data) {
+    return data.error !== undefined ? data.error.name : '';
+  },
+  getErrorMessage(data, e) {
+    return data.error !== undefined ? e(data.error.message) : '';
+  },
   e(copy) {
     return this.getTextByLang(utilLang, copy, store.state.setup.lang);
   },

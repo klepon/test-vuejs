@@ -20,6 +20,10 @@
           v-bind:text="e('addProjectBtn')"
           icon="plus" />
       </div>
+      seharusnya, user yg punya hak buat project, tombol addnya tetep ada, bukan token aja
+      <br />
+      dan hanya admin yg bisa lihat semua project, kalo bukan admin, maka hanya projectnya saja, bikin method find my project
+
     </div>
 
     <div v-if="user.token && isParent()">
@@ -27,12 +31,12 @@
       <loadingText v-bind:showLoading="isLoading()" v-bind:loadingText="e('loadingText')" />
 
       <!-- if error -->
-      <errorMessage v-bind:showError="isError()"
-        v-bind:errorName="getErrorName()"
-        v-bind:errorMessage="getErrorMessage()" />
+      <errorMessage v-bind:showError="$kpUtils.isError(projects)"
+        v-bind:errorName="$kpUtils.getErrorName(projects)"
+        v-bind:errorMessage="$kpUtils.getErrorMessage(projects, e)" />
 
       <!-- list filter -->
-      <listingFilter v-if="!isError() && !isLoading()"
+      <listingFilter v-if="!$kpUtils.isError(projects) && !isLoading()"
         v-bind:data="projects"
         v-on:updateData="updateProjectRender"
         v-bind:keywordPlaceholder="e('search')"
@@ -57,7 +61,7 @@
       </div>
 
       <!-- list pagination -->
-      <pagination
+      <pagination v-if="!$kpUtils.isError(projects)"
         v-bind:currentPage="page"
         v-bind:perpage="perpage"
         v-bind:total="total"
@@ -154,19 +158,8 @@ export default {
     isLoading() {
       return this.util.loading;
     },
-    isError() {
-      return this.projects.error !== undefined;
-    },
     isProjectExist() {
-      return !this.isError() && !this.isLoading() && this.projects.length > 0;
-    },
-    getErrorName() {
-      if (this.projects.error !== undefined) return this.projects.error.name;
-      return '';
-    },
-    getErrorMessage() {
-      if (this.projects.error !== undefined) return this.e(this.projects.error.message);
-      return '';
+      return !this.$kpUtils.isError(this.projects) && !this.isLoading() && this.projects.length > 0;
     },
     getProjects() {
       const start = this.page * this.perpage;

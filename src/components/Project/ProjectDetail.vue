@@ -1,11 +1,18 @@
 <template>
-  <section v-if="user.token" class="container-fluid">
+  <div v-if="user.token">
     <!-- show loading -->
     <loadingText v-bind:showLoading="isLoading()" v-bind:loadingText="e('loadingText')" />
 
+    <!-- if error -->
+    <errorMessage v-bind:showError="$kpUtils.isError(projects)"
+      theme="warning"
+      v-bind:errorName="e('attentionTitle')"
+      v-bind:errorMessage="$kpUtils.getErrorMessage(projects, e)" />
+
+    <hr />
+
     <div>
       <p>detail project for id: {{$route.params.id}}, project terdiri dari</p>
-      <p>{{$route.name}}</p>
       <ul>
         <li>project title dan descripsi</li>
         <li>component task, prop project id, component task yg cari user dari projectnya</li>
@@ -32,17 +39,20 @@
       </ul>
 
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
 import componentText from './projectDetail.lang';
+import url from './_var';
 import loadingText from '../widget/LoadingText';
+import errorMessage from '../widget/ErrorMessage';
 
 export default {
   name: 'AddProject',
   components: {
     loadingText,
+    errorMessage,
   },
   data() {
     return {
@@ -50,6 +60,7 @@ export default {
         loading: true,
       },
       user: this.$store.state.user,
+      projects: [],
     };
   },
   methods: {
@@ -59,9 +70,25 @@ export default {
     isLoading() {
       return this.util.loading;
     },
+    getProjetList() {
+      this.util.loading = true;
+
+      // connect API
+      fetch(`${url.getProjectAndChild.replace('~id~', this.$route.params.id)}${this.user.token}`)
+        .then(response => response.json())
+        .then((jsonData) => {
+          this.projects = jsonData;
+          this.util.loading = false;
+        })
+        .catch((err) => {
+          this.$kpUtils.modalServerError(err);
+          this.util.loading = false;
+        });
+    },
   },
   beforeMount() {
     this.$kpUtils.isLoggedIn();
+    this.getProjetList();
   },
 };
 </script>
