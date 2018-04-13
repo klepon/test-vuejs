@@ -20,9 +20,9 @@
           v-bind:text="e('addProjectBtn')"
           icon="plus" />
       </div>
-      seharusnya, user yg punya hak buat project, tombol addnya tetep ada, bukan token aja
+
+      show add project buat yg punya hak dan hide buat yg tidak punya hak
       <br />
-      dan hanya admin yg bisa lihat semua project, kalo bukan admin, maka hanya projectnya saja, bikin method find my project
 
     </div>
 
