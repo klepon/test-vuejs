@@ -23,6 +23,8 @@
 
       show add project buat yg punya hak dan hide buat yg tidak punya hak
       <br />
+      saat register haris buat ompany, access, group, kalo nggak, nggak bisa masuk
+      <br/>
 
     </div>
 

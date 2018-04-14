@@ -14,6 +14,8 @@ export default {
     name: '',
     discipline: '',
     email: '',
+    access: {},
+    company: {},
   },
 
   localStorageKey: 'userData',
@@ -42,8 +44,8 @@ export default {
   */
   setUser(state, params) {
     // set user detil
-    const { token, name, discipline, email } = params;
-    state.user = { token, name, discipline, email };
+    const { token, name, discipline, email, access, company } = params;
+    state.user = { token, name, discipline, email, access, company };
     kpUtils.setLocalStorage(this.localStorageKey, { ...state.user });
 
     // redirect user after login/logout success

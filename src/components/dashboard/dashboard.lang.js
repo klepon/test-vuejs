@@ -7,6 +7,10 @@ export default {
     en: 'Add posiiton',
     id: 'Simpan posisi',
   },
+  addCompany: {
+    en: 'Add compnay name',
+    id: 'Simpan nama perusahaan',
+  },
   foo: {
     en: '',
     id: '',

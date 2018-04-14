@@ -16,6 +16,7 @@
             <ul class="list-unstyled">
               <li>{{e('yourName')}}: {{user.name}}</li>
               <li>{{e('yourDiscipline')}}: {{user.discipline}}</li>
+              <li>{{e('yourCompany')}}: {{user.company.name}}</li>
             </ul>
             <b-button @click="editProfile = true" variant="primary">{{e('edit')}}</b-button>
           </div>
@@ -31,6 +32,12 @@
               <b-form-input type="text"
                 v-model="user.discipline"
                 :placeholder="e('yourDiscipline')" />
+            </b-form-group>
+
+            <b-form-group>
+              <b-form-input type="text"
+                v-model="user.company.name"
+                :placeholder="e('yourCompany')" />
             </b-form-group>
 
             <b-form-group>
@@ -193,7 +200,9 @@ export default {
           return null;
         });
     },
-    submitSaveProfile() {
+    submitSaveProfile(e) {
+      e.preventDefault();
+
       this.resultError = '';
       this.loading = true;
 

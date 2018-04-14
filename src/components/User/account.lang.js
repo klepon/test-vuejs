@@ -30,6 +30,10 @@ export default {
     en: 'Your discipline',
     id: 'Disiplin Anda',
   },
+  yourCompany: {
+    en: 'Your company',
+    id: 'Perusahan Anda',
+  },
   saveProfile: {
     en: 'Save',
     id: 'Simpan',
