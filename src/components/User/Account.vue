@@ -33,7 +33,7 @@
                 v-model="user.discipline"
                 :placeholder="e('yourDiscipline')" />
             </b-form-group>
-
+hanya yg punya role admin yg boleh edit company
             <b-form-group>
               <b-form-input type="text"
                 v-model="user.company.name"

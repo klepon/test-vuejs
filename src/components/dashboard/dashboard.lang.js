@@ -8,7 +8,7 @@ export default {
     id: 'Simpan posisi',
   },
   addCompany: {
-    en: 'Add compnay name',
+    en: 'Add company name',
     id: 'Simpan nama perusahaan',
   },
   foo: {

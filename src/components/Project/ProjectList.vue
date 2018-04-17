@@ -12,7 +12,7 @@
       <div class="col-12 col-sm-7">
         <h1>{{projectNameByRouteId()}}</h1>
       </div>
-      <div v-if="user.token" class="col-12 col-sm-5 text-sm-right mb-2 mb-sm-0">
+      <div v-if="user.access.createProject" class="col-12 col-sm-5 text-sm-right mb-2 mb-sm-0">
         <buttonIcon
           theme="primary"
           left="true"

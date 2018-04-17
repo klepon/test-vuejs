@@ -52,13 +52,8 @@ export default {
       // connect API
       fetch(url.member, {
         body: JSON.stringify({
-          discipline: '',
-          name: '',
-          realm: '',
-          username: user,
           email: user,
           password: pass,
-          emailVerified: true,
         }), // must match 'Content-Type' header
         ...this.$kpUtils.apiHeader,
       })

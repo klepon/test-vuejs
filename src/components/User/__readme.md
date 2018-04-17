@@ -15,3 +15,20 @@
 beforeMount() {
   this.$kpUtils.isLoggedIn();
 },
+
+** paid user - admin, limit project number base on admin package
+- manage role
+- manage company
+- manage all project inside company
+- all free user benefit
+
+** free user
+- no company until they joint a paid user
+- join a project, role define by project owner
+- create one project, be project owner, create more by joining company (one group with paid user)
+- invite user to join own project
+
+** logic
+- user create project -> create access to
+- user be admin -> enable create company -> create group, add all project to group
+- user join admin -> create group, add user and project to group
