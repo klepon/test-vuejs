@@ -54,6 +54,7 @@ export default {
         body: JSON.stringify({
           email: user,
           password: pass,
+          lang: this.$store.state.setup.lang,
         }), // must match 'Content-Type' header
         ...this.$kpUtils.apiHeader,
       })

@@ -21,6 +21,7 @@ import TaskList from '@/components/task/TaskList';
 import Account from '@/components/user/Account';
 import Login from '@/components/user/Login';
 import Register from '@/components/user/Register';
+import EmailConfirmation from '@/components/user/EmailConfirmation';
 
 Vue.use(Router);
 
@@ -45,6 +46,11 @@ export default new Router({
       path: routerUrl.Register.pathMainRoute,
       name: routerUrl.Register.name,
       component: Register,
+    },
+    {
+      path: routerUrl.EmailConfirmation.pathMainRoute,
+      name: routerUrl.EmailConfirmation.name,
+      component: EmailConfirmation,
     },
     {
       path: routerUrl.Dashboard.pathMainRoute,

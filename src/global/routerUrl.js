@@ -14,6 +14,11 @@ export default {
     path: '/#/Register/',
     name: 'Register',
   },
+  EmailConfirmation: {
+    pathMainRoute: '/EmailConfirmation/:hash/:lang',
+    path: '/#/EmailConfirmation/',
+    name: 'EmailConfirmation',
+  },
   Dashboard: {
     pathMainRoute: '/Dashboard/',
     path: '/#/Dashboard/',

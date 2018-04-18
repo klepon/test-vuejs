@@ -29,7 +29,7 @@
       </b-card>
 
       <p>{{switchText}}</p>
-      <a class="btn btn-secondary" :href="`/#${switchUrl}`">{{switchButtonText}}</a>
+      <a class="btn btn-secondary" :href="`${switchUrl}`">{{switchButtonText}}</a>
     </b-form>
   </section>
 </template>
