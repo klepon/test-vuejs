@@ -42,9 +42,9 @@ export default {
     en: 'Password required',
     id: 'Kata sandi diperlukan',
   },
-  'login failed': {
-    en: 'Invalid User or password',
-    id: 'Nama akun atau kata sandi salah',
+  'email not verified': {
+    en: 'Your email not verified yet, please check your email including spam folder.',
+    id: 'Email Anda belum terverifikasi, silahkan cek email Anda, coba cek juga folder spam.',
   },
   foo: {
     en: '',

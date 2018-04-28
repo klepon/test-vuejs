@@ -10,12 +10,14 @@ export default {
     user: { ...User.tpl },
   */
   tpl: {
-    token: '',
+    id: 0,
     name: '',
-    discipline: '',
-    email: '',
+    email: '', // use for request
+    token: '', // use for request
     access: {},
-    company: {},
+    hashGroup: false,
+    discipline: '',
+    company: {}, // id, name
   },
 
   localStorageKey: 'userData',
@@ -43,13 +45,15 @@ export default {
     },
   */
   setUser(state, params) {
+    const { redirect } = params;
+
     // set user detil
-    const { token, name, discipline, email, access, company } = params;
-    state.user = { token, name, discipline, email, access, company };
+    state.user = params;
+    delete state.user.redirect;
     kpUtils.setLocalStorage(this.localStorageKey, { ...state.user });
 
     // redirect user after login/logout success
-    if (params.redirect) router.push({ name: params.redirect });
+    if (redirect) router.push({ name: redirect });
   },
 
   /* set user data on store to mark login/logout

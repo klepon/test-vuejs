@@ -8,7 +8,7 @@
         <a v-show="state.user.token" :class="`nav-link${isActive('Project')}`" :href="url('Project')">Project</a>
         <a v-show="state.user.token" :class="`nav-link${isActive('Task')}`" :href="url('Task')">Task</a>
         <a v-show="state.user.token && state.user.role === 1" :class="`nav-link${isActive('Report')}`" :href="url('Report')">Report</a>
-        <a v-show="state.user.token && state.user.role === 3" :class="`nav-link${isActive('Report')}`" :href="`${url('Report')}${url('MyReport', true)}`">My Report</a>
+        <a v-show="state.user.token && state.user.role === 3" :class="`nav-link${isActive('Report')}`" :href="`${url('Report')}${url('MyReport')}`">My Report</a>
         <a v-show="state.user.token && state.user.role === 1" :class="`nav-link${isActive('User')}`" :href="url('Member')">Member</a>
         <a v-show="state.user.token" :class="`nav-link${isActive('Account')}`" :href="url('Account')">Account</a>
         <a v-show="state.user.token" @click="logout" class="nav-link" :href="url('Homepage')">Logout</a>
@@ -65,14 +65,19 @@ export default {
       return this.$route.matched[0].name === name ? ' active' : '';
     },
     switchLang(langCode, e) {
-      if (e) e.preventDefault();
+      if (e !== null) e.preventDefault();
       this.$store.commit('switchLang', langCode);
     },
-    url(page, child) {
-      if (child) return this.$kpUtils.routerUrl[page].path;
-
-      return `${this.$kpUtils.routerUrl[page].path}`;
+    url(page) {
+      return this.$kpUtils.routerUrl[page].path;
     },
+  },
+  beforeMount() {
+    // check lang, use localStorage data
+    const lsLang = this.$kpUtils.getStringLocalStorage('mandorLang');
+    if (lsLang !== this.$store.state.setup.lang) {
+      this.switchLang(lsLang, null);
+    }
   },
 };
 </script>

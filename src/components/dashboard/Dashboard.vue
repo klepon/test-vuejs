@@ -9,7 +9,7 @@
       <div class="col-6 col-md-4">
         <b-card>
           <h3 @click="editProfile">{{user.name || e('addName')}}</h3>
-          <p @click="editProfile">{{user.discipline || e('addDiscipline')}} - {{user.company.name || e('addCompany')}}</p>
+          <p @click="editProfile">{{user.discipline || e('addDiscipline')}} - {{companyName() || e('addCompany')}}</p>
         </b-card>
       </div>
 
@@ -44,6 +44,13 @@ export default {
     },
     editProfile() {
       router.push({ name: this.$kpUtils.routerUrl.Account.name });
+    },
+    companyName() {
+      if (this.user.company !== undefined) {
+        return this.user.company.name;
+      }
+
+      return '';
     },
   },
   beforeMount() {

@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import User from '@/components/user/_userStore';
+import kpUtils from '@/global/utils';
 
 Vue.use(Vuex);
 
@@ -25,6 +26,7 @@ export default new Vuex.Store({
   mutations: {
     switchLang(state, langCode) {
       state.setup.lang = langCode;
+      kpUtils.setStringLocalStorage('mandorLang', langCode);
     },
     isUserLogin() {
       User.isUserLogin(this);

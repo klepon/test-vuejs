@@ -16,7 +16,7 @@
             <ul class="list-unstyled">
               <li>{{e('yourName')}}: {{user.name}}</li>
               <li>{{e('yourDiscipline')}}: {{user.discipline}}</li>
-              <li>{{e('yourCompany')}}: {{user.company.name}}</li>
+              <li v-if="isAdmin()">{{e('yourCompany')}}: {{form.companyName}}</li>
             </ul>
             <b-button @click="editProfile = true" variant="primary">{{e('edit')}}</b-button>
           </div>
@@ -33,10 +33,10 @@
                 v-model="user.discipline"
                 :placeholder="e('yourDiscipline')" />
             </b-form-group>
-hanya yg punya role admin yg boleh edit company
-            <b-form-group>
+
+            <b-form-group v-if="isAdmin()">
               <b-form-input type="text"
-                v-model="user.company.name"
+                v-model="form.companyName"
                 :placeholder="e('yourCompany')" />
             </b-form-group>
 
@@ -151,6 +151,7 @@ export default {
       deletePassword: false,
       deleteButtonText: 'yesDeleteButton',
       form: {
+        companyName: '',
         deletePass: '',
         profilePass: '',
         newPass: '',
@@ -168,6 +169,20 @@ export default {
       this.$refs.deleteAccount.hide();
       this.deletePassword = false;
       this.loading = false;
+    },
+    isAdmin() {
+      if (this.user.access[0] !== undefined) {
+        if (this.user.access[0][0] === 'admin') {
+          return true;
+        }
+      }
+      return false;
+    },
+    getCompanyName() {
+      if (this.user.company !== undefined) {
+        return this.user.company.name;
+      }
+      return '';
     },
     toggleTab(key, e) {
       e.preventDefault();
@@ -213,15 +228,17 @@ export default {
         return;
       }
 
-      this.loginUser(this.updateProfile, this.form.profilePass);
+      this.updateProfile();
+      // this.loginUser(this.updateProfile, this.form.profilePass);
     },
-    updateProfile(loginResult) {
-      const apiUrl = `${url.member}/${loginResult.userId}?access_token=${loginResult.id}`;
+    updateProfile() {
+      const apiUrl = `${url.member}/${this.user.id}?access_token=${this.user.token}`;
       const apiRequest = {
         body: JSON.stringify({
-          email: this.user.email,
-          name: this.user.name,
           discipline: this.user.discipline,
+          name: this.user.name,
+          company: this.form.companyName,
+          email: this.user.email,
           password: this.form.profilePass,
         }),
         ...this.$kpUtils.apiHeader,
@@ -241,7 +258,7 @@ export default {
           if (jsonData.id) {
             const newUser = {
               ...this.user,
-              token: loginResult.id,
+              ...jsonData,
             };
 
             this.$store.commit('setUser', newUser);
@@ -249,7 +266,7 @@ export default {
             // store update doesn't update the page, so let change data here
             this.editProfile = false;
             this.loading = false;
-            this.user = newUser;
+            // this.user = newUser;
           }
         })
         .catch((err) => {
@@ -366,6 +383,7 @@ export default {
   },
   beforeMount() {
     this.$kpUtils.isLoggedIn();
+    this.form.companyName = this.getCompanyName();
   },
 };
 </script>

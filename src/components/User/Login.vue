@@ -12,7 +12,7 @@
     v-bind:switchUrl="routerUrl.Register.path"
     v-bind:componentText="componentText"
     v-bind:minPassLength="1"
-    v-on:postAPI="postLogin"
+    v-on:postAPI="doLogin"
     v-on:startProcess="startProcess"
     v-on:endProcess="endProcess"
   />
@@ -47,7 +47,7 @@ export default {
     endProcess() {
       this.loading = false;
     },
-    postLogin({ user, pass }) {
+    doLogin({ user, pass }) {
       // connect API
       fetch(url.login, {
         body: JSON.stringify({
@@ -57,40 +57,23 @@ export default {
         ...this.$kpUtils.apiHeader,
       })
         .then(response => response.json())
-        .then(jsonData => this.getUserData(jsonData))
+        .then((userData) => {
+          // if success, login user
+          if (userData.email) {
+            this.$store.commit('setUser', {
+              redirect: this.$kpUtils.routerUrl.Dashboard.name,
+              ...userData,
+            });
+          } else if (userData.error) { // if error login
+            this.$kpUtils.modalWarning({ message: this.e(userData.error.message) });
+            this.loading = false;
+          }
+        })
         .catch((err) => {
           this.$kpUtils.modalServerError(err);
           this.loading = false;
           return null;
         });
-    },
-    getUserData(loginResult) {
-      // if error
-      if (loginResult.error && loginResult.error.message) {
-        this.loginError = loginResult.error.message;
-        this.loading = false;
-        return;
-      }
-
-      // if success, get user data
-      if (loginResult.id) {
-        fetch(`${url.member}/${loginResult.userId}?access_token=${loginResult.id}`)
-          .then(response => response.json())
-          .then((userData) => {
-            // if success, login user
-            if (userData.email) {
-              this.$store.commit('setUser', {
-                redirect: this.$kpUtils.routerUrl.Dashboard.name,
-                token: loginResult.id,
-                ...userData,
-              });
-            }
-          })
-          .catch(() => {
-            this.loading = false;
-            return null;
-          });
-      }
     },
   },
 };

@@ -2,7 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import wysiwyg from 'vue-wysiwyg';
-import { Card, Modal, Button, Form, FormGroup, FormInput, FormSelect } from 'bootstrap-vue/es/components';
+// don't forget update use Vue.use(components);
+import { Alert, Card, Modal, Button, Form, FormGroup, FormInput, FormSelect } from 'bootstrap-vue/es/components';
 import Icon from 'vue-awesome/components/Icon';
 import 'vue-awesome/icons/angle-double-right';
 import 'vue-awesome/icons/angle-double-left';
@@ -33,6 +34,7 @@ Vue.use(wysiwyg, {
   },
 }); // config https://github.com/chmln/vue-wysiwyg
 
+Vue.use(Alert);
 Vue.use(Card);
 Vue.use(Modal);
 Vue.use(Button);
@@ -52,6 +54,15 @@ const kpInstallPlugin = {
 Vue.use(kpInstallPlugin);
 
 Vue.config.productionTip = false;
+
+// redirect to homepage if page not found
+router.beforeEach((to, from, next) => {
+  if (!to.matched.length) {
+    next('/');
+  } else {
+    next();
+  }
+});
 
 // check if user already login
 store.commit('isUserLogin');

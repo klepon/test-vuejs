@@ -15,6 +15,10 @@ export default {
     en: 'Your login session is expired, please login again.',
     id: 'Login session Anda telah kadaluarsa, silahkan login kembali.',
   },
+  'login failed': {
+    en: 'Invalid User or password',
+    id: 'Nama akun atau kata sandi salah',
+  },
   foo: {
     en: '',
     id: '',

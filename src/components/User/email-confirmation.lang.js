@@ -14,6 +14,14 @@ export default {
     en: 'Please wait, verifiying your email',
     id: 'Mohon tunggu, memverifikasi email Anda',
   },
+  verifySuccess: {
+    en: 'Your email is verified, <a href="#~#">please login</a>',
+    id: 'Email Anda telah terverifikasi, <a href="#~#">silahkan login</a>',
+  },
+  verifyFail: {
+    en: 'Your email not found, probably the link is expired, <a href="#~#">please register</a> again',
+    id: 'Email Anda tidak ditemukan, kemungkinan link sudah kadaluarsa, silahkan <a href="#~#">registrasi kembali</a>',
+  },
   foo: {
     en: '',
     id: '',

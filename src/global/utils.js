@@ -5,27 +5,31 @@ import routerUrl from '@/global/routerUrl';
 import utilLang from '@/global/_util.lang';
 
 export default {
-  getTextByLang(langObj, copy) {
-    if (copy === undefined || copy === '') return '';
+  getTextByLang(langObj, copyCode) {
+    if (copyCode === undefined || copyCode === '') return '';
 
     if (langObj === undefined) {
       console.error('Error: Missing translation file.');
       return '';
     }
 
-    if (langObj[copy] === undefined) {
-      console.error(`Error: Translation word missing for [${copy}]`);
+    if (langObj[copyCode] === undefined) {
+      console.error(`Error: Translation word missing for [${copyCode}]`);
       return '';
     }
 
-    return langObj[copy][store.state.setup.lang];
+    if (langObj[copyCode][store.state.setup.lang] === undefined) {
+      if (langObj[copyCode].en !== undefined) {
+        store.state.setup.lang = 'en';
+      }
+    }
+
+    return langObj[copyCode][store.state.setup.lang];
   },
   getLocalStorage(key) {
     try {
-      // Try parsing the language in local storage as json object
       return localStorage[key] ? JSON.parse(localStorage.getItem(key)) : null;
     } catch (e) {
-      // If something goes wrong, simply return null
       console.log(`localStorage Error on getting (${key}) Object`);
       return null;
     }
@@ -38,6 +42,21 @@ export default {
       localStorage.setItem(key, JSON.stringify({ ...oldData, ...newData }));
     } catch (e) {
       console.log(`localStorage Error on storing (${key}) Object`);
+    }
+  },
+  getStringLocalStorage(key) {
+    try {
+      return localStorage[key] ? localStorage.getItem(key) : null;
+    } catch (e) {
+      console.log(`localStorage Error on getting (${key}) object`);
+      return null;
+    }
+  },
+  setStringLocalStorage(key, newStringData) {
+    try {
+      localStorage.setItem(key, `${newStringData}`);
+    } catch (e) {
+      console.log(`localStorage Error on storing (${key}) object`);
     }
   },
   isLoggedIn() { // following user store format for `store.state.user.token`
@@ -84,8 +103,8 @@ export default {
   getErrorMessage(data, e) {
     return data.error !== undefined ? e(data.error.message) : '';
   },
-  e(copy) {
-    return this.getTextByLang(utilLang, copy, store.state.setup.lang);
+  e(copyCode) {
+    return this.getTextByLang(utilLang, copyCode, store.state.setup.lang);
   },
   apiHeader: {
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
