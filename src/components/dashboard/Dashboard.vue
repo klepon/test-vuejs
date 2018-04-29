@@ -10,8 +10,8 @@
         <v-card>
           <v-card-title primary-title>
             <div>
-              <h3 class="headline mb-0" @click="editProfile">{{user.name || e('addName')}}</h3>
-              <p @click="editProfile">{{user.discipline || e('addDiscipline')}} - {{companyName() || e('addCompany')}}</p>
+              <h3 class="headline mb-0" @click="editProfile">{{name()}}</h3>
+              <p @click="editProfile">{{discipline()}}{{companyName()}}</p>
             </div>
           </v-card-title>
         </v-card>
@@ -49,11 +49,17 @@ export default {
       router.push({ name: this.$kpUtils.routerUrl.Account.name });
     },
     companyName() {
-      if (this.user.company !== undefined) {
-        return this.user.company.name;
+      if (this.user.access[0] !== undefined) {
+        if (this.user.access[0][0] === 'admin') {
+          return ` - ${this.user.company.name || this.e('addCompany')}`;
+        }
       }
-
-      return '';
+    },
+    discipline() {
+      return this.user.discipline || this.e('addDiscipline');
+    },
+    name() {
+      return this.user.name || this.e('addName');
     },
   },
   beforeMount() {

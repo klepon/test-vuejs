@@ -13,12 +13,11 @@
         <h1>{{projectNameByRouteId()}}</h1>
       </div>
       <div v-if="user.access.createProject" class="col-12 col-sm-5 text-sm-right mb-2 mb-sm-0">
-        <buttonIcon
-          theme="primary"
-          left="true"
-          v-bind:link="`${$kpUtils.routerUrl.Project.path}${$kpUtils.routerUrl.AddProject.path}`"
-          v-bind:text="e('addProjectBtn')"
-          icon="plus" />
+        <v-btn :href="`${$kpUtils.routerUrl.Project.path}${$kpUtils.routerUrl.AddProject.path}`" flat primary>
+          <v-icon dark left>add</v-icon>
+          {{e('addProjectBtn')}}
+        </v-btn>
+
       </div>
 
       show add project buat yg punya hak dan hide buat yg tidak punya hak
