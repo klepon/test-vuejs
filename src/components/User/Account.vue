@@ -2,20 +2,41 @@
   <section class="layout">
     <v-flex xs4 md3>
       <v-navigation-drawer permanent>
+        <v-toolbar flat color="cyan" dark>
+          <v-list>
+            <v-list-tile>
+              <v-list-tile-title class="title">
+                <h1 class="title" v-if="tabs.profile">{{e('profile')}}</h1>
+                <h1 class="title" v-if="tabs.changePassword">{{e('changePassword')}}</h1>
+                <h1 class="title" v-if="tabs.removeAccount">{{e('removeAccount')}}</h1>
+              </v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-toolbar>
+        <v-divider></v-divider>
         <v-list dense class="pt-0">
           <v-list-tile @click="toggleTab('profile', $event)" :class="`${setClass(tabs.profile)}`">
+            <v-list-tile-action>
+              <v-icon :color="`${setColor(tabs.profile, 'cyan')}`">account_box</v-icon>
+            </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>{{e('profile')}}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
 
           <v-list-tile @click="toggleTab('changePassword', $event)" :class="`${setClass(tabs.changePassword)}`">
+            <v-list-tile-action>
+              <v-icon :color="`${setColor(tabs.changePassword, 'primary')}`">lock</v-icon>
+            </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>{{e('changePassword')}}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
 
           <v-list-tile @click="toggleTab('removeAccount', $event)" :class="`${setClass(tabs.removeAccount)}`">
+            <v-list-tile-action>
+              <v-icon :color="`${setColor(tabs.removeAccount, 'error')}`">delete_forever</v-icon>
+            </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>{{e('removeAccount')}}</v-list-tile-title>
             </v-list-tile-content>
@@ -25,8 +46,7 @@
     </v-flex>
 
     <v-flex xs8 md9>
-      <div v-show="tabs.profile">
-        <h1 class="title">{{e('profile')}}</h1>
+      <div v-if="tabs.profile">
         <div v-show="!editProfile">
           <ul class="list-unstyled">
             <li>{{e('yourName')}}: {{user.name}}</li>
@@ -68,9 +88,7 @@
         </v-form>
       </div>
 
-      <v-form v-show="tabs.changePassword" class="flex xs12" v-model="form.valid" ref="changePassword" lazy-validation>
-        <h1 class="title">{{e('changePassword')}}</h1>
-
+      <v-form v-if="tabs.changePassword" class="flex xs12" v-model="form.valid" ref="changePassword" lazy-validation>
         <v-text-field v-if="!form.countDownStart" type="password"
           :label="`${e('newPasswod')} - minimum ${form.minPassLength}`"
           v-model="form.newPass"
@@ -109,8 +127,7 @@
         </div>
       </v-form>
 
-      <div v-show="tabs.removeAccount">
-        <h1 class="title">{{e('removeAccount')}}</h1>
+      <div v-if="tabs.removeAccount">
         <p>{{e('removeAccountMessage')}}</p>
         <v-btn @click.stop="form.dialogDeleteAccount = true" class="error">{{e('deleteButton')}}</v-btn>
 
@@ -229,11 +246,16 @@ export default {
       this.resultError = '';
       this.loading = false;
 
-      this.tabs = { ...this.tabsTpl };
-      this.tabs[key] = true;
+      this.tabs = {
+        ...this.tabsTpl,
+        [key]: true,
+      };
     },
     setClass(bool) {
       return bool === true ? 'blue accent-1' : '';
+    },
+    setColor(bool, defaultColor) {
+      return bool === true ? 'white' : defaultColor;
     },
     submitSaveProfile(e) {
       e.preventDefault();
