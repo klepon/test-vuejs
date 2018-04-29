@@ -1,13 +1,9 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
 import Vue from 'vue';
+import Vuetify from 'vuetify';
 import wysiwyg from 'vue-wysiwyg';
-// don't forget update use Vue.use(components);
-import { Alert, Card, Modal, Button, Form, FormGroup, FormInput, FormSelect } from 'bootstrap-vue/es/components';
-import Icon from 'vue-awesome/components/Icon';
-import 'vue-awesome/icons/angle-double-right';
-import 'vue-awesome/icons/angle-double-left';
-import 'vue-awesome/icons/plus';
 
 import store from './global/store';
 import router from './global/router';
@@ -15,6 +11,9 @@ import kpUtils from './global/utils';
 
 import App from './App';
 
+require('vuetify/dist/vuetify.min.css');
+
+Vue.use(Vuetify);
 Vue.use(wysiwyg, {
   hideModules: {
     bold: false,
@@ -33,17 +32,6 @@ Vue.use(wysiwyg, {
     removeFormat: true,
   },
 }); // config https://github.com/chmln/vue-wysiwyg
-
-Vue.use(Alert);
-Vue.use(Card);
-Vue.use(Modal);
-Vue.use(Button);
-Vue.use(Form);
-Vue.use(FormGroup);
-Vue.use(FormInput);
-Vue.use(FormSelect);
-
-Vue.component('icon', Icon);
 
 const kpInstallPlugin = {
   install() {

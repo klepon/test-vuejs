@@ -1,48 +1,57 @@
 <template>
-  <div class="container-fluid">
-    <section class="header">
-      <div class="nav nav-border">
-        <a class="nav-link" :href="url('Homepage')"><img :src="$store.state.setup.logoImage" class="logo"></a>
+  <v-app>
+    <v-content>
+      <section class="header container">
+        <div class="nav-border">
+          <a class="nav-link" :href="url('Homepage')"><img :src="$store.state.setup.logoImage" class="logo"></a>
 
-        <a v-show="state.user.token" :class="`nav-link${isActive('Dashboard')}`" :href="url('Dashboard')">Dashboard</a>
-        <a v-show="state.user.token" :class="`nav-link${isActive('Project')}`" :href="url('Project')">Project</a>
-        <a v-show="state.user.token" :class="`nav-link${isActive('Task')}`" :href="url('Task')">Task</a>
-        <a v-show="state.user.token && state.user.role === 1" :class="`nav-link${isActive('Report')}`" :href="url('Report')">Report</a>
-        <a v-show="state.user.token && state.user.role === 3" :class="`nav-link${isActive('Report')}`" :href="`${url('Report')}${url('MyReport')}`">My Report</a>
-        <a v-show="state.user.token && state.user.role === 1" :class="`nav-link${isActive('User')}`" :href="url('Member')">Member</a>
-        <a v-show="state.user.token" :class="`nav-link${isActive('Account')}`" :href="url('Account')">Account</a>
-        <a v-show="state.user.token" @click="logout" class="nav-link" :href="url('Homepage')">Logout</a>
+          <a v-show="state.user.token" :class="`nav-link${isActive('Dashboard')}`" :href="url('Dashboard')">Dashboard</a>
+          <a v-show="state.user.token" :class="`nav-link${isActive('Project')}`" :href="url('Project')">Project</a>
+          <a v-show="state.user.token" :class="`nav-link${isActive('Task')}`" :href="url('Task')">Task</a>
+          <a v-show="state.user.token && state.user.role === 1" :class="`nav-link${isActive('Report')}`" :href="url('Report')">Report</a>
+          <a v-show="state.user.token && state.user.role === 3" :class="`nav-link${isActive('Report')}`" :href="`${url('Report')}${url('MyReport')}`">My Report</a>
+          <a v-show="state.user.token && state.user.role === 1" :class="`nav-link${isActive('User')}`" :href="url('Member')">Member</a>
+          <a v-show="state.user.token" :class="`nav-link${isActive('Account')}`" :href="url('Account')">Account</a>
+          <a v-show="state.user.token" @click="logout" class="nav-link" :href="url('Homepage')">Logout</a>
 
-        <a v-show="!state.user.token" :class="`nav-link${isActive('Login')}`" :href="url('Login')">Login</a>
-        <a v-show="!state.user.token" :class="`nav-link${isActive('Register')}`" :href="url('Register')">Register</a>
+          <a v-show="!state.user.token" :class="`nav-link${isActive('Login')}`" :href="url('Login')">Login</a>
+          <a v-show="!state.user.token" :class="`nav-link${isActive('Register')}`" :href="url('Register')">Register</a>
 
-        <a v-show="setup.lang === 'en'" @click="switchLang('id', $event)" class="nav-link" href="#">id</a>
-        <a v-show="setup.lang === 'id'" @click="switchLang('en', $event)" class="nav-link" href="#">en</a>
-      </div>
+          <a v-show="setup.lang === 'en'" @click="switchLang('id', $event)" class="nav-link" href="#">id</a>
+          <a v-show="setup.lang === 'id'" @click="switchLang('en', $event)" class="nav-link" href="#">en</a>
+        </div>
+      </section>
 
-      <div class="row header-line">
-        <div class="col-1 bg-primary"></div>
-        <div class="col-1 bg-secondary"></div>
-        <div class="col-1 bg-success"></div>
-        <div class="col-1 bg-danger"></div>
-        <div class="col-1 bg-warning"></div>
-        <div class="col-1 bg-light"></div>
-        <div class="col-1 bg-info"></div>
-        <div class="col-5 bg-dark"></div>
-      </div>
-    </section>
+      <v-layout>
+        <v-flex xs1 v-for="(color, i) in app.colors" v-bind:key="i">
+          <v-progress-linear value="100" height="7" :color="color"></v-progress-linear>
+        </v-flex>
+        <v-flex :class="longLine()">
+          <v-progress-linear value="100" height="7" color="cyan"></v-progress-linear>
+        </v-flex>
+      </v-layout>
 
-    <router-view/>
+      <v-container grid-list-md>
 
-    <b-modal v-model="util.modal.show"
-      :hide-footer=true
-      :title="util.modal.title"
-      :header-bg-variant="util.modal.theme"
-      :header-text-variant="util.modal.themeColor"
-      >
-      <p v-html="util.modal.message"></p>
-    </b-modal>
-  </div>
+        <router-view/>
+
+        <v-dialog v-model="util.modal.show" max-width="500px">
+          <v-card>
+            <v-toolbar :color="util.modal.theme" :dark="util.modal.dark">
+              <v-toolbar-title>{{util.modal.title}}</v-toolbar-title>
+            </v-toolbar>
+
+            <v-card-text v-html="util.modal.message"></v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" flat @click.stop="util.modal.show = false">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
@@ -53,6 +62,9 @@ export default {
       state: this.$store.state,
       setup: this.$store.state.setup,
       util: this.$store.state.util,
+      app: {
+        colors: ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'accent'],
+      },
     };
   },
   methods: {
@@ -71,6 +83,9 @@ export default {
     url(page) {
       return this.$kpUtils.routerUrl[page].path;
     },
+    longLine() {
+      return `xs${12 - this.app.colors.length}`;
+    },
   },
   beforeMount() {
     // check lang, use localStorage data
@@ -82,11 +97,7 @@ export default {
 };
 </script>
 
-<style>
-  @import 'vue-wysiwyg/dist/vueWysiwyg.css';
-</style>
-
 <style lang="scss">
-  @import 'scss/bootstrap/bootstrap.scss';
+  @import 'vue-wysiwyg/dist/vueWysiwyg.css';
   @import 'scss/app.scss';
 </style>

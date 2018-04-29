@@ -11,7 +11,7 @@
     v-bind:switchButtonText="e('registerButton')"
     v-bind:switchUrl="routerUrl.Register.path"
     v-bind:componentText="componentText"
-    v-bind:minPassLength="1"
+    v-bind:minPassLength="6"
     v-on:postAPI="doLogin"
     v-on:startProcess="startProcess"
     v-on:endProcess="endProcess"
@@ -65,7 +65,7 @@ export default {
               ...userData,
             });
           } else if (userData.error) { // if error login
-            this.$kpUtils.modalWarning({ message: this.e(userData.error.message) });
+            this.loginError = userData.error.message;
             this.loading = false;
           }
         })

@@ -78,6 +78,14 @@ export default {
     en: 'Password changed successfully',
     id: 'Kata kunti berhasil dirubah',
   },
+  reLoginMessage: {
+    en: 'You need to re login to continue. This page will reload to login page automatically in #~# seconds.',
+    id: 'Anda perlu login ulang untuk melanjutkan. Halaman ini akan memuat ulang halaman login secara otomatis dalam #~# detik.',
+  },
+  reloadNow: {
+    en: 'Reload Now',
+    id: 'Muat Ulang Sekarang',
+  },
   removeAccountMessage: {
     en: 'By removing account, all your data will be lost including projects participation, comments, and notes.',
     id: 'Dengan menghapus akun, semua data anda akan hilang, termasuk keterlibatan dalam proyek, komen-komen, dan catatan.',

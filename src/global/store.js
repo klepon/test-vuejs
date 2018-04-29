@@ -18,7 +18,7 @@ export default new Vuex.Store({
         title: '',
         message: '',
         theme: '',
-        themeColor: '',
+        dark: '',
       },
     },
     user: { ...User.tpl },
@@ -38,8 +38,8 @@ export default new Vuex.Store({
       User.logoutUser(this);
     },
     setModal(state, data) {
-      const { title, message, theme = 'info', themeColor = 'light', show = true } = data;
-      this.state.util.modal = { title, message, theme, themeColor, show };
+      const { title, message, theme = 'info', dark = true, show = true } = data;
+      this.state.util.modal = { title, message, theme, dark, show };
     },
   },
 });

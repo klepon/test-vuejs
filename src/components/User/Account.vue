@@ -1,126 +1,148 @@
 <template>
-  <section class="account">
-    <div class="row">
-      <div class="col-4 col-md-3">
-        <nav class="nav flex-column pull-left">
-          <a @click="toggleTab('profile', $event)" :class="`nav-link ${setClass(tabs.profile)}`" href="#">{{e('profile')}}</a>
-          <a @click="toggleTab('changePassword', $event)" :class="`nav-link ${setClass(tabs.changePassword)}`" href="#">{{e('changePassword')}}</a>
-          <a @click="toggleTab('removeAccount', $event)" :class="`nav-link ${setClass(tabs.removeAccount)}`" href="#">{{e('removeAccount')}}</a>
-        </nav>
-      </div>
+  <section class="layout">
+    <v-flex xs4 md3>
+      <v-navigation-drawer permanent>
+        <v-list dense class="pt-0">
+          <v-list-tile @click="toggleTab('profile', $event)" :class="`${setClass(tabs.profile)}`">
+            <v-list-tile-content>
+              <v-list-tile-title>{{e('profile')}}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
 
-      <div class="col-8 col-md-9">
-        <div v-show="tabs.profile">
-          <h1>{{e('profile')}}</h1>
-          <div v-show="!editProfile">
-            <ul class="list-unstyled">
-              <li>{{e('yourName')}}: {{user.name}}</li>
-              <li>{{e('yourDiscipline')}}: {{user.discipline}}</li>
-              <li v-if="isAdmin()">{{e('yourCompany')}}: {{form.companyName}}</li>
-            </ul>
-            <b-button @click="editProfile = true" variant="primary">{{e('edit')}}</b-button>
-          </div>
+          <v-list-tile @click="toggleTab('changePassword', $event)" :class="`${setClass(tabs.changePassword)}`">
+            <v-list-tile-content>
+              <v-list-tile-title>{{e('changePassword')}}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
 
-          <b-form @submit="submitSaveProfile" v-show="editProfile">
-            <b-form-group>
-              <b-form-input type="text"
-                v-model="user.name"
-                :placeholder="e('yourName')" />
-            </b-form-group>
+          <v-list-tile @click="toggleTab('removeAccount', $event)" :class="`${setClass(tabs.removeAccount)}`">
+            <v-list-tile-content>
+              <v-list-tile-title>{{e('removeAccount')}}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-navigation-drawer>
+    </v-flex>
 
-            <b-form-group>
-              <b-form-input type="text"
-                v-model="user.discipline"
-                :placeholder="e('yourDiscipline')" />
-            </b-form-group>
-
-            <b-form-group v-if="isAdmin()">
-              <b-form-input type="text"
-                v-model="form.companyName"
-                :placeholder="e('yourCompany')" />
-            </b-form-group>
-
-            <b-form-group>
-              <b-form-input type="password"
-                v-model="form.profilePass"
-                :placeholder="e('yourCurrentPasswod')" />
-            </b-form-group>
-
-            <small v-show="resultError !== ''" class="form-text text-muted">{{e(resultError)}}</small>
-            <div class="flex-horizontal">
-              <b-button type="submit" variant="primary">{{e('saveProfile')}}</b-button>
-              <b-button type="button" @click="editProfile = false" variant="secondary">{{e('cancel')}}</b-button>
-              <div class="loader" v-show="loading"></div>
-            </div>
-          </b-form>
+    <v-flex xs8 md9>
+      <div v-show="tabs.profile">
+        <h1 class="title">{{e('profile')}}</h1>
+        <div v-show="!editProfile">
+          <ul class="list-unstyled">
+            <li>{{e('yourName')}}: {{user.name}}</li>
+            <li>{{e('yourDiscipline')}}: {{user.discipline}}</li>
+            <li v-if="isAdmin()">{{e('yourCompany')}}: {{form.companyName}}</li>
+          </ul>
+          <v-btn @click="editProfile = true" class="primary">{{e('edit')}}</v-btn>
         </div>
 
-        <b-form @submit="submitChangePassword" v-show="tabs.changePassword">
-          <h1>{{e('changePassword')}}</h1>
+        <v-form v-show="editProfile" class="flex xs12" v-model="form.valid" ref="form" lazy-validation>
+          <v-text-field
+            :label="e('yourName')"
+            v-model="user.name"
+          ></v-text-field>
 
-          <b-form-group>
-            <b-form-input type="password"
-              v-model="form.newPass"
-              @keyup.native="comparePassword"
-              required
-              :pattern="`.{${form.minPassLength},}`"
-              :placeholder="`${e('newPasswod')} - minimum ${form.minPassLength}`" />
-          </b-form-group>
+          <v-text-field
+            :label="e('yourDiscipline')"
+            v-model="user.discipline"
+          ></v-text-field>
 
-          <b-form-group :description="e(notEqualPassword)">
-            <b-form-input type="password"
-              v-model="form.rePass"
-              @keyup.native="comparePassword"
-              required
-              :placeholder="e('confirmPasswod')" />
-          </b-form-group>
+          <v-text-field v-if="isAdmin()"
+            :label="e('yourCompany')"
+            v-model="form.companyName"
+          ></v-text-field>
 
-          <b-form-group>
-            <b-form-input type="password"
-              v-model="form.oldPass"
-              required
-              :placeholder="e('yourCurrentPasswod')" />
-          </b-form-group>
+          <v-text-field type="password"
+            :label="e('yourCurrentPasswod')"
+            v-model="form.profilePass"
+            :rules="form.requiredRules"
+            required
+          ></v-text-field>
 
-          <small v-show="resultError !== ''" class="form-text text-muted">{{e(resultError)}}</small>
+          <v-alert type="info" :value="resultError !== ''">{{e(resultError)}}</v-alert>
+          <v-progress-linear v-show="loading" indeterminate color="accent"></v-progress-linear>
           <div class="flex-horizontal">
-            <b-button type="submit" variant="primary">{{e('saveProfile')}}</b-button>
-            <div class="loader" v-show="loading"></div>
+            <v-btn @click="submitSaveProfile" class="primary">{{e('saveProfile')}}</v-btn>
+            <v-btn flat @click="editProfile = false">{{e('cancel')}}</v-btn>
           </div>
-        </b-form>
-
-        <div v-show="tabs.removeAccount">
-          <h1>{{e('removeAccount')}}</h1>
-          <p>{{e('removeAccountMessage')}}</p>
-          <b-button v-b-modal.deleteAccount variant="danger">{{e('deleteButton')}}</b-button>
-          <b-modal id="deleteAccount"
-            ref="deleteAccount"
-            :title="e('warningTitle')"
-            header-bg-variant="danger"
-            header-text-variant="light"
-            :no-close-on-backdrop=true
-            :no-close-on-esc=true
-            :hide-footer=true
-            >
-            <p v-html="e('deleteMessageWarning')"></p>
-
-            <b-form-group v-show="deletePassword">
-              <b-form-input type="password"
-                v-model="form.deletePass"
-                required
-                :placeholder="e('deletePasswordConfirm')" />
-            </b-form-group>
-
-            <small v-show="resultError !== ''" class="form-text text-muted">{{e(resultError)}}</small>
-            <div class="flex-horizontal">
-              <b-button @click="submitDeleteAccount" variant="danger">{{e(deleteButtonText)}}</b-button>
-              <b-button @click="hideModal" variant="secondary">{{e('cancel')}}</b-button>
-              <div class="loader" v-show="loading"></div>
-            </div>
-          </b-modal>
-        </div>
+        </v-form>
       </div>
-    </div>
+
+      <v-form v-show="tabs.changePassword" class="flex xs12" v-model="form.valid" ref="changePassword" lazy-validation>
+        <h1 class="title">{{e('changePassword')}}</h1>
+
+        <v-text-field v-if="!form.countDownStart" type="password"
+          :label="`${e('newPasswod')} - minimum ${form.minPassLength}`"
+          v-model="form.newPass"
+          :rules="form.passRules"
+          required
+        ></v-text-field>
+
+        <v-text-field v-if="!form.countDownStart" type="password"
+          :label="e('confirmPasswod')"
+          v-model="form.rePass"
+          :rules="form.passReRules"
+          required
+        ></v-text-field>
+
+        <v-text-field v-if="!form.countDownStart" type="password"
+          :label="e('yourCurrentPasswod')"
+          v-model="form.oldPass"
+          :rules="form.requiredRules"
+          required
+        ></v-text-field>
+
+        <v-alert type="info" :value="resultError !== ''">{{e(resultError)}}</v-alert>
+        <v-progress-linear v-show="loading" indeterminate color="accent"></v-progress-linear>
+        <v-btn v-if="!form.countDownStart" @click="submitChangePassword" class="primary">{{e('saveProfile')}}</v-btn>
+
+        <div v-if="form.countDownStart">
+          <v-progress-linear
+            :size="100"
+            :width="15"
+            :rotate="-90"
+            :value="getProgress()"
+            color="teal"
+            />
+          <p>{{reloadMessage()}}</p>
+          <v-btn @click="logoutUser" class="primary">{{e('reloadNow')}}</v-btn>
+        </div>
+      </v-form>
+
+      <div v-show="tabs.removeAccount">
+        <h1 class="title">{{e('removeAccount')}}</h1>
+        <p>{{e('removeAccountMessage')}}</p>
+        <v-btn @click.stop="form.dialogDeleteAccount = true" class="error">{{e('deleteButton')}}</v-btn>
+
+        <v-dialog v-model="form.dialogDeleteAccount" max-width="500px" persistent>
+          <v-card>
+            <v-toolbar color="error" dark>
+              <v-toolbar-title>{{e('warningTitle')}}</v-toolbar-title>
+            </v-toolbar>
+
+            <v-card-text>
+              <p v-html="e('deleteMessageWarning')"></p>
+
+              <v-text-field type="password" v-show="deletePassword"
+                :label="e('deletePasswordConfirm')"
+                v-model="form.deletePass"
+                :rules="form.requiredRules"
+                required
+              ></v-text-field>
+
+              <v-alert type="info" :value="resultError !== ''">{{e(resultError)}}</v-alert>
+              <v-progress-linear v-show="loading" indeterminate color="accent"></v-progress-linear>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-btn @click="submitDeleteAccount" class="error">{{e(deleteButtonText)}}</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn flat @click.stop="form.dialogDeleteAccount = false">{{e('cancel')}}</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
+    </v-flex>
   </section>
 </template>
 
@@ -151,6 +173,12 @@ export default {
       deletePassword: false,
       deleteButtonText: 'yesDeleteButton',
       form: {
+        reloadTimeScale: 20,
+        reloadTime: 0,
+        countDownStart: false,
+        countDownInterval: {},
+        dialogDeleteAccount: false,
+        valid: true,
         companyName: '',
         deletePass: '',
         profilePass: '',
@@ -158,6 +186,17 @@ export default {
         rePass: '',
         oldPass: '',
         minPassLength: 6,
+        requiredRules: [
+          v => !!v || this.e('passEmpty'),
+        ],
+        passRules: [
+          v => !!v || this.e('passEmpty'),
+          v => (v && v.length >= this.form.minPassLength) || this.e('Invalid password.'),
+        ],
+        passReRules: [
+          v => !!v || this.e('passEmpty'),
+          v => (v && v === this.form.newPass) || this.e('passwordNotMatch'),
+        ],
       },
     };
   },
@@ -166,7 +205,7 @@ export default {
       return this.$kpUtils.getTextByLang(componentText, copy);
     },
     hideModal() {
-      this.$refs.deleteAccount.hide();
+      this.dialogDeleteAccount = false;
       this.deletePassword = false;
       this.loading = false;
     },
@@ -194,26 +233,7 @@ export default {
       this.tabs[key] = true;
     },
     setClass(bool) {
-      return bool === true ? 'active' : '';
-    },
-    loginUser(nextFunction, pass) {
-      fetch(url.login, {
-        body: JSON.stringify({
-          email: this.user.email,
-          password: pass,
-        }),
-        ...this.$kpUtils.apiHeader,
-      })
-        .then(response => response.json())
-        .then(jsonData => nextFunction(jsonData))
-        .catch((err) => {
-          this.$kpUtils.modalServerError(err);
-
-          this.deletePassword = false;
-          this.loading = false;
-
-          return null;
-        });
+      return bool === true ? 'blue accent-1' : '';
     },
     submitSaveProfile(e) {
       e.preventDefault();
@@ -229,7 +249,6 @@ export default {
       }
 
       this.updateProfile();
-      // this.loginUser(this.updateProfile, this.form.profilePass);
     },
     updateProfile() {
       const apiUrl = `${url.member}/${this.user.id}?access_token=${this.user.token}`;
@@ -275,15 +294,6 @@ export default {
           return null;
         });
     },
-    comparePassword() {
-      this.notEqualPassword = '';
-
-      if (this.form.newPass === '' || this.form.rePass === '') return;
-
-      if (this.form.newPass !== this.form.rePass) {
-        this.notEqualPassword = 'passwordNotMatch';
-      }
-    },
     submitChangePassword() {
       this.resultError = '';
       this.loading = true;
@@ -322,6 +332,8 @@ export default {
             this.form.newPass = '';
             this.form.rePass = '';
             this.form.oldPass = '';
+            this.form.countDownStart = true;
+            this.startCountDown();
             return '';
           }
 
@@ -344,17 +356,11 @@ export default {
         this.deleteButtonText = 'deleteButton';
       } else {
         this.loading = true;
-        this.loginUser(this.deleteAccount, this.form.deletePass);
+        this.deleteAccount();
       }
     },
-    deleteAccount(loginResult) {
-      if (loginResult.error && loginResult.error.message) {
-        this.loading = false;
-        this.resultError = 'Invalid password.';
-        return;
-      }
-
-      const apiUrl = `${url.member}/${loginResult.userId}?access_token=${loginResult.id}`;
+    deleteAccount() {
+      const apiUrl = `${url.member}/${this.user.id}?access_token=${this.user.token}`;
       const apiRequest = {
         body: JSON.stringify({
           password: this.form.deletePass,
@@ -373,12 +379,39 @@ export default {
               redirect: this.$kpUtils.routerUrl.Homepage.name,
               ...User.tpl,
             });
+          } else if (jsonData.error && jsonData.error.message) {
+            this.resultError = jsonData.error.message;
+            this.loading = false;
           }
         })
         .catch((err) => {
           this.$kpUtils.modalServerError(err);
           return null;
         });
+    },
+    getProgress() {
+      return (100 / this.form.reloadTimeScale) * this.form.reloadTime;
+    },
+    getProgressSecond() {
+      return this.form.reloadTimeScale - this.form.reloadTime;
+    },
+    reloadMessage() {
+      return this.e('reLoginMessage').replace('#~#', this.getProgressSecond());
+    },
+    startCountDown() {
+      this.form.reloadTime = 0;
+
+      this.form.countDownInterval = setInterval(() => {
+        this.form.reloadTime += 1;
+
+        if (this.form.reloadTime >= this.form.reloadTimeScale) {
+          clearInterval(this.form.countDownInterval);
+          this.logoutUser();
+        }
+      }, 1000);
+    },
+    logoutUser() {
+      this.$store.commit('logoutUser');
     },
   },
   beforeMount() {

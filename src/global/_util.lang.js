@@ -19,6 +19,10 @@ export default {
     en: 'Invalid User or password',
     id: 'Nama akun atau kata sandi salah',
   },
+  goToHome: {
+    en: 'Back to homepage',
+    id: 'Kembali ke halaman depan',
+  },
   foo: {
     en: '',
     id: '',

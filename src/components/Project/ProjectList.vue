@@ -30,6 +30,8 @@
 
     <div v-if="user.token && isParent()">
       <!-- show loading -->
+      <v-progress-linear indeterminate color="cyan"></v-progress-linear>
+
       <loadingText v-bind:showLoading="isLoading()" v-bind:loadingText="e('loadingText')" />
 
       <!-- if error -->

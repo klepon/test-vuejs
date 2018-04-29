@@ -1,36 +1,44 @@
 <template>
-  <section class="user-form">
-    <b-form @submit="onSubmit" class="col-8 col-md-6 offset-sm-2 offset-md-3">
-      <b-card>
-        <h1>{{title}}</h1>
-        <b-form-group label-for="userName" :label="labelUserEmail" :description="userError">
-          <b-form-input id="userName"
-            type="email"
-            v-model="user"
-            required
-            placeholder="my-email@domain.com">
-          </b-form-input>
-        </b-form-group>
+  <section class="layout">
+    <v-flex sm8 offset-sm2 md6 offset-md3>
+      <v-card>
+        <v-card-title primary-title>
+          <v-form class="flex xs12" v-model="valid" ref="form" lazy-validation>
 
-        <b-form-group label-for="password" :label="labelPassword" :description="passError">
-          <b-form-input id="password"
-            type="password"
-            v-model="pass"
-            required
-            >
-          </b-form-input>
-        </b-form-group>
+            <h1 class="title">{{title}}</h1>
 
-        <small v-show="resultError !== ''" class="form-text text-muted">{{resultError}}</small>
-        <div class="flex-horizontal">
-          <b-button type="submit" variant="primary">{{submitButton}}</b-button>
-          <div v-show="loading" class="loader"></div>
-        </div>
-      </b-card>
+            <v-text-field
+              :label="labelUserEmail"
+              v-model="user"
+              :rules="emailRules"
+              required
+            ></v-text-field>
 
-      <p>{{switchText}}</p>
-      <a class="btn btn-secondary" :href="`${switchUrl}`">{{switchButtonText}}</a>
-    </b-form>
+            <v-text-field
+              :label="labelPassword"
+              v-model="pass"
+              :rules="passRules"
+              type="password"
+              required
+            ></v-text-field>
+
+            <v-alert v-show="resultError !== ''" type="info" :value="true">{{resultError}}</v-alert>
+            <v-progress-linear v-show="loading" indeterminate color="accent"></v-progress-linear>
+            <v-btn class="primary" @click="submit" :disabled="!valid">{{submitButton}}</v-btn>
+
+          </v-form>
+        </v-card-title>
+      </v-card>
+
+      <div class="mt-4">
+        <p>{{switchText}}</p>
+        <v-btn class="primary" :href="`${switchUrl}`">{{switchButtonText}}</v-btn>
+        <v-btn :href="`${$kpUtils.routerUrl.Homepage.path}`" flat>
+          {{e('goToHome')}}
+          <v-icon dark left>arrow_forward</v-icon>
+        </v-btn>
+      </div>
+    </v-flex>
   </section>
 </template>
 
@@ -40,38 +48,31 @@ export default {
   props: ['title', 'labelUserEmail', 'labelPassword', 'loading', 'resultError', 'submitButton', 'switchText', 'switchButtonText', 'switchUrl', 'componentText', 'minPassLength'],
   data() {
     return {
-      userError: '',
-      passError: '',
+      valid: true,
       user: 'qw@qw.qw',
       pass: '123456',
+      emailRules: [
+        v => !!v || this.e('userEmpty'),
+        v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || this.e('userError'),
+      ],
+      passRules: [
+        v => !!v || this.e('passEmpty'),
+        v => (v && v.length >= this.minPassLength) || this.e('passError'),
+      ],
     };
   },
   methods: {
     e(copy) {
       return this.$kpUtils.getTextByLang(this.componentText, copy);
     },
-    onSubmit(e) {
+    submit(e) {
       e.preventDefault();
 
       // reset error
-      this.userError = '';
-      this.passError = '';
       this.$emit('startProcess');
 
-      // error email
-      if (!this.$kpUtils.regex.email.test(String(this.user).toLowerCase())) this.userError = this.e('userError');
-
-      // empty email
-      if (this.user === '') this.userError = this.e('userEmpty');
-
-      // error Password
-      if (this.pass.length < this.minPassLength) this.passError = this.e('passError');
-
-      // empty Password
-      if (this.pass === '') this.passError = this.e('passEmpty');
-
       // return if error
-      if (this.passError !== '' || this.userError !== '') {
+      if (!this.$refs.form.validate()) {
         this.$emit('endProcess');
         return;
       }

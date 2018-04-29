@@ -69,7 +69,7 @@ export default {
     })
       .then(() => {
         store.commit('setUser', {
-          redirect: kpUtils.routerUrl.Homepage.name,
+          redirect: kpUtils.routerUrl.Login.name,
           ...this.tpl,
         });
       })
