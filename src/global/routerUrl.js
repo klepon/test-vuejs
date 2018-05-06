@@ -36,7 +36,7 @@ export default {
   ProjectID: {
     pathMainRoute: 'detail/:id/*',
     path: 'detail/',
-    name: 'ProjectID',
+    name: 'Detail Project',
   },
   AddProject: {
     path: 'AddProject',
