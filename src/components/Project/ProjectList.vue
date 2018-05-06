@@ -108,7 +108,7 @@ export default {
         { text: this.e('sortDateDesc'), value: 'date~asc' },
       ],
       projects: [],
-      myProject: ['',''],
+      myProject: ['', ''],
       perpage: 4,
       page: 1,
       total: 1,
@@ -194,13 +194,13 @@ export default {
   computed: {
     iconButton() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return ' btn--icon';
+        case 'sm': return ' btn--bottom btn--floating btn--fixed btn--right bottom-2 fixed';
         default: return '';
       }
     },
     hideXs() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return 'hidden-xs-only';
+        case 'sm': return 'hidden-xs-only';
         default: return '';
       }
     },

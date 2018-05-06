@@ -4,7 +4,7 @@
   background-color: #fff;
 }
 
-.header {
+.logo-link {
   .logo {
     width: 25px;
   }
@@ -19,4 +19,14 @@
   .nav-link.active {
     border-bottom: solid 3px $nav-pills-link-active-bg;
   }
+}
+
+.btn--bottom {
+  &.bottom-2 {
+    bottom: 90px !important;
+  }
+}
+
+.fixed {
+  position: fixed;
 }
