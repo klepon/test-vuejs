@@ -1,6 +1,6 @@
 <template>
   <section class="layout">
-    <v-flex sm8 offset-sm2 md6 offset-md3>
+    <v-flex sm8 offset-sm2 md8 lg6 offset-md2 offset-lg3>
       <v-card>
         <v-card-title primary-title>
           <v-form class="flex xs12" v-model="valid" ref="form" lazy-validation>
