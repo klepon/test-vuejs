@@ -1,7 +1,7 @@
 <template>
-  <div v-if="showLoading" class="d-flex flex-column align-items-center">
-    <div class="loader mb-3"></div>
-    <div class="text-xs-center text-sm-left">{{loadingText}}</div>
+  <div v-if="showLoading">
+    <v-progress-linear indeterminate color="cyan"></v-progress-linear>
+    <p>{{loadingText}}</p>
   </div>
 </template>
 

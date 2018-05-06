@@ -14,6 +14,10 @@ export default {
     en: 'Project List',
     id: 'Daftar Proyek',
   },
+  noProject: {
+    en: 'No project found.',
+    id: 'Project tidak ditemukan.',
+  },
   addProjectBtn: {
     en: 'Add New Project',
     id: 'Tambah Project Baru',

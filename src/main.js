@@ -13,7 +13,18 @@ import App from './App';
 
 require('vuetify/dist/vuetify.min.css');
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+  theme: {
+    primary: '#007bff',
+    secondary: '#6c757d',
+    accent: '#d1ecf1',
+    error: '#dc3545',
+    success: '#28a745',
+    info: '#17a2b8',
+    warning: '#ffc107',
+  },
+});
+
 Vue.use(wysiwyg, {
   hideModules: {
     bold: false,

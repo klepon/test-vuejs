@@ -1,7 +1,7 @@
 <template>
-  <div v-if="showError" :class="`alert alert-${getTheme()}`">
+  <v-alert :type="getTheme()" :value="showError">
     <strong>{{errorName}}:</strong> {{errorMessage}}
-  </div>
+  </v-alert>
 </template>
 
 <script>
@@ -11,7 +11,7 @@ export default {
   props: ['errorName', 'errorMessage', 'showError', 'theme'],
   methods: {
     getTheme() {
-      return this.theme === undefined ? 'danger' : this.theme;
+      return this.theme === undefined ? 'error' : this.theme;
     },
   },
 };

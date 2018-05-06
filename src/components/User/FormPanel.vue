@@ -49,11 +49,11 @@ export default {
   data() {
     return {
       valid: true,
-      user: 'qw@qw.qw',
+      user: 'qw@qw.qw1',
       pass: '123456',
       emailRules: [
         v => !!v || this.e('userEmpty'),
-        v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || this.e('userError'),
+        v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,6})+$/.test(v) || this.e('userError'),
       ],
       passRules: [
         v => !!v || this.e('passEmpty'),

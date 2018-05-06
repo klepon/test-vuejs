@@ -64,6 +64,13 @@ export default {
       router.push({ name: this.routerUrl.Login.name });
     }
   },
+  isAdmin() {
+    if (store.state.user.access[0] !== undefined) {
+      return store.state.user.access[0][0] === 'admin';
+    }
+
+    return false;
+  },
   modalServerError(err) {
     this.textModal({
       title: this.e('warningTitle'),

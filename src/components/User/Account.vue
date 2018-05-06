@@ -1,15 +1,27 @@
 <template>
-  <section class="layout">
-    <v-flex xs4 md3>
-      <v-navigation-drawer permanent>
+  <section class="layout ">
+    <v-flex>
+      <v-navigation-drawer stateless hide-overlay :mini-variant="showMini()" v-model="drawer">
         <v-toolbar flat color="cyan" dark>
-          <v-list>
-            <v-list-tile>
-              <v-list-tile-title class="title">
-                <h1 class="title" v-if="tabs.profile">{{e('profile')}}</h1>
-                <h1 class="title" v-if="tabs.changePassword">{{e('changePassword')}}</h1>
-                <h1 class="title" v-if="tabs.removeAccount">{{e('removeAccount')}}</h1>
-              </v-list-tile-title>
+          <v-list class="pa-0">
+            <v-list-tile avatar>
+              <v-list-tile-avatar>
+                <v-btn icon dark @click.native.stop="mini = !mini">
+                  <v-icon large>settings</v-icon>
+                </v-btn>
+              </v-list-tile-avatar>
+
+              <v-list-tile-content>
+                <v-list-tile-title class="title" v-if="tabs.profile">{{e('profile')}}</v-list-tile-title>
+                <v-list-tile-title class="title" v-if="tabs.changePassword">{{e('changePassword')}}</v-list-tile-title>
+                <v-list-tile-title class="title" v-if="tabs.removeAccount">{{e('removeAccount')}}</v-list-tile-title>
+              </v-list-tile-content>
+
+              <v-list-tile-action v-if="isXs">
+                <v-btn icon @click.native.stop="mini = !mini">
+                  <v-icon>chevron_left</v-icon>
+                </v-btn>
+              </v-list-tile-action>
             </v-list-tile>
           </v-list>
         </v-toolbar>
@@ -45,7 +57,7 @@
       </v-navigation-drawer>
     </v-flex>
 
-    <v-flex xs8 md9>
+    <v-flex xs12>
       <div v-if="tabs.profile">
         <div v-show="!editProfile">
           <ul class="list-unstyled">
@@ -131,7 +143,14 @@
         <p>{{e('removeAccountMessage')}}</p>
         <v-btn @click.stop="form.dialogDeleteAccount = true" class="error">{{e('deleteButton')}}</v-btn>
 
-        <v-dialog v-model="form.dialogDeleteAccount" max-width="500px" persistent>
+        <v-dialog
+          v-model="form.dialogDeleteAccount"
+          max-width="500px"
+          persistent
+          hide-overlay
+          transition="dialog-bottom-transition"
+          scrollable
+          :fullscreen="$vuetify.breakpoint.xsOnly">
           <v-card>
             <v-toolbar color="error" dark>
               <v-toolbar-title>{{e('warningTitle')}}</v-toolbar-title>
@@ -177,6 +196,8 @@ export default {
   },
   data() {
     return {
+      drawer: true,
+      mini: true,
       editProfile: false,
       notEqualPassword: '',
       resultError: '',
@@ -435,10 +456,24 @@ export default {
     logoutUser() {
       this.$store.commit('logoutUser');
     },
+    showMini() {
+      if (this.isXs) {
+        return this.mini;
+      }
+      return false;
+    },
   },
   beforeMount() {
     this.$kpUtils.isLoggedIn();
     this.form.companyName = this.getCompanyName();
+  },
+  computed: {
+    isXs() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return true;
+        default: return false;
+      }
+    },
   },
 };
 </script>

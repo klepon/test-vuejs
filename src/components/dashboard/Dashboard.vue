@@ -49,11 +49,11 @@ export default {
       router.push({ name: this.$kpUtils.routerUrl.Account.name });
     },
     companyName() {
-      if (this.user.access[0] !== undefined) {
-        if (this.user.access[0][0] === 'admin') {
-          return ` - ${this.user.company.name || this.e('addCompany')}`;
-        }
+      if (this.$kpUtils.isAdmin() || this.user.company.name) {
+        return ` - ${this.user.company.name || this.e('addCompany')}`;
       }
+
+      return '';
     },
     discipline() {
       return this.user.discipline || this.e('addDiscipline');

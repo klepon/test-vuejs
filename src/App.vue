@@ -1,24 +1,62 @@
 <template>
   <v-app>
     <v-content>
+      <v-toolbar color="white">
+        <v-toolbar-items>
+          <v-btn flat :href="url('Homepage')">home</v-btn>
+        </v-toolbar-items>
+
+        <v-spacer></v-spacer>
+
+        <v-toolbar-items class="hidden-xs-only">
+          <v-btn flat>Link One</v-btn>
+          <v-btn flat>Link Two</v-btn>
+          <v-btn flat>Link Three</v-btn>
+        </v-toolbar-items>
+
+        <v-toolbar-side-icon class="hidden-sm-and-up"></v-toolbar-side-icon>
+      </v-toolbar>
       <section class="header container">
-        <div class="nav-border">
-          <a class="nav-link" :href="url('Homepage')"><img :src="$store.state.setup.logoImage" class="logo"></a>
-
-          <a v-show="state.user.token" :class="`nav-link${isActive('Dashboard')}`" :href="url('Dashboard')">Dashboard</a>
-          <a v-show="state.user.token" :class="`nav-link${isActive('Project')}`" :href="url('Project')">Project</a>
-          <a v-show="state.user.token" :class="`nav-link${isActive('Task')}`" :href="url('Task')">Task</a>
-          <a v-show="state.user.token && state.user.role === 1" :class="`nav-link${isActive('Report')}`" :href="url('Report')">Report</a>
-          <a v-show="state.user.token && state.user.role === 3" :class="`nav-link${isActive('Report')}`" :href="`${url('Report')}${url('MyReport')}`">My Report</a>
-          <a v-show="state.user.token && state.user.role === 1" :class="`nav-link${isActive('User')}`" :href="url('Member')">Member</a>
-          <a v-show="state.user.token" :class="`nav-link${isActive('Account')}`" :href="url('Account')">Account</a>
-          <a v-show="state.user.token" @click="logout" class="nav-link" :href="url('Homepage')">Logout</a>
-
-          <a v-show="!state.user.token" :class="`nav-link${isActive('Login')}`" :href="url('Login')">Login</a>
-          <a v-show="!state.user.token" :class="`nav-link${isActive('Register')}`" :href="url('Register')">Register</a>
-
-          <a v-show="setup.lang === 'en'" @click="switchLang('id', $event)" class="nav-link" href="#">id</a>
-          <a v-show="setup.lang === 'id'" @click="switchLang('en', $event)" class="nav-link" href="#">en</a>
+        <div class="layout nav-border">
+          <div>
+            <a class="nav-link" :href="url('Homepage')"><img :src="$store.state.setup.logoImage" class="logo"></a>
+          </div>
+          <div v-if="state.user.token">
+            <a :class="`nav-link${isActive('Dashboard')}`" :href="url('Dashboard')">Dashboard</a>
+          </div>
+          <div v-if="state.user.token">
+            <a :class="`nav-link${isActive('Project')}`" :href="url('Project')">Project</a>
+          </div>
+          <div v-if="state.user.token">
+            <a :class="`nav-link${isActive('Task')}`" :href="url('Task')">Task</a>
+          </div>
+          <div v-if="state.user.token && state.user.role === 1">
+            <a :class="`nav-link${isActive('Report')}`" :href="url('Report')">Report</a>
+          </div>
+          <div v-if="state.user.token && state.user.role === 3">
+            <a :class="`nav-link${isActive('Report')}`" :href="`${url('Report')}${url('MyReport')}`">My Report</a>
+          </div>
+          <div v-if="state.user.token && state.user.role === 1">
+            <a :class="`nav-link${isActive('User')}`" :href="url('Member')">Member</a>
+          </div>
+          <div v-if="state.user.token">
+            <a :class="`nav-link${isActive('Account')}`" :href="url('Account')">Account</a>
+          </div>
+          <div v-if="state.user.token">
+            <a @click="logout" class="nav-link" :href="url('Homepage')">Logout</a>
+          </div>
+          <div v-if="!state.user.token">
+            <a :class="`nav-link${isActive('Login')}`" :href="url('Login')">Login</a>
+          </div>
+          <div v-if="!state.user.token">
+            <a :class="`nav-link${isActive('Register')}`" :href="url('Register')">Register</a>
+          </div>
+          <div v-if="setup.lang === 'en'">
+            <a @click="switchLang('id', $event)" class="nav-link" href="#">id</a>
+          </div>
+          <div v-if="setup.lang === 'id'">
+            <a @click="switchLang('en', $event)" class="nav-link" href="#">en</a>
+          </div>
         </div>
       </section>
 
@@ -35,7 +73,7 @@
 
         <router-view/>
 
-        <v-dialog v-model="util.modal.show" max-width="500px">
+        <v-dialog v-model="util.modal.show" max-width="500px" :fullscreen="$vuetify.breakpoint.xsOnly">
           <v-card>
             <v-toolbar :color="util.modal.theme" :dark="util.modal.dark">
               <v-toolbar-title>{{util.modal.title}}</v-toolbar-title>
@@ -93,6 +131,14 @@ export default {
     if (lsLang !== this.$store.state.setup.lang) {
       this.switchLang(lsLang, null);
     }
+  },
+  computed: {
+    hideXs() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return 'hidden-xs-only';
+        default: return '';
+      }
+    },
   },
 };
 </script>

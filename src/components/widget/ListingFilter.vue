@@ -1,21 +1,26 @@
 <template>
-  <b-form class="form-inline list-util">
+  <v-form class="layout justify-space-between">
 
-    <b-form-input class="mr-sm-2 mb-2"
-      type="text"
-      v-model="keyword"
-      :placeholder="keywordPlaceholder"
-      @keyup.native="keywordSearch" />
+    <v-flex class="xs7 sm4">
+      <v-text-field
+        :label="keywordPlaceholder"
+        v-model="keyword"
+        @keyup.native="keywordSearch"
+      ></v-text-field>
+    </v-flex>
 
-    <label class="ml-auto mr-2 mb-2 d-none d-sm-block">{{sortByLabel}}</label>
-    <b-form-select class="mb-2"
-      v-model="sortBy"
-      :options="sortByList"
-      @change.native="doSorting" />
+    <v-flex class="xs5 sm4">
+      <v-select
+        :items="sortByList"
+        v-model="sortBy"
+        :label="sortByLabel"
+        @change="doSorting"
+      ></v-select>
+    </v-flex>
 
     <!-- next feature: collapsible advance filter -->
 
-  </b-form>
+  </v-form>
 </template>
 
 <script>
@@ -69,7 +74,7 @@ export default {
     },
 
     doSorting(...arg) {
-      const filter = arg[0].target.value.split('~');
+      const filter = arg[0].split('~');
       this.data.sort((a, b) => {
         if (filter[1] === 'asc') {
           if (a[filter[0]].toLowerCase() < b[filter[0]].toLowerCase()) return -1;
