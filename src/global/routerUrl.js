@@ -29,10 +29,6 @@ export default {
     path: '/#/Project/',
     name: 'Project',
   },
-  ProjectPage: {
-    path: '?page=',
-    name: 'ProjectPage',
-  },
   ProjectID: {
     pathMainRoute: 'detail/:id/*',
     path: 'detail/',
@@ -40,7 +36,7 @@ export default {
   },
   AddProject: {
     path: 'AddProject',
-    name: 'AddProject',
+    name: 'Add Project',
   },
   Report: {
     pathMainRoute: '/Report/',
@@ -65,6 +61,22 @@ export default {
     pathMainRoute: '/Account/',
     path: '/#/Account/',
     name: 'Account',
+  },
+  SubAccount: {
+    path: ':sub',
+  },
+  AccountProfile: {
+    pathMainRoute: '/Account/profile',
+    path: '/#/Account/profile',
+    name: 'Profile',
+  },
+  AccountChangePassword: {
+    path: '/#/Account/change-password',
+    name: 'Change Password',
+  },
+  AccountDeleteAccount: {
+    path: '/#/Account/remove-account',
+    name: 'Remove Account',
   },
   foo: {
     pathMainRoute: '/foo/',

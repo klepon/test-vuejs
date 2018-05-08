@@ -109,7 +109,7 @@ export default {
       ],
       projects: [],
       myProject: ['', ''],
-      perpage: 4,
+      perpage: 10,
       page: 1,
       total: 1,
     };
@@ -194,12 +194,14 @@ export default {
   computed: {
     iconButton() {
       switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
         case 'sm': return ' btn--bottom btn--floating btn--fixed btn--right bottom-2 fixed';
         default: return '';
       }
     },
     hideXs() {
       switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
         case 'sm': return 'hidden-xs-only';
         default: return '';
       }

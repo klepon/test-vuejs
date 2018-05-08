@@ -10,11 +10,11 @@
         </v-flex>
       </v-layout>
 
-      <v-container grid-list-lg py-0 style="height: 100%;">
+      <v-container grid-list-lg pa-0 style="height: 100%;">
         <v-layout style="height: 100%;">
           <heading />
 
-          <v-flex xs12 py-3>
+          <v-flex xs12 pt-3 pb-5>
             <router-view/>
           </v-flex>
         </v-layout>

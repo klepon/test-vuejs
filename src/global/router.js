@@ -36,6 +36,12 @@ export default new Router({
       path: routerUrl.Account.pathMainRoute,
       name: routerUrl.Account.name,
       component: Account,
+      children: [
+        {
+          path: routerUrl.SubAccount.path,
+          component: Account,
+        },
+      ],
     },
     {
       path: routerUrl.Login.pathMainRoute,
@@ -97,4 +103,7 @@ export default new Router({
       component: User,
     },
   ],
+  scrollBehavior() {
+    return { x: 0, y: 0 };
+  },
 });

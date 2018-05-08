@@ -1,5 +1,19 @@
 @import "variable";
 
+/* reset */
+li {
+    list-style-position: inside;
+}
+/* end reset */
+
+/* bugfix */
+.dialog__content {
+  .card__actions {
+    align-items: flex-start;
+  }
+}
+
+/* end bugfix */
 .application.theme--light {
   background-color: #fff;
 }

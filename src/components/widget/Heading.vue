@@ -7,7 +7,7 @@
     <v-navigation-drawer
       v-model="drawer"
       :class="slideXs"
-      :style="showXsAbove"
+      :style="`${drawerStyle()} ${showXsAbove}`"
       class="cyan lighten-5"
       >
       <v-list class="pa-1">
@@ -83,28 +83,28 @@
 
           <v-list-tile
             v-if="state.user.token"
-            :href="url('Account')">
+            :href="url('AccountProfile')">
             <v-list-tile-title>{{e('profile')}}</v-list-tile-title>
             <v-list-tile-action>
-              <v-icon :color="isActive('Account')">recent_actors</v-icon>
+              <v-icon :color="isActive('profile', 'sub')">recent_actors</v-icon>
             </v-list-tile-action>
           </v-list-tile>
 
           <v-list-tile
             v-if="state.user.token"
-            :href="url('Account')">
+            :href="url('AccountChangePassword')">
             <v-list-tile-title>{{e('changePassword')}}</v-list-tile-title>
             <v-list-tile-action>
-              <v-icon :color="isActive('Account')">vpn_key</v-icon>
+              <v-icon :color="isActive('change-password', 'sub')">vpn_key</v-icon>
             </v-list-tile-action>
           </v-list-tile>
 
           <v-list-tile
             v-if="state.user.token"
-            :href="url('Account')">
+            :href="url('AccountDeleteAccount')">
             <v-list-tile-title>{{e('removeAccount')}}</v-list-tile-title>
             <v-list-tile-action>
-              <v-icon :color="isActive('Account')">delete</v-icon>
+              <v-icon :color="isActive('remove-account', 'sub')">delete</v-icon>
             </v-list-tile-action>
           </v-list-tile>
 
@@ -168,9 +168,9 @@
             <v-list-tile-title>EN</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+
       </v-list>
     </v-navigation-drawer>
-
   </v-flex>
 </template>
 
@@ -182,6 +182,8 @@ export default {
   name: 'Header',
   data() {
     return {
+      windowHeight: 0,
+      windowScrollY: 0,
       drawer: false,
       state: this.$store.state,
       setup: this.$store.state.setup,
@@ -196,8 +198,13 @@ export default {
       e.preventDefault();
       this.$store.commit('logoutUser');
     },
-    isActive(name) {
+    isActive(name, sub) {
       if (this.$route.matched[0] === undefined) return '';
+
+      if (sub !== undefined) {
+        if (name === this.$route.params.sub) return 'primary';
+      }
+
       return this.$route.matched[0].name === name ? 'primary' : '';
     },
     switchLang(langCode, e) {
@@ -207,6 +214,10 @@ export default {
     url(page) {
       return this.$kpUtils.routerUrl[page].path;
     },
+    drawerStyle() {
+      if (!this.drawer) return 'height: 100%;';
+      return `height: ${this.windowHeight}px; top: ${this.windowScrollY}px; overflow:scroll;`;
+    },
   },
   beforeMount() {
     // check lang, use localStorage data
@@ -215,15 +226,43 @@ export default {
       this.switchLang(lsLang, null);
     }
   },
+  mounted() {
+    const self = this;
+    self.windowScrollY = window.scrollY;
+
+    this.$nextTick(() => {
+      window.addEventListener('resize', () => {
+        self.windowHeight = window.innerHeight;
+        self.drawer = self.hideDrawer;
+      });
+
+      window.addEventListener('scroll', () => {
+        self.windowScrollY = window.scrollY;
+      });
+    });
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll);
+  },
   computed: {
     slideXs() {
       switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
         case 'sm': return 'navigation-drawer--temporary navigation-drawer--absolute';
         default: return 'navigation-drawer--permanent';
       }
     },
+    hideDrawer() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+        case 'sm': return this.drawer;
+        default: return false;
+      }
+    },
     showXsAbove() {
       switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
         case 'sm': return '';
         default: return 'transform: none;';
       }

@@ -46,7 +46,7 @@ export default {
       return this.$kpUtils.getTextByLang(componentText, copy);
     },
     editProfile() {
-      router.push({ name: this.$kpUtils.routerUrl.Account.name });
+      router.push({ path: this.$kpUtils.routerUrl.AccountProfile.pathMainRoute });
     },
     companyName() {
       if (this.$kpUtils.isAdmin() || this.user.company.name) {

@@ -1,64 +1,7 @@
 <template>
   <section class="layout ">
-    <v-flex>
-      <v-navigation-drawer stateless hide-overlay :mini-variant="showMini()" v-model="drawer">
-        <v-toolbar flat color="cyan" dark>
-          <v-list class="pa-0">
-            <v-list-tile avatar>
-              <v-list-tile-avatar>
-                <v-btn icon dark @click.native.stop="mini = !mini">
-                  <v-icon large>settings</v-icon>
-                </v-btn>
-              </v-list-tile-avatar>
-
-              <v-list-tile-content>
-                <v-list-tile-title class="title" v-if="tabs.profile">{{e('profile')}}</v-list-tile-title>
-                <v-list-tile-title class="title" v-if="tabs.changePassword">{{e('changePassword')}}</v-list-tile-title>
-                <v-list-tile-title class="title" v-if="tabs.removeAccount">{{e('removeAccount')}}</v-list-tile-title>
-              </v-list-tile-content>
-
-              <v-list-tile-action v-if="isXs">
-                <v-btn icon @click.native.stop="mini = !mini">
-                  <v-icon>chevron_left</v-icon>
-                </v-btn>
-              </v-list-tile-action>
-            </v-list-tile>
-          </v-list>
-        </v-toolbar>
-        <v-divider></v-divider>
-        <v-list dense class="pt-0">
-          <v-list-tile @click="toggleTab('profile', $event)" :class="`${setClass(tabs.profile)}`">
-            <v-list-tile-action>
-              <v-icon :color="`${setColor(tabs.profile, 'cyan')}`">account_box</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>{{e('profile')}}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-
-          <v-list-tile @click="toggleTab('changePassword', $event)" :class="`${setClass(tabs.changePassword)}`">
-            <v-list-tile-action>
-              <v-icon :color="`${setColor(tabs.changePassword, 'primary')}`">lock</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>{{e('changePassword')}}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-
-          <v-list-tile @click="toggleTab('removeAccount', $event)" :class="`${setClass(tabs.removeAccount)}`">
-            <v-list-tile-action>
-              <v-icon :color="`${setColor(tabs.removeAccount, 'error')}`">delete_forever</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>{{e('removeAccount')}}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-navigation-drawer>
-    </v-flex>
-
     <v-flex xs12>
-      <div v-if="tabs.profile">
+      <div v-if="isVisible('profile')">
         <div v-show="!editProfile">
           <ul class="list-unstyled">
             <li>{{e('yourName')}}: {{user.name}}</li>
@@ -92,7 +35,7 @@
           ></v-text-field>
 
           <v-alert type="info" :value="resultError !== ''">{{e(resultError)}}</v-alert>
-          <v-progress-linear v-show="loading" indeterminate color="accent"></v-progress-linear>
+          <v-progress-linear v-if="loading" indeterminate color="accent"></v-progress-linear>
           <div class="flex-horizontal">
             <v-btn @click="submitSaveProfile" class="primary">{{e('saveProfile')}}</v-btn>
             <v-btn flat @click="editProfile = false">{{e('cancel')}}</v-btn>
@@ -100,7 +43,7 @@
         </v-form>
       </div>
 
-      <v-form v-if="tabs.changePassword" class="flex xs12" v-model="form.valid" ref="changePassword" lazy-validation>
+      <v-form v-if="isVisible('change-password')" class="flex xs12" v-model="form.valid" ref="changePassword" lazy-validation>
         <v-text-field v-if="!form.countDownStart" type="password"
           :label="`${e('newPasswod')} - minimum ${form.minPassLength}`"
           v-model="form.newPass"
@@ -139,7 +82,7 @@
         </div>
       </v-form>
 
-      <div v-if="tabs.removeAccount">
+      <div v-if="isVisible('remove-account')">
         <p>{{e('removeAccountMessage')}}</p>
         <v-btn @click.stop="form.dialogDeleteAccount = true" class="error">{{e('deleteButton')}}</v-btn>
 
@@ -189,11 +132,6 @@ import url from './_var';
 
 export default {
   name: 'Account',
-  tabsTpl: {
-    profile: false,
-    changePassword: false,
-    removeAccount: false,
-  },
   data() {
     return {
       drawer: true,
@@ -203,10 +141,6 @@ export default {
       resultError: '',
       loading: false,
       user: this.$store.state.user,
-      tabs: {
-        ...this.tabsTpl,
-        profile: true,
-      },
       componentText,
       deletePassword: false,
       deleteButtonText: 'yesDeleteButton',
@@ -261,22 +195,18 @@ export default {
       }
       return '';
     },
-    toggleTab(key, e) {
-      e.preventDefault();
-
-      this.resultError = '';
-      this.loading = false;
-
-      this.tabs = {
-        ...this.tabsTpl,
-        [key]: true,
-      };
-    },
     setClass(bool) {
       return bool === true ? 'blue accent-1' : '';
     },
     setColor(bool, defaultColor) {
       return bool === true ? 'white' : defaultColor;
+    },
+    isVisible(tab) {
+      if (this.$route.params.sub === tab) {
+        return true;
+      }
+
+      return false;
     },
     submitSaveProfile(e) {
       e.preventDefault();
@@ -456,23 +386,15 @@ export default {
     logoutUser() {
       this.$store.commit('logoutUser');
     },
-    showMini() {
-      if (this.isXs) {
-        return this.mini;
-      }
-      return false;
-    },
   },
   beforeMount() {
     this.$kpUtils.isLoggedIn();
     this.form.companyName = this.getCompanyName();
   },
-  computed: {
-    isXs() {
-      switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return true;
-        default: return false;
-      }
+  watch: {
+    $route() {
+      this.resultError = '';
+      this.loading = false;
     },
   },
 };
