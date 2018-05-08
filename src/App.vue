@@ -11,13 +11,13 @@
       </v-layout>
 
       <v-container grid-list-lg pa-0 style="height: 100%;">
-        <v-layout style="height: 100%;">
+        <div :class="getClassName()" style="height: 100%;">
           <heading />
 
-          <v-flex xs12 pt-3 pb-5>
+          <v-flex xs12 pt-3 pb-5 :class="getContentPadding()">
             <router-view/>
           </v-flex>
-        </v-layout>
+        </div>
         <v-dialog v-model="util.modal.show" max-width="500px" :fullscreen="$vuetify.breakpoint.xsOnly">
           <v-card>
             <v-toolbar :color="util.modal.theme" :dark="util.modal.dark">
@@ -54,6 +54,25 @@ export default {
         colors: ['primary', 'secondary', 'success', 'info', 'warning', 'error', 'accent'],
       },
     };
+  },
+  methods: {
+    getClassName() {
+      if (this.isSmAndUp) return 'layout';
+      return '';
+    },
+    getContentPadding() {
+      if (!this.isSmAndUp) return 'pa-3';
+      return '';
+    },
+  },
+  computed: {
+    isSmAndUp() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+        case 'sm': return false;
+        default: return true;
+      }
+    },
   },
 };
 </script>

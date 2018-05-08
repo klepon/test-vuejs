@@ -6,8 +6,9 @@
 
     <v-navigation-drawer
       v-model="drawer"
-      :class="slideXs"
-      :style="`${drawerStyle()} ${showXsAbove}`"
+      :mini-variant.sync="mini"
+      :class="slideOnXs"
+      :style="`${drawerStyle()} ${showSmAndUp}`"
       class="cyan lighten-5"
       >
       <v-list class="pa-1">
@@ -18,6 +19,19 @@
           <v-list-tile-content>
             <v-list-tile-title>{{$route.name}}</v-list-tile-title>
           </v-list-tile-content>
+
+          <v-list-tile-action v-if="showMiniTrigger">
+            <v-btn icon @click.native.stop="mini = !mini">
+              <v-icon>chevron_left</v-icon>
+            </v-btn>
+          </v-list-tile-action>
+
+          <v-list-tile-action v-if="!showMiniTrigger">
+            <v-btn icon @click.native.stop="drawer = !drawer">
+              <v-icon>chevron_left</v-icon>
+            </v-btn>
+          </v-list-tile-action>
+
         </v-list-tile>
       </v-list>
       <v-list class="pt-0" dense>
@@ -185,6 +199,8 @@ export default {
       windowHeight: 0,
       windowScrollY: 0,
       drawer: false,
+      mini: true,
+      showMiniTrigger: true,
       state: this.$store.state,
       setup: this.$store.state.setup,
       util: this.$store.state.util,
@@ -233,7 +249,13 @@ export default {
     this.$nextTick(() => {
       window.addEventListener('resize', () => {
         self.windowHeight = window.innerHeight;
-        self.drawer = self.hideDrawer;
+        self.drawer = self.hideDrawerOverlayXsAndUp;
+        if (self.drawer) {
+          self.mini = false;
+          self.showMiniTrigger = false;
+        } else {
+          self.showMiniTrigger = true;
+        }
       });
 
       window.addEventListener('scroll', () => {
@@ -246,21 +268,21 @@ export default {
     window.removeEventListener('scroll', this.handleScroll);
   },
   computed: {
-    slideXs() {
+    slideOnXs() {
       switch (this.$vuetify.breakpoint.name) {
         case 'xs':
         case 'sm': return 'navigation-drawer--temporary navigation-drawer--absolute';
         default: return 'navigation-drawer--permanent';
       }
     },
-    hideDrawer() {
+    hideDrawerOverlayXsAndUp() {
       switch (this.$vuetify.breakpoint.name) {
         case 'xs':
         case 'sm': return this.drawer;
         default: return false;
       }
     },
-    showXsAbove() {
+    showSmAndUp() {
       switch (this.$vuetify.breakpoint.name) {
         case 'xs':
         case 'sm': return '';
