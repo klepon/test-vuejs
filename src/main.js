@@ -56,6 +56,9 @@ Vue.config.productionTip = false;
 
 // redirect to homepage if page not found
 router.beforeEach((to, from, next) => {
+  // check for user login, redirect if not login
+  kpUtils.isLoggedIn(to);
+
   if (!to.matched.length) {
     next('/');
   } else {

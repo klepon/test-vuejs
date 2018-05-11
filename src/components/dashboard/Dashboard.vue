@@ -62,8 +62,5 @@ export default {
       return this.user.name || this.e('addName');
     },
   },
-  beforeMount() {
-    this.$kpUtils.isLoggedIn();
-  },
 };
 </script>

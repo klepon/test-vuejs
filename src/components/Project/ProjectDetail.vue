@@ -9,8 +9,6 @@
       v-bind:errorName="e('attentionTitle')"
       v-bind:errorMessage="$kpUtils.getErrorMessage(projects, e)" />
 
-    <hr />
-
     <div>
       <p>detail project for id: {{$route.params.id}}, project terdiri dari</p>
       <ul>
@@ -70,7 +68,7 @@ export default {
     isLoading() {
       return this.util.loading;
     },
-    getProjetList() {
+    getProjet() {
       this.util.loading = true;
 
       // connect API
@@ -83,12 +81,12 @@ export default {
         .catch((err) => {
           this.$kpUtils.modalServerError(err);
           this.util.loading = false;
+          this.$store.commit('logoutUser');
         });
     },
   },
   beforeMount() {
-    this.$kpUtils.isLoggedIn();
-    this.getProjetList();
+    this.getProjet();
   },
 };
 </script>

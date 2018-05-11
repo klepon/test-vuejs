@@ -12,8 +12,8 @@ li {
     align-items: flex-start;
   }
 }
-
 /* end bugfix */
+
 .application.theme--light {
   background-color: #fff;
 }
@@ -43,4 +43,8 @@ li {
 
 .fixed {
   position: fixed;
+}
+
+.bottom-100 {
+  bottom: 100%;
 }

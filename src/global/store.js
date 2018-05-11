@@ -21,7 +21,8 @@ export default new Vuex.Store({
         dark: '',
       },
     },
-    user: { ...User.tpl },
+    user: { ...User.getTpl() },
+    projects: [],
   },
   mutations: {
     switchLang(state, langCode) {

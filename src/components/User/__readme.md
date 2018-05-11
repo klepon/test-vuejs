@@ -11,11 +11,6 @@
 * router from '@/global/router';
 * setting from '@/global/setting';
 
-** add auto redirect on user loose token on each page that need auth, see user/Account.vue
-beforeMount() {
-  this.$kpUtils.isLoggedIn();
-},
-
 ** paid user - admin, limit project number base on admin package
 - manage role
 - manage company

@@ -1,23 +1,14 @@
 <template>
   <section class="project">
-
-    <!-- breadcrumb -->
-    <nav v-if="user.token && !isParent()" aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a :href="$kpUtils.routerUrl.Project.path">{{e(util.pagetTitleMapping[$kpUtils.routerUrl.Project.name])}}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{projectNameByRouteId()}}</li>
-      </ol>
-    </nav>
-
     <!-- title and AddProject -->
-    <v-layout align-center v-if="isParent()">
+    <v-layout align-center>
       <v-flex xs12>
         <h1>{{projectNameByRouteId()}}</h1>
       </v-flex>
-      <div v-if="isAllowCreateProject()">
-        <v-btn :href="`${$kpUtils.routerUrl.Project.path}${$kpUtils.routerUrl.AddProject.path}`" :class="`primary${iconButton}`">
+      <div v-if="isAllowCreateProject() && isParent()">
+        <v-btn :href="`${$kpUtils.routerUrl.Project.path}${$kpUtils.routerUrl.AddProject.path}`" :class="`primary${iconButton} bottom-100`">
           <v-icon dark>add</v-icon>
-          <span :class="hideXs">{{e('addProjectBtn')}}</span>
+          <span :class="hideMobile">{{e('addProjectBtn')}}</span>
         </v-btn>
       </div>
     </v-layout>
@@ -59,7 +50,7 @@
         </v-layout>
 
         <v-layout column justify-space-between align-content-start wrap>
-          <span v-html="project.description"></span>
+          <span v-html="project.sortDescription"></span>
           <small>{{myProject.indexOf(project.id) >= 0 ? 'my project - ' : ''}}small info, milestone, percentage progress, etc</small>
         </v-layout>
       </div>
@@ -131,18 +122,28 @@ export default {
       fetch(`${url.getProjects}${this.user.token}`)
         .then(response => response.json())
         .then((jsonData) => {
-          this.projects = jsonData;
-          this.util.loading = false;
-          this.findMyProject();
+          if (jsonData.error) {
+            if (jsonData.error.statusCode === 401) { // Authorization Required
+              this.$store.commit('logoutUser');
+            }
+          } else {
+            this.projects = jsonData;
+            this.util.loading = false;
+            this.findMyProject();
+          }
         })
         .catch((err) => {
           this.$kpUtils.modalServerError(err);
           this.util.loading = false;
+          this.$store.commit('logoutUser');
         });
     },
     projectNameByRouteId() {
-      if (this.$route.params.id && this.projects[0]) {
-        return this.projects.find(p => p.id === this.$route.params.id * 1).name;
+      if (this.$route.params.id && this.projects.length > 0) {
+        const detailProject = this.projects.find(p => p.id === this.$route.params.id * 1);
+        if (detailProject) {
+          return detailProject.name;
+        }
       }
 
       return this.e(this.util.pagetTitleMapping[this.$route.name]);
@@ -180,12 +181,11 @@ export default {
     },
   },
   beforeMount() {
-    this.$kpUtils.isLoggedIn();
     this.getProjetList();
   },
   beforeRouteUpdate(to, from, next) {
-    // reload data after save add project
-    if (to.name === this.$kpUtils.routerUrl.Project.name && from.name === this.$kpUtils.routerUrl.AddProject.name) {
+    // reload after add new project
+    if (to.name === this.$kpUtils.routerUrl.ProjectID.name && from.name === this.$kpUtils.routerUrl.AddProject.name) {
       this.getProjetList();
     }
 
@@ -194,15 +194,13 @@ export default {
   computed: {
     iconButton() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-        case 'sm': return ' btn--bottom btn--floating btn--fixed btn--right bottom-2 fixed';
+        case 'xs': return ' btn--bottom btn--floating btn--fixed btn--left bottom-2 fixed';
         default: return '';
       }
     },
-    hideXs() {
+    hideMobile() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-        case 'sm': return 'hidden-xs-only';
+        case 'xs': return 'hidden-xs-only';
         default: return '';
       }
     },

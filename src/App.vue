@@ -16,6 +16,7 @@
 
           <v-flex xs12 pt-3 pb-5 :class="getContentPadding()">
             <router-view/>
+            <div class="pb-5">&nbsp;</div>
           </v-flex>
         </div>
         <v-dialog v-model="util.modal.show" max-width="500px" :fullscreen="$vuetify.breakpoint.xsOnly">
@@ -57,19 +58,18 @@ export default {
   },
   methods: {
     getClassName() {
-      if (this.isSmAndUp) return 'layout';
+      if (this.isMobileUp) return 'layout';
       return '';
     },
     getContentPadding() {
-      if (!this.isSmAndUp) return 'pa-3';
+      if (!this.isMobileUp) return 'pa-3';
       return '';
     },
   },
   computed: {
-    isSmAndUp() {
+    isMobileUp() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-        case 'sm': return false;
+        case 'xs': return false;
         default: return true;
       }
     },

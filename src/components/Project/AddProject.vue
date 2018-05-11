@@ -1,36 +1,31 @@
 <template>
-  <section class="container-fluid">
+  <section class="layout">
+    <v-form class="flex xs12" v-model="form.valid" ref="form" lazy-validation>
+      <v-text-field
+        :label="e('title')"
+        v-model="project.title"
+        :rules="form.required"
+        required
+      ></v-text-field>
 
-    <p><b>Todo:</b></p>
-    <ul>
-      <li>nama project -> done</li>
-      <li>keterangan project -> done</li>
-      <li>set owner sebagai admin</li>
-    </ul>
+      <v-text-field
+        :label="e('sortDesc')"
+        v-model="project.sortDesc"
+      ></v-text-field>
 
-    <b-form @submit="onSubmit">
-      <b-form-group :description="util.titleError">
-        <b-form-input
-          type="text"
-          v-model="project.title"
-          required
-          :placeholder="e('title')">
-        </b-form-input>
-      </b-form-group>
+      <wysiwyg class="mt-2 mb-4" v-model="project.description" :placeholder="e('description')" />
 
-      <b-form-group :description="e('descriptionDesc')">
-        <wysiwyg v-model="project.description" :placeholder="e('description')" />
-      </b-form-group>
-
-      <b-btn type="submit" variant="primary">{{e('submmitBtn')}}</b-btn>
-    </b-form >
-
+      <v-progress-linear v-show="util.loading" indeterminate color="accent"></v-progress-linear>
+      <v-btn class="primary ml-0" @click="onSubmit" :disabled="!form.valid">{{e('submmitBtn')}}</v-btn>
+    </v-form>
   </section>
 </template>
 
 <script>
 import componentText from './addProject.lang';
 import url from './_var';
+
+/* eslint-disable no-console */
 
 export default {
   name: 'AddProject',
@@ -40,10 +35,16 @@ export default {
       project: {
         title: '',
         description: '',
+        sortDesc: '',
       },
       util: {
         loading: false,
-        titleError: '',
+      },
+      form: {
+        required: [
+          v => !!v || this.e('titleRequired'),
+        ],
+        valid: true,
       },
     };
   },
@@ -61,6 +62,7 @@ export default {
         body: JSON.stringify({
           name: this.project.title,
           description: this.project.description,
+          sortDescription: this.project.sortDesc,
         }),
         ...this.$kpUtils.apiHeader,
       })
@@ -68,7 +70,8 @@ export default {
         .then((jsonData) => {
           // success
           if (jsonData.id) {
-            this.$router.push({ name: this.$kpUtils.routerUrl.Project.name });
+            const path = `${this.$kpUtils.routerUrl.Project.pathMainRoute}${this.$kpUtils.routerUrl.ProjectID.path}${jsonData.id}/${jsonData.name}`;
+            this.$router.push({ path });
           } else {
             switch (jsonData.error.statusCode) {
               case 422:
@@ -77,26 +80,26 @@ export default {
                 });
                 break;
               case 401:
-                // no auth: {error.statusCode: 401}
+                // no auth: {error.statusCode: 401}, not admin or already have 1 project
                 this.$kpUtils.modalWarning({
-                  message: this.e('authNeeded'),
+                  message: this.e('createProjectNotAllowed'),
                 });
                 break;
               default:
                 this.$kpUtils.modalServerError(null);
             }
+
+            this.util.loading = false;
           }
         })
         .catch((err) => {
           this.$kpUtils.modalServerError(err);
 
           this.util.loading = false;
+          this.$store.commit('logoutUser');
           return null;
         });
     },
-  },
-  beforeMount() {
-    this.$kpUtils.isLoggedIn();
   },
 };
 </script>

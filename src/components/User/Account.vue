@@ -6,7 +6,7 @@
           <ul class="list-unstyled">
             <li>{{e('yourName')}}: {{user.name}}</li>
             <li>{{e('yourDiscipline')}}: {{user.discipline}}</li>
-            <li v-if="isAdmin()">{{e('yourCompany')}}: {{form.companyName}}</li>
+            <li v-if="$kpUtils.isAdmin()">{{e('yourCompany')}}: {{form.companyName}}</li>
           </ul>
           <v-btn @click="editProfile = true" class="primary">{{e('edit')}}</v-btn>
         </div>
@@ -22,7 +22,7 @@
             v-model="user.discipline"
           ></v-text-field>
 
-          <v-text-field v-if="isAdmin()"
+          <v-text-field v-if="$kpUtils.isAdmin()"
             :label="e('yourCompany')"
             v-model="form.companyName"
           ></v-text-field>
@@ -180,14 +180,6 @@ export default {
       this.dialogDeleteAccount = false;
       this.deletePassword = false;
       this.loading = false;
-    },
-    isAdmin() {
-      if (this.user.access[0] !== undefined) {
-        if (this.user.access[0][0] === 'admin') {
-          return true;
-        }
-      }
-      return false;
     },
     getCompanyName() {
       if (this.user.company !== undefined) {
@@ -350,7 +342,7 @@ export default {
             this.hideModal();
             this.$store.commit('setUser', {
               redirect: this.$kpUtils.routerUrl.Homepage.name,
-              ...User.tpl,
+              ...User.getTpl(),
             });
           } else if (jsonData.error && jsonData.error.message) {
             this.resultError = jsonData.error.message;
@@ -388,7 +380,6 @@ export default {
     },
   },
   beforeMount() {
-    this.$kpUtils.isLoggedIn();
     this.form.companyName = this.getCompanyName();
   },
   watch: {

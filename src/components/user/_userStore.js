@@ -7,17 +7,30 @@ import url from './_var';
 export default {
   /* set user data object
   * how to use; add on store state
-    user: { ...User.tpl },
+    user: { ...User.getTpl() },
   */
-  tpl: {
-    id: 0,
-    name: '',
-    email: '', // use for request
-    token: '', // use for request
-    access: {},
-    hashGroup: false,
-    discipline: '',
-    company: {}, // id, name
+  getTpl(data) {
+    const {
+      id = 0,
+      name = '',
+      email = '', // use for request
+      token = '', // use for request
+      admin = false,
+      hashGroup = false,
+      discipline = '',
+      company = {}, // id, name
+    } = data === undefined ? {} : data;
+
+    return {
+      id,
+      name,
+      email,
+      token,
+      admin,
+      hashGroup,
+      discipline,
+      company,
+    };
   },
 
   localStorageKey: 'userData',
@@ -48,8 +61,7 @@ export default {
     const { redirect } = params;
 
     // set user detil
-    state.user = params;
-    delete state.user.redirect;
+    state.user = { ...this.getTpl(params) };
     kpUtils.setLocalStorage(this.localStorageKey, { ...state.user });
 
     // redirect user after login/logout success
@@ -70,13 +82,18 @@ export default {
       .then(() => {
         store.commit('setUser', {
           redirect: kpUtils.routerUrl.Login.name,
-          ...this.tpl,
+          ...this.getTpl(),
         });
       })
       .catch(() => {
         store.commit('setModal', {
           title: this.e('warningTitle', store),
           message: this.e('serverError', store),
+        });
+
+        store.commit('setUser', {
+          redirect: kpUtils.routerUrl.Login.name,
+          ...this.getTpl(),
         });
       });
   },

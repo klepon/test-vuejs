@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import store from '@/global/store';
 import router from '@/global/router';
-import routerUrl from '@/global/routerUrl';
+import routerUrlObj from '@/global/routerUrl';
 import utilLang from '@/global/_util.lang';
 
 export default {
@@ -59,17 +59,15 @@ export default {
       console.log(`localStorage Error on storing (${key}) object`);
     }
   },
-  isLoggedIn() { // following user store format for `store.state.user.token`
+  isLoggedIn(to) { // following user store format for `store.state.user.token`
     if (!store.state.user.token) {
-      router.push({ name: this.routerUrl.Login.name });
+      if (to.name !== this.routerUrl.Login.name) {
+        router.push({ name: this.routerUrl.Login.name });
+      }
     }
   },
   isAdmin() {
-    if (store.state.user.access[0] !== undefined) {
-      return store.state.user.access[0][0] === 'admin';
-    }
-
-    return false;
+    return store.state.user.admin;
   },
   modalServerError(err) {
     this.textModal({
@@ -127,5 +125,5 @@ export default {
   regex: {
     email: /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i,
   },
-  routerUrl: { ...routerUrl },
+  routerUrl: { ...routerUrlObj },
 };

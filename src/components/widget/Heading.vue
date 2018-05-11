@@ -1,14 +1,14 @@
 <template>
   <v-flex py-0>
-    <v-btn @click.stop="drawer = !drawer" class="hidden-md-and-up btn--bottom btn--floating btn--fixed btn--right fixed primary">
+    <v-btn @click.stop="drawer = !drawer" class="hidden-sm-and-up btn--bottom btn--floating btn--fixed btn--left fixed primary">
       <v-icon dark>more_vert</v-icon>
     </v-btn>
 
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant.sync="mini"
-      :class="slideOnXs"
-      :style="`${drawerStyle()} ${showSmAndUp}`"
+      :class="slideOnMobile"
+      :style="`${drawerStyle()} ${showMobileUp}`"
       class="cyan lighten-5"
       >
       <v-list class="pa-1">
@@ -199,7 +199,7 @@ export default {
       windowHeight: 0,
       windowScrollY: 0,
       drawer: false,
-      mini: true,
+      mini: false,
       showMiniTrigger: true,
       state: this.$store.state,
       setup: this.$store.state.setup,
@@ -249,7 +249,7 @@ export default {
     this.$nextTick(() => {
       window.addEventListener('resize', () => {
         self.windowHeight = window.innerHeight;
-        self.drawer = self.hideDrawerOverlayXsAndUp;
+        self.drawer = self.hideDrawerOverlayMobileUp;
         if (self.drawer) {
           self.mini = false;
           self.showMiniTrigger = false;
@@ -268,24 +268,21 @@ export default {
     window.removeEventListener('scroll', this.handleScroll);
   },
   computed: {
-    slideOnXs() {
+    slideOnMobile() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-        case 'sm': return 'navigation-drawer--temporary navigation-drawer--absolute';
+        case 'xs': return 'navigation-drawer--temporary navigation-drawer--absolute';
         default: return 'navigation-drawer--permanent';
       }
     },
-    hideDrawerOverlayXsAndUp() {
+    hideDrawerOverlayMobileUp() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-        case 'sm': return this.drawer;
+        case 'xs': return this.drawer;
         default: return false;
       }
     },
-    showSmAndUp() {
+    showMobileUp() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-        case 'sm': return '';
+        case 'xs': return '';
         default: return 'transform: none;';
       }
     },

@@ -7,10 +7,10 @@ export default {
     id: 'Nama proyek',
   },
   description: {
-    en: 'Project description',
-    id: 'Deskripsi proyek',
+    en: 'Project description, note, or anything',
+    id: 'Deskripsi proyek, catatan, atau apa saja',
   },
-  descriptionDesc: {
+  sortDesc: {
     en: 'Sort description about your project.',
     id: 'Keterangan singkat tentang proyek Anda.',
   },
@@ -29,6 +29,10 @@ export default {
   code422: {
     en: 'Some data mising, please refresh your browser or contact your admin',
     id: 'Beberapa data hilang, mohon refresh browser Anda atau hubungi Admin',
+  },
+  createProjectNotAllowed: {
+    en: 'You are not allowed to create a project. PLease upgrade your account',
+    id: 'Anda tidak diijinkan membuat proyek. Silahkan tingkatkan keanggotaan Anda.',
   },
   foo: {
     en: '',

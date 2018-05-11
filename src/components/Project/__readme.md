@@ -1,4 +1,5 @@
 ** how to use
+* open _projectStore.js, create method and property on main store as show on this file
 
 
 ** required
